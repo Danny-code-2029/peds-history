@@ -9,7 +9,7 @@
 
   <!-- 2. SEO Title & Description Shown on Google Search -->
   <title>Pediatric History | Dr. Danny</title>
-  <meta name="description" content="Interactive pediatric clinical history taking guide, Ghai bedside proforma, and checklist by Dr. Danny (danny-code-2029)." />
+  <meta name="description" content="Interactive pediatric clinical history taking guide, bedside proforma, and checklist by Dr. Danny (danny-code-2029)." />
   <meta name="keywords" content="Dr. Danny, Dr Danny peds, pediatric history, peds history, clinical pediatrics, danny-code-2029" />
   <meta name="robots" content="index, follow" />
   <link rel="canonical" href="https://danny-code-2029.github.io/peds-history/" />
@@ -44,7 +44,7 @@
   <header class="bg-blue-950 text-white sticky top-0 z-30 shadow-md">
     <div class="max-w-5xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-2">
       <div>
-        <h1 class="text-lg font-bold tracking-tight">Pediatric History Proforma | Dr. Danny (Ghai 8th Ed.)</h1>
+        <h1 class="text-lg font-bold tracking-tight">Pediatric History Proforma | Dr. Danny</h1>
         <p class="text-xs text-blue-200">Interactive Pediatric History & Clinical Calculator by Dr. Danny — Ask prompted questions & generate case paragraphs</p>
       </div>
       <div class="flex items-center gap-2">
@@ -140,7 +140,7 @@
     <!-- 2. RED-FLAG & IMNCI EMERGENCY TRIAGE -->
     <details open class="bg-white rounded-xl shadow-sm border border-red-200 overflow-hidden">
       <summary class="bg-red-50 px-4 py-3 font-bold text-red-900 cursor-pointer flex justify-between items-center border-b border-red-200">
-        <span>2. Immediate IMNCI & Emergency Red-Flag Triage</span>
+        <span>2. Clinical Red-Flags </span>
         <span class="text-xs text-red-600 font-semibold">Screen Every Sick Child</span>
       </summary>
       <div class="p-4 space-y-3">
@@ -170,7 +170,7 @@
       </summary>
       <div class="p-4 space-y-3">
         <div class="ask-prompt">
-          <strong>Ask the informant:</strong> "What are the main complaints that brought you here today, and how many days has each been present? When was the child last completely well and playful? Did the illness start suddenly or gradually?" (Record raw symptoms, not self-reported diagnoses like 'typhoid').
+          <strong>Ask the informant:</strong> "What are the main complaints that brought you here today, and how many days has each been present? When was the child last completely well and playful? Did the illness start suddenly or gradually?"
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <div class="sm:col-span-2">
@@ -314,15 +314,15 @@
       </div>
     </details>
 
-    <!-- MODULE 3C: DEHYDRATION & FLUID DEFICIT (GHAI CH. 5) -->
+    <!-- MODULE 3C: DEHYDRATION & FLUID DEFICIT -->
     <details id="dehydrationModule" class="hidden bg-rose-50/50 rounded-xl shadow-sm border-2 border-rose-300 overflow-hidden" open>
       <summary class="bg-rose-100 px-4 py-3 font-bold text-rose-900 cursor-pointer flex justify-between items-center border-b border-rose-300">
-        <span>3C. Dehydration Assessment & Holliday-Segar Fluid Calculator (Ghai Ch. 5)</span>
+        <span>3C. Hydration Status</span>
         <span class="text-xs font-semibold">Active Module</span>
       </summary>
       <div class="p-4 space-y-3">
         <div class="ask-prompt">
-          <strong>Ask for Fluid Losses & Hydration Clues (Table 5.3):</strong> "How many watery stools or vomiting episodes has the child had? Is the child drinking eagerly/thirsty, or too weak to drink? Are the eyes sunken, tears absent when crying, mouth dry, and urine output reduced?"
+          <strong>Ask for Fluid Losses & Hydration Clues:</strong> "How many watery stools or vomiting episodes has the child had? Is the child drinking eagerly/thirsty, or too weak to drink? Are the eyes sunken, tears absent when crying, mouth dry, and urine output reduced?"
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <div>
@@ -333,8 +333,8 @@
             <label class="block text-xs font-semibold mb-1">Thirst & Mental Status</label>
             <select id="dehydThirst" class="w-full border rounded p-2 text-sm bg-white">
               <option value="normal thirst and alert mental status (No Dehydration)">Normal thirst & alert (No Dehydration)</option>
-              <option value="eager/increased thirst and irritable mental status (Some Dehydration)">Drinks eagerly, thirsty & irritable (Some Dehydration: 5–10% loss in infants / 3–6% in older)</option>
-              <option value="unable to drink and lethargic/comatose mental status (Severe Dehydration)">Unable to drink & lethargic/comatose (Severe Dehydration: &gt;10% in infants / &gt;6% in older)</option>
+              <option value="eager/increased thirst and irritable mental status (Some Dehydration)">Drinks eagerly, thirsty & irritable (Some Dehydration)</option>
+              <option value="unable to drink and lethargic/comatose mental status (Severe Dehydration)">Unable to drink & lethargic/comatose (Severe Dehydration)</option>
             </select>
           </div>
           <div>
@@ -348,7 +348,7 @@
     <!-- 4. HEAD-TO-TOE SYSTEMIC REVIEW (PERTINENT NEGATIVES) -->
     <details open class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
       <summary class="bg-slate-50 px-4 py-3 font-bold text-slate-800 cursor-pointer flex justify-between items-center border-b">
-        <span>4. Head-to-Toe Systemic Review & Pertinent Negatives</span>
+        <span>4. Systemic Review & Pertinent Negatives</span>
         <span class="text-xs text-blue-600 font-normal">Rule out other organ foci</span>
       </summary>
       <div class="p-4 space-y-3">
@@ -365,8 +365,8 @@
             <input id="sysGi" type="text" value="No loose stools, bilious/projectile vomiting, abdominal pain, or jaundice." class="w-full border rounded p-2 text-sm" />
           </div>
           <div>
-            <label class="block text-xs font-semibold mb-1">Renal & Urinary Tract (UTI / Nephrotic / AGN)</label>
-            <input id="sysRenal" type="text" value="No dysuria (crying during micturition), frequency, hematuria, oliguria, or periorbital puffiness." class="w-full border rounded p-2 text-sm" />
+            <label class="block text-xs font-semibold mb-1">Renal & Urinary Tract</label>
+            <input id="sysRenal" type="text" value="No dysuria, frequency, hematuria, oliguria, or periorbital puffiness." class="w-full border rounded p-2 text-sm" />
           </div>
           <div>
             <label class="block text-xs font-semibold mb-1">Cardiac, Musculoskeletal & Hematolymphoid</label>
@@ -376,49 +376,76 @@
       </div>
     </details>
 
-    <!-- 5. PAST MEDICAL, ANTENATAL, NATAL & NEONATAL HISTORY -->
+    <!-- 5. PAST, SURGICAL, ALLERGEN & ADDICTION HISTORY -->
     <details class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
       <summary class="bg-slate-50 px-4 py-3 font-bold text-slate-800 cursor-pointer flex justify-between items-center border-b">
-        <span>5. Past Medical, Antenatal (Trimesters), Natal & Neonatal History</span>
+        <span>5. Past Medical, Surgical, Allergen & Addiction History</span>
         <span class="text-xs text-blue-600 font-normal">Tap to expand</span>
       </summary>
       <div class="p-4 space-y-3">
         <div class="ask-prompt">
-          <strong>Ask the mother:</strong> "Has the child had similar illnesses, recurrent wheezing/diarrhea, hospital admissions, or blood transfusions before? During pregnancy, did you take Folate in the 1st trimester, Iron/Calcium/Tetanus shots in the 2nd, and have regular checkups? Was there any fever with rash (TORCH), high BP, diabetes, or leaking water &gt;18 hours? Did the baby cry right after birth, and what was the birth weight?"
+          <strong>Ask about Past History:</strong> "Has the child had similar illnesses, hospital admissions, prior surgeries, or known drug/food allergies? For adolescents or older children, inquire about tobacco, alcohol, or substance habits."
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
-            <label class="block text-xs font-semibold mb-1">Past Illnesses, Hospitalizations, Surgeries & Allergies</label>
-            <input id="pastHistory" type="text" value="No similar complaints, recurrent infections, hospitalizations, surgeries, blood transfusions, or known drug/food allergies in the past." class="w-full border rounded p-2 text-sm" />
+            <label class="block text-xs font-semibold mb-1">Past Medical & Hospitalization History</label>
+            <input id="pastHistory" type="text" value="No similar past illnesses, recurrent infections, or previous hospital admissions." class="w-full border rounded p-2 text-sm" />
           </div>
           <div>
-            <label class="block text-xs font-semibold mb-1">Antenatal Trimester-Wise History (1st, 2nd, 3rd Trimesters)</label>
-            <input id="ancHistory" type="text" value="Booked and supervised pregnancy; took Folic acid in 1st trimester, Iron, Calcium, and 2 doses of Td in 2nd trimester; normal fetal movements and weight gain; no fever with rash (TORCH), PIH, GDM, APH, or teratogenic drug/radiation exposure." class="w-full border rounded p-2 text-sm" />
+            <label class="block text-xs font-semibold mb-1">Surgical & Procedural History</label>
+            <input id="surgicalHistory" type="text" value="No history of prior surgeries, major trauma, or blood transfusions." class="w-full border rounded p-2 text-sm" />
           </div>
           <div>
-            <label class="block text-xs font-semibold mb-1">Natal / Intrapartum History (Gestation, Mode, Cry, Birth Weight)</label>
-            <input id="natalHistory" type="text" value="Full-term normal vaginal institutional delivery with clear liquor and no PROM >18 hours; cried immediately after birth (no resuscitation needed); birth weight was 2.9 kg." class="w-full border rounded p-2 text-sm" />
+            <label class="block text-xs font-semibold mb-1">Allergen & Drug Allergy History</label>
+            <input id="allergenHistory" type="text" value="No known allergies to foods, drugs (such as penicillin/sulfa), or environmental allergens." class="w-full border rounded p-2 text-sm" />
           </div>
           <div>
-            <label class="block text-xs font-semibold mb-1">Postnatal / Neonatal History (First 28 Days & NICU)</label>
-            <input id="neonatalHistory" type="text" value="Passed meconium within 24 hours and urine within 48 hours; umbilical cord fell on day 7 with no harmful topical applications; no neonatal jaundice, respiratory distress, seizures, or NICU admission." class="w-full border rounded p-2 text-sm" />
+            <label class="block text-xs font-semibold mb-1">Addiction & Substance Inquiry (If applicable)</label>
+            <input id="addictionHistory" type="text" value="No history of tobacco, alcohol, or substance use." class="w-full border rounded p-2 text-sm" />
           </div>
         </div>
       </div>
     </details>
 
-    <!-- 6. GROWTH, ANTHROPOMETRY & SHORT STATURE SCREEN (GHAI CH. 2) -->
+    <!-- 6. BIRTH & NEONATAL HISTORY -->
     <details class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
       <summary class="bg-slate-50 px-4 py-3 font-bold text-slate-800 cursor-pointer flex justify-between items-center border-b">
-        <span>6. Physical Growth, Dentition & Short Stature Inquiry (Ghai Ch. 2)</span>
-        <span class="text-xs text-blue-600 font-normal">Includes MPH & Fluid Calculators</span>
+        <span>6. Antenatal, Birth & Neonatal History</span>
+        <span class="text-xs text-blue-600 font-normal">Tap to expand</span>
+      </summary>
+      <div class="p-4 space-y-3">
+        <div class="ask-prompt">
+          <strong>Ask the mother:</strong> "During pregnancy, did you take regular supplements and checkups? Was there any high BP, bleeding, or infection? Did the baby cry right after birth, and what was the birth weight? Did the baby pass meconium and urine normally?"
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-semibold mb-1">Antenatal Trimester-Wise History</label>
+            <input id="ancHistory" type="text" value="Booked and supervised pregnancy; took standard iron, calcium, and tetanus shots; normal fetal movements; no history of high BP, gestational diabetes, or teratogenic exposure." class="w-full border rounded p-2 text-sm" />
+          </div>
+          <div>
+            <label class="block text-xs font-semibold mb-1">Birth & Natal History (Gestation, Mode, Cry, Birth Weight)</label>
+            <input id="natalHistory" type="text" value="Full-term normal vaginal delivery with clear liquor; cried immediately after birth; birth weight was 2.9 kg." class="w-full border rounded p-2 text-sm" />
+          </div>
+          <div>
+            <label class="block text-xs font-semibold mb-1">Neonatal History (First 28 Days & NICU)</label>
+            <input id="neonatalHistory" type="text" value="Passed meconium within 24 hours and urine within 48 hours; umbilical cord fell off normally; no neonatal jaundice, seizures, or NICU admission." class="w-full border rounded p-2 text-sm" />
+          </div>
+        </div>
+      </div>
+    </details>
+
+    <!-- 7. GROWTH & DEVELOPMENTAL HISTORY -->
+    <details class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+      <summary class="bg-slate-50 px-4 py-3 font-bold text-slate-800 cursor-pointer flex justify-between items-center border-b">
+        <span>7. Growth, Anthropometry & Developmental History</span>
+        <span class="text-xs text-blue-600 font-normal">Includes MPH, Fluids & DQ Calculators</span>
       </summary>
       <div class="p-4 space-y-3">
         <div class="ghai-pearl">
-          <strong>Ghai Ch. 2 Benchmarks:</strong> Birth wt (3 kg) doubles by 5 mo (6 kg), triples by 1 yr (9 kg), quadruples by 2 yr (12 kg); 3 yr = 15 kg, 4 yr = 16 kg. Length: Birth 50 cm, 6 mo 65 cm, 1 yr 75 cm, 2 yr 90 cm, 4 yr 100 cm. HC: Birth 34 cm, 1 yr 46 cm (chest = head at 1 yr). Primary lower central incisors erupt at 6–10 mo.
+          <strong>Clinical Growth & Development Reference:</strong> Birth weight (3 kg) triples by 1 yr (9 kg) and quadruples by 2 yr (12 kg). Head circumference: 34 cm at birth, 46 cm at 1 yr. Milestones: Neck holding at 3 mo, sitting alone at 8 mo, walking alone at 15 mo, meaningful words at 12 mo.
         </div>
         <div class="ask-prompt">
-          <strong>Ask the parents (Table 2.14 Short Stature & FTT Clues):</strong> "Has the child been gaining weight and height like peers? When did the first milk teeth erupt? Does the child have excessive urination (polyuria), bulky/greasy stools, chronic constipation/lethargy, or did either parent have a late growth spurt in school?"
+          <strong>Ask the parents:</strong> "Has the child been gaining weight and height normally? When did milestones like neck holding, sitting, and walking occur? What is the daily screen time or any behavioral habits?"
         </div>
         <div class="grid grid-cols-2 sm:grid-cols-6 gap-2.5 bg-slate-50 p-3 rounded-lg border">
           <div>
@@ -450,70 +477,44 @@
             <input id="mphOutput" type="text" readonly placeholder="Enter parental heights" class="w-full border rounded p-1.5 text-xs bg-slate-100 font-bold text-blue-900" />
           </div>
           <div class="col-span-2 sm:col-span-3">
-            <label class="block text-xs font-semibold mb-1">Holliday-Segar 24h Maintenance Fluid</label>
+            <label class="block text-xs font-semibold mb-1">Holliday-Segar Maintenance Fluid</label>
             <input id="fluidOutput" type="text" readonly placeholder="Enter child weight" class="w-full border rounded p-1.5 text-xs bg-slate-100 font-bold text-rose-900" />
           </div>
         </div>
-        <div>
-          <label class="block text-xs font-semibold mb-1">Growth Trajectory, Dentition & Etiological Clues (Polyuria, Malabsorption, Hypothyroid, Parental Puberty)</label>
-          <input id="growthNotes" type="text" value="Normal somatic growth velocity and age-appropriate dentition; no history of polyuria, chronic greasy stools, constipation/lethargy, or familial/constitutional growth delay." class="w-full border rounded p-2 text-sm" />
-        </div>
-      </div>
-    </details>
-
-    <!-- 7. 5-DOMAIN DEVELOPMENTAL & BEHAVIORAL HISTORY (GHAI CH. 3) -->
-    <details class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-      <summary class="bg-slate-50 px-4 py-3 font-bold text-slate-800 cursor-pointer flex justify-between items-center border-b">
-        <span>7. 5-Domain Developmental, Red Flags & Behavioral History (Ghai Ch. 3)</span>
-        <span class="text-xs text-blue-600 font-normal">Includes DQ & Behavioral Screen</span>
-      </summary>
-      <div class="p-4 space-y-3">
-        <div class="ghai-pearl">
-          <strong>Ghai Ch. 3 Key Milestones & WHO Red-Flag Cutoffs:</strong> Gross Motor: Neck holding (3m), Rolls over (5m), Tripod sit (6m), Sits alone (8m; Red flag &gt;10m), Stands with support (9m), Walks alone (15m; Red flag &gt;18m), Tricycle (3y). Fine Motor: Bidextrous reach (4m), Unidextrous transfer (6m), Immature pincer (9m), Mature pincer (12m), Scribbles/3-block tower (18m), Circle (3y), Cross (4y). Social: Social smile (2m), Stranger anxiety (6m), Waves bye (9m), Domestic mimicry (18m). Language: Coos (3m), Monosyllables (6m), Bisyllables (9m), 1–2 meaningful words (12m; Red flag &gt;18m). Vision/Hearing: Fixates face (1m; Red flag &gt;2m), Turns head to sound (3–4m), Diagonal localization (10m).
-        </div>
-        <div class="ask-prompt">
-          <strong>Ask across all 5 Domains & Habits:</strong> "When did the child hold their neck, sit alone, walk, use a pincer grasp, smile socially, and speak meaningful words? Does the child see and turn to sound normally? Has the child ever lost a skill they previously learned? Also ask: How many hours of TV/mobile screen does the child watch daily (&gt;1–2 hr delays speech)? Do they eat mud/plaster/chalk (pica), hold their breath until blue/pale when crying (breath-holding spells), or have tantrums/hyperactivity?"
-        </div>
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 bg-slate-50 p-3 rounded border">
           <div>
-            <label class="block text-xs font-semibold mb-1">Chronological/Corrected Age (mo)</label>
+            <label class="block text-xs font-semibold mb-1">Chronological Age (mo)</label>
             <input id="dqChrono" type="number" placeholder="e.g., 24" oninput="calcDQ()" class="w-full border rounded p-1.5 text-sm bg-white" />
           </div>
           <div>
-            <label class="block text-xs font-semibold mb-1">Attained Developmental Age (mo)</label>
+            <label class="block text-xs font-semibold mb-1">Attained Dev. Age (mo)</label>
             <input id="dqDev" type="number" placeholder="e.g., 24" oninput="calcDQ()" class="w-full border rounded p-1.5 text-sm bg-white" />
           </div>
           <div>
             <label class="block text-xs font-semibold mb-1">Developmental Quotient (DQ)</label>
-            <input id="dqResult" type="text" readonly placeholder="Auto-calculated (Delay <70%)" class="w-full border rounded p-1.5 text-sm bg-slate-100 font-bold text-blue-900" />
+            <input id="dqResult" type="text" readonly placeholder="Auto-calculated" class="w-full border rounded p-1.5 text-sm bg-slate-100 font-bold text-blue-900" />
           </div>
         </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <div>
-            <label class="block text-xs font-semibold mb-1">5-Domain Milestones (Gross, Fine, Social, Language, Vision/Hearing) & Regression</label>
-            <input id="devSummary" type="text" value="Age-appropriate milestones attained across all 5 domains (Gross Motor, Fine Motor, Personal-Social, Language, and Vision/Hearing) with no developmental dissociation or regression." class="w-full border rounded p-2 text-sm" />
-          </div>
-          <div>
-            <label class="block text-xs font-semibold mb-1">Behavioral, Habit & Screen Time Inquiry (Pica, Breath-Holding, Tantrums, TV Time)</label>
-            <input id="behavSummary" type="text" value="Screen/TV viewing is <1 hour/day; no history of pica, breath-holding spells, excessive temper tantrums, thumb sucking, tics, inattention/hyperactivity, or autistic features." class="w-full border rounded p-2 text-sm" />
-          </div>
+        <div>
+          <label class="block text-xs font-semibold mb-1">Growth Trajectory & Developmental Milestones Summary</label>
+          <input id="growthNotes" type="text" value="Normal somatic growth velocity and age-appropriate milestones attained across all domains with no regression." class="w-full border rounded p-2 text-sm" />
         </div>
       </div>
     </details>
 
-    <!-- 8. NUTRITION (ICMR RDA CALCULATOR) & IMMUNIZATION (GHAI CH. 6 & 9) -->
+    <!-- 8. NUTRITIONAL & IMMUNIZATION HISTORY -->
     <details class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
       <summary class="bg-slate-50 px-4 py-3 font-bold text-slate-800 cursor-pointer flex justify-between items-center border-b">
-        <span>8. Nutritional History (Ghai Ch. 6 ICMR RDA Calculator) & Immunization</span>
+        <span>8. Nutritional History & Immunization</span>
         <span class="text-xs text-blue-600 font-normal">Auto Calorie & Protein Deficit</span>
       </summary>
       <div class="p-4 space-y-3">
         <div class="ask-prompt">
-          <strong>Ask about Feeding & 24-Hr Recall:</strong> "Was breastfeeding started within 1 hour of birth and colostrum fed? Were any pre-lacteal feeds (honey/ghutti/sugar water) given? Was the baby exclusively breastfed for 6 months, or given diluted cow/formula milk in a bottle? When did weaning start, and is oil/ghee added? Tell me everything the child ate and drank yesterday in household measures (katori/glass/tsp)."
+          <strong>Ask about Feeding & Immunization:</strong> "Was breastfeeding started within 1 hour and exclusively for 6 months? When was complementary feeding started? What did the child eat yesterday? Are vaccinations up to date?"
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-5 gap-2.5 bg-emerald-50/60 p-3 rounded-lg border border-emerald-200">
           <div class="sm:col-span-2">
-            <label class="block text-xs font-semibold mb-1">Select Age Group (ICMR Table 6.1 RDA)</label>
+            <label class="block text-xs font-semibold mb-1">Select Age Group (RDA Standard)</label>
             <select id="icmrAgeGroup" onchange="updateICMR()" class="w-full border rounded p-1.5 text-xs bg-white">
               <option value="1060|16.7">1–3 years (RDA: 1060 kcal, 16.7 g protein)</option>
               <option value="1350|20.1">4–6 years (RDA: 1350 kcal, 20.1 g protein)</option>
@@ -541,58 +542,58 @@
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
-            <label class="block text-xs font-semibold mb-1">Breastfeeding, Pre-lacteals, Bottle Use & Weaning Details</label>
-            <input id="nutriEarly" type="text" value="Breastfeeding initiated within 1 hour of birth; colostrum fed, no pre-lacteal feeds; exclusively breastfed for 6 months with no bottle feeding; complementary feeding initiated at 6 months with energy-dense home foods." class="w-full border rounded p-2 text-sm" />
+            <label class="block text-xs font-semibold mb-1">Feeding History & Weaning Details</label>
+            <input id="nutriEarly" type="text" value="Breastfeeding initiated within 1 hour; exclusive breastfeeding for 6 months; timely introduction of complementary feeds." class="w-full border rounded p-2 text-sm" />
           </div>
           <div>
-            <label class="block text-xs font-semibold mb-1">Immunization Status (NIS/UIP & IAP) & Left Deltoid BCG Scar</label>
-            <input id="immStatus" type="text" value="Completely immunized for age as per the Universal Immunization Program (BCG, OPV, Pentavalent, Rotavirus, PCV, fIPV, and MR doses verified); BCG scar is present on the left deltoid." class="w-full border rounded p-2 text-sm" />
+            <label class="block text-xs font-semibold mb-1">Immunization Status & BCG Scar</label>
+            <input id="immStatus" type="text" value="Completely immunized for age as per National Immunization Schedule; BCG scar present on left deltoid." class="w-full border rounded p-2 text-sm" />
           </div>
         </div>
       </div>
     </details>
 
-    <!-- MODULE 8B: ADOLESCENT CLINIC CHECKLIST (GHAI CH. 4, 10–19 YR) -->
+    <!-- MODULE 8B: ADOLESCENT CLINIC CHECKLIST -->
     <details id="adolescentModule" class="hidden bg-purple-50/50 rounded-xl shadow-sm border-2 border-purple-300 overflow-hidden" open>
       <summary class="bg-purple-100 px-4 py-3 font-bold text-purple-900 cursor-pointer flex justify-between items-center border-b border-purple-300">
-        <span>8B. Adolescent Health Visit & HEADSS / SMR Inquiry (Ghai Ch. 4, Ages 10–19 yr)</span>
+        <span>8B. Adolescent Health & HEADSS Inquiry (Ages 10–19 yr)</span>
         <span class="text-xs font-semibold">Active Module</span>
       </summary>
       <div class="p-4 space-y-3">
         <div class="ask-prompt">
-          <strong>Ghai Table 4.4 Checklist:</strong> First ask with parents: academic performance, school absenteeism, calcium/iron/dairy intake, junk food, sleep duration, and menarche (avg 12.6 yr, 2–2.5 yr after breast buds). Then interview the adolescent confidentially (with consent): body image, mood/anxiety, peer relationships, tobacco/alcohol/substance use, reproductive health concerns, and Td (10, 16 yr) / HPV vaccines.
+          <strong>Adolescent Checklist:</strong> Assess academics, sleep, diet, pubertal development (SMR), emotional well-being, peer relations, and confidential health habits.
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
-            <label class="block text-xs font-semibold mb-1">Pubertal / SMR Trajectory, Menstrual History, Sleep & Academics</label>
-            <input id="adolGeneral" type="text" placeholder="e.g., Age-appropriate pubertal progression (SMR Stage 3); regular menstrual cycles; sleeps 8 hrs/night; good school attendance" class="w-full border rounded p-2 text-sm bg-white" />
+            <label class="block text-xs font-semibold mb-1">Pubertal / SMR Trajectory, Sleep & Academics</label>
+            <input id="adolGeneral" type="text" placeholder="e.g., Age-appropriate pubertal progression; regular sleep and good school attendance" class="w-full border rounded p-2 text-sm bg-white" />
           </div>
           <div>
-            <label class="block text-xs font-semibold mb-1">Confidential Psychosocial Screen & Adolescent Vaccines (Td / HPV)</label>
-            <input id="adolConfidential" type="text" placeholder="e.g., Healthy body image and peer relations; no academic/emotional stress, substance/tobacco use, or high-risk behavior; received 10-yr Td booster" class="w-full border rounded p-2 text-sm bg-white" />
+            <label class="block text-xs font-semibold mb-1">Confidential Psychosocial & Vaccine Screen</label>
+            <input id="adolConfidential" type="text" placeholder="e.g., Stable mental health and peer relations; no high-risk behaviors" class="w-full border rounded p-2 text-sm bg-white" />
           </div>
         </div>
       </div>
     </details>
 
-    <!-- 9. FAMILY, SOCIO-ECONOMIC (KUPPUSWAMY) & WASH ENVIRONMENT -->
+    <!-- 9. FAMILY, SOCIO-ECONOMIC & WASH ENVIRONMENT -->
     <details class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
       <summary class="bg-slate-50 px-4 py-3 font-bold text-slate-800 cursor-pointer flex justify-between items-center border-b">
-        <span>9. Family Pedigree, Socio-Economic Class & WASH Environment</span>
+        <span>9. Family History, Socio-Economic Class & WASH Environment</span>
         <span class="text-xs text-blue-600 font-normal">Tap to expand</span>
       </summary>
       <div class="p-4 space-y-3">
         <div class="ask-prompt">
-          <strong>Ask the family:</strong> "Are the parents related by blood (consanguinity)? How many members live in the household, and are all siblings healthy? Does anyone at home or in the neighborhood have TB, chronic cough, asthma, epilepsy, or thalassemia? What is the head of the family's education, occupation, and monthly income? Do you use LPG or wood/biomass chulha, drink filtered/boiled water, and have a sanitary toilet?"
+          <strong>Ask the family:</strong> "Are parents related by blood? Any family history of TB, asthma, or genetic disorders? What is the family income, housing, and drinking water source?"
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
-            <label class="block text-xs font-semibold mb-1">Family Type, Consanguinity, Siblings & TB/Genetic Contacts</label>
-            <input id="famHistory" type="text" value="Born of a non-consanguineous marriage in a nuclear family; siblings are healthy; no family history of tuberculosis, chronic cough, bronchial asthma, seizure disorders, or bleeding/hemolytic disorders." class="w-full border rounded p-2 text-sm" />
+            <label class="block text-xs font-semibold mb-1">Family Pedigree & Genetic/Chronic Disease Contacts</label>
+            <input id="famHistory" type="text" value="Non-consanguineous nuclear family; siblings healthy; no family history of tuberculosis, asthma, or seizure disorders." class="w-full border rounded p-2 text-sm" />
           </div>
           <div>
-            <label class="block text-xs font-semibold mb-1">Kuppuswamy Socio-Economic Class, Housing, Cooking Fuel & WASH</label>
-            <input id="socioHistory" type="text" value="Belongs to Lower-Middle socio-economic class (Class III) on the Modified Kuppuswamy scale; lives in a pucca house with adequate cross-ventilation, LPG cooking fuel, filtered drinking water, sanitary toilet facilities, and no indoor tobacco/biomass smoke exposure." class="w-full border rounded p-2 text-sm" />
+            <label class="block text-xs font-semibold mb-1">Socio-Economic Class (Kuppuswamy) & WASH Environment</label>
+            <input id="socioHistory" type="text" value="Middle socio-economic class; lives in pucca house with clean drinking water and sanitary toilet facilities." class="w-full border rounded p-2 text-sm" />
           </div>
         </div>
       </div>
@@ -603,7 +604,7 @@
       <div class="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h2 class="text-base font-bold text-blue-950">Formal Clinical Case Presentation (Paragraph Format)</h2>
-          <p class="text-xs text-slate-500">Synthesizes all entered findings and Ghai clinical calculations into cohesive bedside paragraphs.</p>
+          <p class="text-xs text-slate-500">Synthesizes all entered findings and clinical calculations into cohesive bedside paragraphs.</p>
         </div>
         <div class="flex flex-wrap gap-2">
           <button onclick="generateHistoryParagraphs()" class="bg-blue-800 hover:bg-blue-900 text-white text-sm font-semibold px-4 py-2 rounded-lg shadow">
@@ -623,7 +624,7 @@
           <input id="geminiKey" type="password" placeholder="Optional: Paste Gemini API Key for AI Polish & Differential Diagnosis" class="w-full border rounded px-2.5 py-1.5 text-xs" />
         </div>
         <button onclick="polishWithGemini()" id="aiBtn" class="bg-purple-700 hover:bg-purple-800 text-white text-xs font-semibold px-3 py-2 rounded-lg">
-          ✨ Polish Prose & Generate Ghai DDx with Gemini AI
+          ✨ Polish Prose & Generate Differential Diagnosis with Gemini AI
         </button>
       </div>
     </section>
@@ -647,7 +648,6 @@
       document.getElementById('adolescentModule').classList.toggle('hidden', !document.getElementById('toggleAdolescent').checked);
     }
 
-    // Ghai Ch. 2 Mid-Parental Height (MPH) Calculator
     function calcMPH() {
       const f = parseFloat(document.getElementById('fatherHt').value);
       const m = parseFloat(document.getElementById('motherHt').value);
@@ -661,7 +661,6 @@
       }
     }
 
-    // Ghai Ch. 5 Holliday-Segar Maintenance Fluid Calculator
     function calcFluids() {
       const wt = parseFloat(document.getElementById('ptWeight').value);
       const out = document.getElementById('fluidOutput');
@@ -677,7 +676,6 @@
       }
     }
 
-    // Ghai Ch. 3 Developmental Quotient (DQ) Calculator
     function calcDQ() {
       const chrono = parseFloat(document.getElementById('dqChrono').value);
       const dev = parseFloat(document.getElementById('dqDev').value);
@@ -691,7 +689,6 @@
       }
     }
 
-    // Ghai Ch. 6 ICMR 2010 RDA Dietary Deficit Calculator
     function updateICMR() {
       calcDietDeficit();
     }
@@ -742,12 +739,10 @@
       const informant = document.getElementById('ptInformant').value.trim() || 'Mother';
       const reliability = document.getElementById('ptReliability').value;
 
-      // Paragraph 1: Demographics & Chief Complaints
       let para1 = `DEMOGRAPHICS & CHIEF COMPLAINTS:\n${name}, a ${age}-old ${sex} child${birthOrder ? ` (${birthOrder} in birth order)` : ''}${religion ? ` belonging to a ${religion} family` : ''} residing in ${address}, was brought to the pediatric department. The clinical history was narrated by ${possLower} ${informant.toLowerCase()}, whose reliability is judged to be ${reliability}. `;
       const cc = document.getElementById('chiefComplaints').value.trim() || 'acute clinical symptoms';
       para1 += `The child presented with chief complaints of ${cc}.`;
 
-      // Paragraph 2: History of Present Illness (HPI), Modules & Triage
       const wellUntil = document.getElementById('wellUntil').value.trim() || 'the onset of the current illness';
       const onset = document.getElementById('hpiOnset').value;
       const narrative = document.getElementById('hpiNarrative').value.trim();
@@ -796,16 +791,16 @@
 
         para2 += `Fluid loss and hydration assessment reveals ${dLoss || 'ongoing gastrointestinal fluid losses'}, with ${dThirst}. `;
         if (dSigns) para2 += `Clinical hydration signs: ${dSigns}. `;
-        if (fluidCalc) para2 += `Calculated Holliday-Segar 24-hour maintenance fluid requirement is ${fluidCalc}. `;
+        if (fluidCalc) para2 += `Calculated 24-hour maintenance fluid requirement is ${fluidCalc}. `;
       }
 
       if (narrative) para2 += `${narrative}. `;
 
       const checkedDangers = Array.from(document.querySelectorAll('.danger-sign:checked')).map(cb => cb.value);
       if (checkedDangers.length > 0) {
-        para2 += `On immediate IMNCI and emergency red-flag triage, positive danger signs include: ${checkedDangers.join(', ')}. `;
+        para2 += `On emergency red-flag triage, positive danger signs include: ${checkedDangers.join(', ')}. `;
       } else {
-        para2 += `On IMNCI and emergency red-flag triage, no general danger signs are present (the child is able to feed, has no persistent vomiting, convulsions, lethargy, central cyanosis, or stridor at rest). `;
+        para2 += `On emergency red-flag triage, no general danger signs are present. `;
       }
 
       const sysCns = document.getElementById('sysCnsEnt').value.trim();
@@ -814,20 +809,21 @@
       const sysCard = document.getElementById('sysCardiac').value.trim();
       para2 += `Systemic review of pertinent negatives: ${sysCns} ${sysGi} ${sysRenal} ${sysCard}`;
 
-      // Paragraph 3: Past, Antenatal, Natal & Neonatal History
       const pastH = document.getElementById('pastHistory').value.trim();
+      const surgH = document.getElementById('surgicalHistory').value.trim();
+      const allerH = document.getElementById('allergenHistory').value.trim();
+      const addicH = document.getElementById('addictionHistory').value.trim();
+      let para3 = `PAST, SURGICAL, ALLERGEN & ADDICTION HISTORY:\nPast medical history: ${pastH} Surgical history: ${surgH} Allergen history: ${allerH} Addiction/Habit history: ${addicH}`;
+
       const ancH = document.getElementById('ancHistory').value.trim();
       const natalH = document.getElementById('natalHistory').value.trim();
       const neoH = document.getElementById('neonatalHistory').value.trim();
+      let para4 = `ANTENATAL, BIRTH & NEONATAL HISTORY:\nAntenatal history: ${ancH} Birth/Natal history: ${natalH} Neonatal history: ${neoH}`;
 
-      let para3 = `PAST, ANTENATAL, NATAL & NEONATAL HISTORY:\nPast medical history: ${pastH} Antenatal history: ${ancH} Natal history: ${natalH} Postnatal and neonatal history: ${neoH}`;
-
-      // Paragraph 4: Growth, Developmental, Behavioral, Nutritional & Immunization History
       const mphVal = document.getElementById('mphOutput').value.trim();
       const growthNotes = document.getElementById('growthNotes').value.trim();
       const devSum = document.getElementById('devSummary').value.trim();
       const dqVal = document.getElementById('dqResult').value.trim();
-      const behavSum = document.getElementById('behavSummary').value.trim();
       const nutEarly = document.getElementById('nutriEarly').value.trim();
       const defVal = document.getElementById('deficitOutput').value.trim();
       const immStat = document.getElementById('immStatus').value.trim();
@@ -838,28 +834,27 @@
       if (hc) anthroArr.push(`head circumference ${hc} cm`);
       if (muac) anthroArr.push(`MUAC ${muac} cm`);
 
-      let para4 = `GROWTH, DEVELOPMENTAL, NUTRITIONAL & IMMUNIZATION HISTORY:\n`;
-      if (anthroArr.length > 0) para4 += `Current recorded anthropometry includes ${anthroArr.join(', ')}. `;
-      if (mphVal) para4 += `Target Mid-Parental Height (MPH) is ${mphVal}. `;
-      para4 += `${growthNotes} Developmentally: ${devSum}${dqVal ? ` Calculated Developmental Quotient (DQ) is ${dqVal}.` : ''} Behavioral and habit screen: ${behavSum} Nutritionally: ${nutEarly}`;
+      let para5 = `GROWTH, DEVELOPMENTAL, NUTRITIONAL & IMMUNIZATION HISTORY:\n`;
+      if (anthroArr.length > 0) para5 += `Current recorded anthropometry includes ${anthroArr.join(', ')}. `;
+      if (mphVal) para5 += `Target Mid-Parental Height (MPH) is ${mphVal}. `;
+      para5 += `${growthNotes} Developmentally: ${devSum}${dqVal ? ` Calculated Developmental Quotient (DQ) is ${dqVal}.` : ''} Nutritionally: ${nutEarly}`;
       if (defVal) {
         const selText = document.getElementById('icmrAgeGroup').options[document.getElementById('icmrAgeGroup').selectedIndex].text;
-        para4 += ` On 24-hour dietary recall compared against ICMR RDA (${selText}), ${defVal}.`;
+        para5 += ` Dietary intake compared against standards (${selText}): ${defVal}.`;
       }
-      para4 += ` Immunization status: ${immStat}`;
+      para5 += ` Immunization status: ${immStat}`;
 
       if (document.getElementById('toggleAdolescent').checked) {
         const adolGen = document.getElementById('adolGeneral').value.trim();
         const adolConf = document.getElementById('adolConfidential').value.trim();
-        para4 += `\n\nADOLESCENT HEALTH & HEADSS ASSESSMENT:\n${adolGen} ${adolConf}`;
+        para5 += `\n\nADOLESCENT HEALTH & HEADSS ASSESSMENT:\n${adolGen} ${adolConf}`;
       }
 
-      // Paragraph 5: Family & Socio-Economic History
       const famH = document.getElementById('famHistory').value.trim();
       const socH = document.getElementById('socioHistory').value.trim();
-      let para5 = `FAMILY & SOCIO-ENVIRONMENTAL HISTORY:\n${famH} ${socH}`;
+      let para6 = `FAMILY & SOCIO-ENVIRONMENTAL HISTORY:\n${famH} ${socH}`;
 
-      document.getElementById('outputParagraphs').value = [para1, para2, para3, para4, para5].join('\n\n');
+      document.getElementById('outputParagraphs').value = [para1, para2, para3, para4, para5, para6].join('\n\n');
     }
 
     function copySummary() {
@@ -896,7 +891,7 @@
           body: JSON.stringify({
             contents: [{
               parts: [{
-                text: `You are a Senior Professor of Pediatrics (author of Ghai Essential Pediatrics). Rewrite the following raw pediatric history notes into a cohesive, fluent, formal bedside medical case presentation in paragraphs. Preserve all clinical calculations (DQ, MPH, Holliday-Segar fluids, ICMR calorie/protein deficits) and pertinent negatives. At the end, add a section titled "SYNDROMIC IMPRESSION & TOP 3 DIFFERENTIAL DIAGNOSES" based on Ghai Essential Pediatrics guidelines.\n\nRAW CASE NOTES:\n${rawCase}`
+                text: `You are a Senior Professor of Pediatrics. Rewrite the following raw pediatric history notes into a cohesive, fluent, formal bedside medical case presentation in paragraphs. Preserve all clinical calculations and pertinent negatives. At the end, add a section titled "SYNDROMIC IMPRESSION & TOP 3 DIFFERENTIAL DIAGNOSES".\n\nRAW CASE NOTES:\n${rawCase}`
               }]
             }]
           })
@@ -912,7 +907,7 @@
         alert('Error: ' + err.message);
       } finally {
         btn.disabled = false;
-        btn.textContent = '✨ Polish Prose & Generate Ghai DDx with Gemini AI';
+        btn.textContent = '✨ Polish Prose & Generate Differential Diagnosis with Gemini AI';
       }
     }
   </script>
