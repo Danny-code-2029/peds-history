@@ -42,9 +42,56 @@
     details > summary { list-style: none; }
     details > summary::-webkit-details-marker { display: none; }
 
+    /* Google 4-Color Ring Avatar (Chrome Upper-Right Style) */
+    .google-avatar-ring {
+      background: conic-gradient(
+        #ea4335 0deg 90deg,
+        #4285f4 90deg 180deg,
+        #34a853 180deg 270deg,
+        #fbbc05 270deg 360deg
+      );
+      padding: 2.5px;
+      border-radius: 9999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .google-avatar-ring:hover {
+      transform: scale(1.04);
+      box-shadow: 0 0 12px rgba(66, 133, 244, 0.45);
+    }
+    .google-avatar-inner {
+      border: 2px solid #0f172a;
+      border-radius: 9999px;
+      object-fit: cover;
+      background-color: #1e293b;
+    }
+
+    /* Chrome Material-You Pill Button & Gemini Sparkle Aesthetics */
+    .chrome-pill-btn {
+      border-radius: 9999px;
+      font-weight: 600;
+      transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .chrome-pill-btn:active {
+      transform: scale(0.97);
+    }
+    .gemini-chrome-fab {
+      background: linear-gradient(135deg, #1a73e8 0%, #7c3aed 55%, #db2777 100%);
+      box-shadow: 0 8px 24px -4px rgba(124, 58, 237, 0.55);
+    }
+    .gemini-chrome-fab:hover {
+      box-shadow: 0 12px 28px -3px rgba(124, 58, 237, 0.75);
+      filter: brightness(1.06);
+    }
+
     /* Dark Mode Overrides */
     html.dark body { background-color: #0f172a; color: #e2e8f0; }
-    html.dark details, html.dark section, html.dark .modal-card {
+    html.dark details, html.dark section, html.dark .modal-card, html.dark #leftSidebar {
       background-color: #1e293b !important;
       border-color: #334155 !important;
       color: #f1f5f9 !important;
@@ -65,7 +112,7 @@
 
     /* Clean A4 Print Stylesheet */
     @media print {
-      header, .no-print, #geminiFloatBtn, #geminiModal, #settingsModal, #loginModal { display: none !important; }
+      header, .no-print, #geminiFloatBtn, #geminiModal, #settingsModal, #loginModal, #leftSidebar, #sidebarOverlay, #profileModal, #storageModal, #aboutModal, #accountPopup { display: none !important; }
       body { background: white !important; color: black !important; padding: 0 !important; }
       main { max-width: 100% !important; }
     }
@@ -73,59 +120,169 @@
 </head>
 <body class="bg-slate-100 text-slate-800 min-h-screen pb-24 transition-colors duration-200">
 
-  <!-- STICKY HEADER -->
-  <header class="bg-blue-950 text-white sticky top-0 z-30 shadow-md">
-    <div class="max-w-5xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-2">
-      <div class="flex items-center gap-3">
+  <!-- STICKY CHROME-STYLE HEADER -->
+  <header class="bg-slate-900 text-white sticky top-0 z-30 shadow-md border-b border-slate-800">
+    <div class="max-w-6xl mx-auto px-3 sm:px-4 py-2.5 flex items-center justify-between gap-2 sm:gap-4">
+
+      <!-- LEFT: 1. More Button (3 Horizontal Lines) + Heading -->
+      <div class="flex items-center gap-2.5 shrink-0">
+        <button onclick="toggleSidebar()" class="p-2 rounded-full hover:bg-slate-800 active:bg-slate-700 transition-colors focus:outline-none" title="More Menu" aria-label="Open More Menu">
+          <!-- 3 Horizontal Lines Icon -->
+          <svg class="w-6 h-6 text-slate-100" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
         <div>
-          <h1 class="text-lg font-bold tracking-tight">Pediatric History Performa</h1>
-          <p class="text-[11px] text-blue-200">Auto-saving bedside history, clinical calculators, pedigree & AI assistant</p>
+          <h1 class="text-sm sm:text-base font-bold tracking-tight leading-tight">Pediatric History Performa</h1>
+          <p class="text-[10px] text-slate-400 hidden sm:block">Bedside clinical proforma, calculators & AI case vault</p>
         </div>
       </div>
 
-      <div class="flex flex-wrap items-center gap-1.5">
-        <!-- Multi-Patient Draft Selector -->
-        <select id="draftSelector" onchange="switchPatientDraft(this.value)" class="text-xs bg-blue-900 text-white border border-blue-700 rounded px-2 py-1.5 font-semibold" title="Auto-saved patient drafts">
-          <option value="draft_1">📁 Patient 1</option>
-          <option value="draft_2">📁 Patient 2</option>
-          <option value="draft_3">📁 Patient 3</option>
-          <option value="draft_4">📁 Patient 4</option>
-          <option value="draft_5">📁 Patient 5</option>
-        </select>
+      <!-- CENTER: 9. Chrome Omnibox-Style Patient Case Search Bar -->
+      <div class="relative flex-1 max-w-md">
+        <div class="flex items-center bg-slate-800/90 hover:bg-slate-800 focus-within:bg-slate-800 focus-within:ring-2 focus-within:ring-blue-500 rounded-full px-3.5 py-1.5 border border-slate-700 transition-all">
+          <svg class="w-4 h-4 text-slate-400 mr-2 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 103.5 10.5a7.5 7.5 0 0013.15 6.15z" />
+          </svg>
+          <input
+            id="headerCaseSearch"
+            type="text"
+            oninput="handleCaseSearch(this.value)"
+            onfocus="handleCaseSearch(this.value)"
+            placeholder="Search patient case history by name..."
+            class="w-full bg-transparent text-xs sm:text-sm text-white placeholder-slate-400 focus:outline-none"
+          />
+          <button id="clearSearchBtn" onclick="clearCaseSearch()" class="hidden text-slate-400 hover:text-white text-xs ml-1">&times;</button>
+        </div>
 
-        <!-- Ask Gemini Button -->
-        <button onclick="toggleGeminiModal()" class="text-xs bg-purple-600 hover:bg-purple-500 text-white font-semibold px-2.5 py-1.5 rounded shadow flex items-center gap-1">
-          ✨ Ask Gemini
-        </button>
-
-        <!-- Login / Vault Button -->
-        <button id="headerLoginBtn" onclick="toggleLoginModal()" class="text-xs bg-indigo-600 hover:bg-indigo-500 text-white font-semibold px-2.5 py-1.5 rounded shadow flex items-center gap-1">
-          🔑 Login
-        </button>
-
-        <!-- Settings (Theme) Button -->
-        <button onclick="toggleSettingsModal()" class="text-xs bg-slate-800 hover:bg-slate-700 text-white px-2.5 py-1.5 rounded border border-slate-600" title="Theme & Vault Settings">
-          ⚙️ Settings
-        </button>
-
-        <!-- Reset & Generate -->
-        <button onclick="resetForm()" class="text-xs bg-blue-900 hover:bg-blue-800 px-2.5 py-1.5 rounded border border-blue-700">
-          Reset
-        </button>
-        <button onclick="scrollToSummary()" class="text-xs bg-emerald-500 hover:bg-emerald-600 text-white font-semibold px-3 py-1.5 rounded shadow">
-          Generate History
-        </button>
+        <!-- Live Search Results Dropdown -->
+        <div id="searchResultsDropdown" class="hidden absolute left-0 right-0 mt-2 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700 overflow-hidden z-50 max-h-72 overflow-y-auto">
+        </div>
       </div>
+
+      <!-- RIGHT: Save/Generate Actions + 8. Login Button OR Profile Picture -->
+      <div class="flex items-center gap-2 shrink-0 relative">
+        <button onclick="saveCurrentCaseToStorage(true)" class="chrome-pill-btn text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-1.5 border border-slate-700 hidden md:inline-flex" title="Save patient to Storage">
+          <span>💾</span> <span>Save Case</span>
+        </button>
+
+        <button onclick="scrollToSummary()" class="chrome-pill-btn text-xs bg-emerald-600 hover:bg-emerald-500 text-white px-3.5 py-1.5 shadow-sm">
+          <span>Generate</span>
+        </button>
+
+        <!-- BEFORE LOGIN: Chrome Pill Sign-In Button -->
+        <button id="headerLoginBtn" onclick="toggleLoginModal()" class="chrome-pill-btn text-xs bg-blue-600 hover:bg-blue-500 text-white px-3.5 py-1.5 shadow">
+          <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+          <span>Sign in</span>
+        </button>
+
+        <!-- AFTER LOGIN: Only Profile Picture with Google 4-Color Ring -->
+        <button id="headerAvatarBtn" onclick="toggleAccountPopup(event)" class="hidden focus:outline-none" title="Google Account & Logout">
+          <span class="google-avatar-ring">
+            <img id="headerAvatarImg" src="" alt="Profile" class="w-8 h-8 google-avatar-inner" />
+          </span>
+        </button>
+
+        <!-- 8. UPPER-RIGHT POPUP WINDOW (OPENS WHEN CLICKING PROFILE PIC) -->
+        <div id="accountPopup" class="hidden absolute right-0 top-12 w-72 bg-slate-900 text-white rounded-3xl shadow-2xl border border-slate-700 p-4 z-50">
+          <div class="flex justify-between items-center mb-2">
+            <span id="popupUserEmail" class="text-[11px] text-slate-300 truncate font-medium">user@gmail.com</span>
+            <button onclick="closeAccountPopup()" class="text-slate-400 hover:text-white text-base leading-none">&times;</button>
+          </div>
+          <div class="flex flex-col items-center text-center py-2">
+            <div class="google-avatar-ring mb-2 cursor-pointer" onclick="closeAccountPopup(); openProfileModal();">
+              <img id="popupAvatarImg" src="" alt="Profile" class="w-16 h-16 google-avatar-inner" />
+            </div>
+            <div id="popupUserName" class="font-bold text-sm">Dr. Medico</div>
+            <div id="popupUserMeta" class="text-[11px] text-slate-400 mt-0.5">MBBS</div>
+            <button onclick="closeAccountPopup(); openProfileModal();" class="mt-2.5 text-xs border border-slate-600 hover:bg-slate-800 text-blue-300 px-4 py-1 rounded-full font-medium transition-colors">
+              Manage your Medico Profile
+            </button>
+          </div>
+          <div class="border-t border-slate-800 my-3"></div>
+          <div class="space-y-1.5 text-xs">
+            <button onclick="closeAccountPopup(); toggleLoginModal();" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-800 text-left text-slate-200">
+              <span>🔑</span> <span>API Vault Key Status</span>
+            </button>
+            <button onclick="closeAccountPopup(); handleMedicoLogout();" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl bg-red-600/20 hover:bg-red-600/30 text-red-300 font-semibold text-left">
+              <span>🚪</span> <span>Log out & Clear Session Key</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
     </div>
   </header>
 
+  <!-- 2. LEFT SIDEBAR OVERLAY & DRAWER ("MORE" MENU) -->
+  <div id="sidebarOverlay" onclick="toggleSidebar()" class="hidden fixed inset-0 bg-slate-950/60 backdrop-blur-xs z-40 transition-opacity"></div>
+
+  <aside id="leftSidebar" class="fixed top-0 left-0 bottom-0 w-72 bg-white dark:bg-slate-900 shadow-2xl border-r border-slate-200 dark:border-slate-800 z-50 transform -translate-x-full transition-transform duration-200 flex flex-col justify-between">
+    <div>
+      <!-- Sidebar Top Header -->
+      <div class="px-4 py-3.5 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+        <span class="text-xs font-bold uppercase tracking-wider text-slate-400">More Menu</span>
+        <button onclick="toggleSidebar()" class="p-1.5 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 text-lg leading-none">&times;</button>
+      </div>
+
+      <!-- 4. PROFILE SECTION IN MORE MENU (CLICKING OPENS PROFILE PAGE) -->
+      <div class="p-4 border-b border-slate-200 dark:border-slate-800">
+        <div onclick="toggleSidebar(); openProfileModal();" class="group cursor-pointer bg-slate-50 dark:bg-slate-800/70 hover:bg-blue-50/70 dark:hover:bg-slate-800 p-3 rounded-2xl border border-slate-200 dark:border-slate-700 transition-all flex items-center gap-3">
+          <div class="google-avatar-ring shrink-0">
+            <img id="sidebarAvatarImg" src="" alt="Profile" class="w-12 h-12 google-avatar-inner" />
+          </div>
+          <div class="overflow-hidden flex-1">
+            <div id="sidebarProfileName" class="font-bold text-sm text-slate-900 dark:text-white truncate group-hover:text-blue-600">Medico Profile</div>
+            <div id="sidebarProfileCourse" class="text-[11px] text-slate-500 dark:text-slate-400 truncate">Tap to add Name, College & Course</div>
+            <span class="inline-block mt-1 text-[10px] font-semibold text-blue-600 dark:text-blue-400">✎ View / Edit Profile</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. NAVIGATION ITEMS UNDER PROFILE: STORAGE -> SETTINGS -> ABOUT -->
+      <nav class="p-3 space-y-1 text-sm font-medium">
+        <button onclick="toggleSidebar(); openStorageModal();" class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 transition-colors">
+          <div class="flex items-center gap-3">
+            <span class="text-base">🗄️</span>
+            <span>Storage & Google Sheet</span>
+          </div>
+          <span id="sidebarCaseCount" class="text-[11px] bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full font-bold">0</span>
+        </button>
+
+        <button onclick="toggleSidebar(); toggleSettingsModal();" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 transition-colors">
+          <span class="text-base">⚙️</span>
+          <span>Settings</span>
+        </button>
+
+        <button onclick="toggleSidebar(); openAboutModal();" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 transition-colors">
+          <span class="text-base">ℹ️</span>
+          <span>About</span>
+        </button>
+      </nav>
+    </div>
+
+    <!-- Bottom Quick Actions inside Sidebar -->
+    <div class="p-4 border-t border-slate-200 dark:border-slate-800 space-y-2">
+      <button onclick="toggleSidebar(); saveCurrentCaseToStorage(true);" class="w-full chrome-pill-btn justify-center bg-blue-600 hover:bg-blue-700 text-white text-xs py-2.5 shadow">
+        <span>💾 Save Current Patient to Storage</span>
+      </button>
+      <button onclick="toggleSidebar(); startBlankPatientCase();" class="w-full chrome-pill-btn justify-center bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs py-2">
+        <span>➕ Start New Blank Case</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- MAIN CLINICAL WORKSPACE -->
   <main class="max-w-5xl mx-auto px-3 sm:px-4 pt-4 space-y-4">
 
     <!-- Focused Symptom & Age Module Toggles -->
     <section class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 no-print">
       <div class="flex flex-wrap items-center justify-between gap-2 mb-2.5">
         <h2 class="text-xs font-bold uppercase tracking-wider text-slate-500">Activate Focused Clinical Modules (As Needed)</h2>
-        <span id="autoSaveBadge" class="text-[11px] text-emerald-600 font-medium">✓ Auto-saved locally</span>
+        <div class="flex items-center gap-3">
+          <span id="autoSaveBadge" class="text-[11px] text-emerald-600 font-medium">✓ Auto-saved locally</span>
+          <button onclick="resetForm()" class="text-[11px] text-rose-600 hover:underline font-semibold">Reset Form</button>
+        </div>
       </div>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
         <label class="flex items-center gap-2 bg-amber-50 border border-amber-300 px-3 py-2 rounded-lg cursor-pointer select-none">
@@ -229,7 +386,7 @@
           <div class="sm:col-span-2">
             <div class="flex justify-between items-center mb-1">
               <label class="block text-xs font-semibold">Chief Complaints (Format: "Fever for 5 days; Cough for 3 days")</label>
-              <button type="button" onclick="startDictation('chiefComplaints')" class="text-[11px] bg-blue-100 hover:bg-blue-200 text-blue-800 px-2 py-0.5 rounded font-semibold">🎤 Dictate</button>
+              <button type="button" onclick="startDictation('chiefComplaints')" class="chrome-pill-btn text-[11px] bg-blue-50 hover:bg-blue-100 text-blue-700 px-2.5 py-0.5 border border-blue-200">🎤 Dictate</button>
             </div>
             <input id="chiefComplaints" type="text" oninput="renderSymptomTimeline()" placeholder="e.g., Fever for 5 days; Cough for 3 days; Fast breathing for 1 day" class="w-full border rounded p-2 text-sm" />
           </div>
@@ -257,7 +414,7 @@
           <div class="sm:col-span-2">
             <div class="flex justify-between items-center mb-1">
               <label class="block text-xs font-semibold">Course, Progression & Aggravating/Relieving Factors</label>
-              <button type="button" onclick="startDictation('hpiNarrative')" class="text-[11px] bg-blue-100 hover:bg-blue-200 text-blue-800 px-2 py-0.5 rounded font-semibold">🎤 Dictate</button>
+              <button type="button" onclick="startDictation('hpiNarrative')" class="chrome-pill-btn text-[11px] bg-blue-50 hover:bg-blue-100 text-blue-700 px-2.5 py-0.5 border border-blue-200">🎤 Dictate</button>
             </div>
             <input id="hpiNarrative" type="text" placeholder="e.g., Progressively worsened; temporary relief with antipyretics" class="w-full border rounded p-2 text-sm" />
           </div>
@@ -440,7 +597,7 @@
             </div>
           </div>
         </div>
-        <button type="button" onclick="addPastEntry()" class="text-xs bg-blue-50 hover:bg-blue-100 text-blue-800 font-semibold px-3 py-1.5 rounded border border-blue-300">
+        <button type="button" onclick="addPastEntry()" class="chrome-pill-btn text-xs bg-blue-50 hover:bg-blue-100 text-blue-800 px-3.5 py-1.5 border border-blue-200">
           + Add Another Past Complaint
         </button>
       </div>
@@ -465,7 +622,7 @@
             </div>
           </div>
         </div>
-        <button type="button" onclick="addSurgicalEntry()" class="text-xs bg-blue-50 hover:bg-blue-100 text-blue-800 font-semibold px-3 py-1.5 rounded border border-blue-300">
+        <button type="button" onclick="addSurgicalEntry()" class="chrome-pill-btn text-xs bg-blue-50 hover:bg-blue-100 text-blue-800 px-3.5 py-1.5 border border-blue-200">
           + Add Another Surgical Entry
         </button>
       </div>
@@ -676,7 +833,7 @@
             </div>
           </div>
         </div>
-        <button type="button" onclick="addAllergenEntry()" class="text-xs bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-semibold px-3 py-1.5 rounded border border-emerald-300">
+        <button type="button" onclick="addAllergenEntry()" class="chrome-pill-btn text-xs bg-emerald-50 hover:bg-emerald-100 text-emerald-800 px-3.5 py-1.5 border border-emerald-300">
           + Add Allergen
         </button>
       </div>
@@ -701,7 +858,7 @@
             </div>
           </div>
         </div>
-        <button type="button" onclick="addAddictionEntry()" class="text-xs bg-purple-50 hover:bg-purple-100 text-purple-800 font-semibold px-3 py-1.5 rounded border border-purple-300">
+        <button type="button" onclick="addAddictionEntry()" class="chrome-pill-btn text-xs bg-purple-50 hover:bg-purple-100 text-purple-800 px-3.5 py-1.5 border border-purple-300">
           + Add Addiction
         </button>
       </div>
@@ -825,34 +982,35 @@
       <div class="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h2 class="text-base font-bold text-blue-950">Formal Clinical Case Presentation</h2>
-          <p class="text-xs text-slate-500">Synthesizes all entered findings into structured bedside paragraphs.</p>
+          <p class="text-xs text-slate-500">Synthesizes all entered findings into structured bedside paragraphs & saves to Storage.</p>
         </div>
         <div class="flex flex-wrap gap-2 no-print">
-          <button onclick="generateHistoryParagraphs()" class="bg-blue-800 hover:bg-blue-900 text-white text-xs font-semibold px-3.5 py-2 rounded-lg shadow">
-            Generate Case Paragraphs
+          <button onclick="generateHistoryParagraphs(true)" class="chrome-pill-btn bg-blue-700 hover:bg-blue-800 text-white text-xs px-4 py-2 shadow">
+            <span>⚡ Generate & Save Case</span>
           </button>
-          <button onclick="copySummary()" class="bg-slate-200 hover:bg-slate-300 text-slate-800 text-xs font-semibold px-3 py-2 rounded-lg">
-            📋 Copy
+          <button onclick="copySummary()" class="chrome-pill-btn bg-slate-200 hover:bg-slate-300 text-slate-800 text-xs px-3.5 py-2">
+            <span>📋 Copy</span>
           </button>
-          <button onclick="shareWhatsApp()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold px-3 py-2 rounded-lg">
-            📲 WhatsApp
+          <button onclick="shareWhatsApp()" class="chrome-pill-btn bg-emerald-600 hover:bg-emerald-700 text-white text-xs px-3.5 py-2">
+            <span>📲 WhatsApp</span>
           </button>
-          <button onclick="window.print()" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold px-3 py-2 rounded-lg">
-            🖨️ Print / PDF
+          <button onclick="window.print()" class="chrome-pill-btn bg-indigo-600 hover:bg-indigo-700 text-white text-xs px-3.5 py-2">
+            <span>🖨️ Print / PDF</span>
           </button>
         </div>
       </div>
 
-      <textarea id="outputParagraphs" rows="15" class="w-full border border-slate-300 rounded-lg p-3.5 text-sm leading-relaxed font-serif bg-slate-50" placeholder="Tap 'Generate Case Paragraphs' above to compile the patient's history..."></textarea>
+      <textarea id="outputParagraphs" rows="15" class="w-full border border-slate-300 rounded-lg p-3.5 text-sm leading-relaxed font-serif bg-slate-50" placeholder="Tap 'Generate & Save Case' above to compile the patient's history..."></textarea>
 
       <!-- Gemini AI Polish & DDx -->
       <div class="border-t pt-3 flex flex-wrap items-center justify-between gap-2 no-print">
         <div class="text-xs text-slate-500" id="vaultStatusBanner">
-          🔒 Using Firebase Cloud API Vault (or Smart Zero-Key Fallback if not logged in)
+          🔒 Using Firebase Cloud API Vault (or Smart Zero-Key Fallback if not signed in)
         </div>
         <div class="flex flex-wrap gap-2">
-          <button onclick="polishWithGemini()" id="aiBtn" class="bg-purple-700 hover:bg-purple-800 text-white text-xs font-semibold px-3.5 py-2 rounded-lg shadow">
-            ✨ Polish Case & Generate Differential Diagnosis
+          <button onclick="polishWithGemini()" id="aiBtn" class="chrome-pill-btn gemini-chrome-fab text-white text-xs px-4 py-2">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C12.5 7.5 16.5 11.5 22 12C16.5 12.5 12.5 16.5 12 22C11.5 16.5 7.5 12.5 2 12C7.5 11.5 11.5 7.5 12 2Z"/></svg>
+            <span>Polish Case & Generate Differential Diagnosis</span>
           </button>
         </div>
       </div>
@@ -864,51 +1022,196 @@
 
   </main>
 
-  <!-- FLOATING ASK GEMINI BUTTON -->
-  <button id="geminiFloatBtn" onclick="toggleGeminiModal()" class="fixed bottom-5 right-5 z-40 bg-purple-700 hover:bg-purple-800 text-white font-bold px-4 py-3 rounded-full shadow-xl flex items-center gap-2 border-2 border-purple-300">
-    <span>✨ Ask Gemini</span>
+  <!-- 7. CHROME-STYLE FLOATING ASK GEMINI BUTTON -->
+  <button id="geminiFloatBtn" onclick="toggleGeminiModal()" class="fixed bottom-5 right-5 z-40 chrome-pill-btn gemini-chrome-fab text-white font-bold px-5 py-3 text-sm border border-white/25">
+    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M12 2C12.5 7.5 16.5 11.5 22 12C16.5 12.5 12.5 16.5 12 22C11.5 16.5 7.5 12.5 2 12C7.5 11.5 11.5 7.5 12 2Z"/>
+    </svg>
+    <span>Ask Gemini</span>
   </button>
 
-  <!-- 1. FIREBASE GOOGLE LOGIN & CLOUD API VAULT MODAL -->
-  <div id="loginModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 flex items-center justify-center p-4">
-    <div class="modal-card bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden border border-indigo-200">
-      <div class="bg-indigo-900 text-white px-4 py-3 flex items-center justify-between">
+  <!-- 4. PROFILE PAGE MODAL (NAME, PHONE, INSTITUTION, COURSE, EDIT PROFILE PIC) -->
+  <div id="profileModal" class="hidden fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="modal-card bg-white rounded-3xl shadow-2xl max-w-md w-full overflow-hidden border border-slate-200">
+      <div class="bg-slate-900 text-white px-5 py-4 flex items-center justify-between">
         <div>
-          <h3 class="font-bold text-sm">🔑 Medico Google Login & Cloud API Vault</h3>
-          <p class="text-[11px] text-indigo-200">Firebase Cloud Vault — Active while logged in, cleared on logout</p>
+          <h3 class="font-bold text-sm">👤 Medico Profile</h3>
+          <p class="text-[11px] text-slate-400">Personalize your clinician details & avatar</p>
         </div>
-        <button onclick="toggleLoginModal()" class="text-white text-lg font-bold px-2">&times;</button>
+        <button onclick="closeProfileModal()" class="text-slate-400 hover:text-white text-xl font-bold px-2">&times;</button>
       </div>
 
-      <div class="p-4 space-y-3 text-xs">
-        <div id="vaultSyncStatus" class="text-[11px] bg-slate-100 text-slate-700 px-2.5 py-1.5 rounded border">
+      <div class="p-5 space-y-4 text-xs">
+        <!-- Profile Picture Editor with Google 4-Color Ring -->
+        <div class="flex flex-col items-center gap-2">
+          <div class="google-avatar-ring">
+            <img id="profileModalAvatarPreview" src="" alt="Profile Preview" class="w-20 h-20 google-avatar-inner" />
+          </div>
+          <div class="flex flex-wrap items-center justify-center gap-2 mt-1">
+            <label class="chrome-pill-btn cursor-pointer bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 text-[11px]">
+              <span>📷 Upload New Photo</span>
+              <input type="file" accept="image/*" onchange="handleProfilePicUpload(this)" class="hidden" />
+            </label>
+            <button type="button" onclick="resetProfilePicToGoogle()" class="chrome-pill-btn bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1.5 text-[11px] border">
+              Use Google Photo
+            </button>
+          </div>
+        </div>
+
+        <div class="space-y-3">
+          <div>
+            <label class="block font-semibold mb-1">Full Name</label>
+            <input id="profName" type="text" placeholder="e.g., Dr. Satyapriya Srinivash" class="w-full border rounded-xl p-2.5 text-sm" />
+          </div>
+          <div>
+            <label class="block font-semibold mb-1">Phone Number</label>
+            <input id="profPhone" type="tel" placeholder="e.g., +91 98765 43210" class="w-full border rounded-xl p-2.5 text-sm" />
+          </div>
+          <div>
+            <label class="block font-semibold mb-1">Educational Institution / Medical College</label>
+            <input id="profInstitution" type="text" placeholder="e.g., Shri Shankaracharya Institute of Medical Sciences" class="w-full border rounded-xl p-2.5 text-sm" />
+          </div>
+          <div>
+            <label class="block font-semibold mb-1">Course / Batch / Designation</label>
+            <input id="profCourse" type="text" placeholder="e.g., MBBS (2nd Prof)" class="w-full border rounded-xl p-2.5 text-sm" />
+          </div>
+        </div>
+
+        <button onclick="saveMedicoProfile()" class="w-full chrome-pill-btn justify-center bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 text-sm shadow">
+          <span>✓ Save Profile Details</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5 & 6. STORAGE & GOOGLE SHEET MODAL (2 COLUMNS: HYPERLINKED PATIENT NAME & CHIEF COMPLAINTS) -->
+  <div id="storageModal" class="hidden fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="modal-card bg-white rounded-3xl shadow-2xl max-w-3xl w-full overflow-hidden border border-slate-200 flex flex-col max-h-[90vh]">
+      <div class="bg-slate-900 text-white px-5 py-4 flex items-center justify-between">
+        <div>
+          <h3 class="font-bold text-sm">🗄️ Patient Case Storage & Google Sheet Directory</h3>
+          <p class="text-[11px] text-slate-400">2-Column Index: Patient's Name (Hyperlinked to Case History) & Chief Complaints</p>
+        </div>
+        <button onclick="closeStorageModal()" class="text-slate-400 hover:text-white text-xl font-bold px-2">&times;</button>
+      </div>
+
+      <div class="p-5 space-y-4 overflow-y-auto flex-1 text-xs">
+        <!-- Linked Google Sheet Bar -->
+        <div class="bg-emerald-50/80 dark:bg-slate-800 p-3.5 rounded-2xl border border-emerald-200 dark:border-slate-700 space-y-2.5">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div class="font-bold text-emerald-950 dark:text-emerald-300 flex items-center gap-1.5 text-sm">
+              <span>📊 Linked Google Sheet Case Registry</span>
+            </div>
+            <div class="flex flex-wrap gap-2">
+              <button onclick="openLinkedGoogleSheet()" class="chrome-pill-btn bg-emerald-600 hover:bg-emerald-700 text-white px-3.5 py-1.5 shadow">
+                <span>↗ Open Google Sheet</span>
+              </button>
+              <button onclick="copyTwoColumnForGoogleSheet()" class="chrome-pill-btn bg-blue-600 hover:bg-blue-700 text-white px-3.5 py-1.5 shadow" title="Copies 2-column rows with clickable =HYPERLINK() formulas ready to paste into Google Sheets">
+                <span>📋 Copy 2-Column Hyperlink Rows for Sheet</span>
+              </button>
+              <button onclick="exportTwoColumnCSV()" class="chrome-pill-btn bg-slate-800 hover:bg-slate-700 text-white px-3 py-1.5">
+                <span>⬇️ CSV</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="flex gap-2">
+            <input id="googleSheetUrlInput" type="url" placeholder="Paste your Google Sheet link here (https://docs.google.com/spreadsheets/d/...)" class="flex-1 border rounded-xl px-3 py-1.5 text-xs bg-white" />
+            <button onclick="saveGoogleSheetUrl()" class="chrome-pill-btn bg-slate-900 text-white px-3.5 py-1.5">Save Link</button>
+          </div>
+          <p class="text-[11px] text-slate-600 dark:text-slate-400">
+            💡 <strong>How it works:</strong> Click <strong>"Copy 2-Column Hyperlink Rows for Sheet"</strong> and press <code>Ctrl + V</code> inside your Google Sheet. Column A will automatically display the <strong>Patient's Name with a clickable hyperlink</strong> that opens their full case history on this webpage, and Column B will list all their <strong>Chief Complaints</strong>.
+          </p>
+        </div>
+
+        <!-- 2-Column Interactive Table -->
+        <div class="border rounded-2xl overflow-hidden">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 border-b text-xs">
+                <th class="py-2.5 px-3.5 font-bold w-2/5">Column 1: Patient's Name (Click to Open Case History)</th>
+                <th class="py-2.5 px-3.5 font-bold">Column 2: Chief Complaints</th>
+                <th class="py-2.5 px-3 font-bold text-right w-24">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="storageTableBody" class="divide-y text-xs">
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. ABOUT PAGE MODAL -->
+  <div id="aboutModal" class="hidden fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="modal-card bg-white rounded-3xl shadow-2xl max-w-lg w-full overflow-hidden border border-slate-200">
+      <div class="bg-slate-900 text-white px-5 py-4 flex items-center justify-between">
+        <div>
+          <h3 class="font-bold text-sm">ℹ️ About Pediatric History Performa</h3>
+          <p class="text-[11px] text-slate-400">Clinical Case-Taking & Bedside Decision Support System</p>
+        </div>
+        <button onclick="closeAboutModal()" class="text-slate-400 hover:text-white text-xl font-bold px-2">&times;</button>
+      </div>
+      <div class="p-5 space-y-3 text-xs leading-relaxed text-slate-700 dark:text-slate-300">
+        <p>
+          <strong>Pediatric History Performa</strong> is an interactive bedside clinical history-taking web application designed for medical students, interns, and pediatric residents to systematically record, calculate, and synthesize pediatric case presentations.
+        </p>
+        <div class="bg-slate-50 dark:bg-slate-800 p-3.5 rounded-2xl border space-y-1.5">
+          <div class="font-bold text-slate-900 dark:text-white">Key Clinical & Technical Capabilities:</div>
+          <ul class="list-disc pl-4 space-y-1">
+            <li><strong>Structured 13-Section Proforma:</strong> Covers Demographics, Emergency Triage, Chief Complaints Timeline, Present Illness, Past/Surgical History, Birth & Preterm Corrected Age, Growth & Holliday-Segar Fluids, Developmental Quotient (DQ), Nutritional Deficit, Interactive NIS Immunization Checklist, Allergens, Addictions, 3-Generation SVG Pedigree Builder, and GPE/Vitals.</li>
+            <li><strong>2-Column Google Sheet Case Registry:</strong> Automatically generates shareable patient case hyperlinks paired with chief complaints for seamless ward logbook archiving.</li>
+            <li><strong>Personal Firebase Cloud AI Vault:</strong> Links each clinician's personal Gemini API key to their Google account during active sessions and wipes the session key upon logout.</li>
+          </ul>
+        </div>
+        <div class="pt-1 text-[11px] text-slate-500 flex justify-between items-center border-t">
+          <span>Created by <strong>Dr. Danny (Satyapriya Srinivash)</strong></span>
+          <span>v3.0 • Chrome Edition</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 1. FIREBASE GOOGLE LOGIN & CLOUD API VAULT MODAL -->
+  <div id="loginModal" class="hidden fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="modal-card bg-white rounded-3xl shadow-2xl max-w-md w-full overflow-hidden border border-indigo-200">
+      <div class="bg-slate-900 text-white px-5 py-4 flex items-center justify-between">
+        <div>
+          <h3 class="font-bold text-sm">🔑 Medico Google Login & Cloud API Vault</h3>
+          <p class="text-[11px] text-slate-400">Firebase Cloud Vault — Active while logged in, cleared on logout</p>
+        </div>
+        <button onclick="toggleLoginModal()" class="text-white text-xl font-bold px-2">&times;</button>
+      </div>
+
+      <div class="p-5 space-y-3 text-xs">
+        <div id="vaultSyncStatus" class="text-[11px] bg-slate-100 text-slate-700 px-3 py-2 rounded-xl border">
           ☁️ Connected to Firebase (`danny-code-peds-history-vault`)
         </div>
 
         <!-- VIEW A: LOGGED OUT -->
         <div id="loggedOutView" class="space-y-3">
-          <button onclick="signInWithGoogle()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 px-4 rounded-lg shadow flex items-center justify-center gap-2 text-sm">
-            <span>G</span> Sign in with Google
+          <button onclick="signInWithGoogle()" class="w-full chrome-pill-btn justify-center bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 px-4 shadow text-sm">
+            <span>G</span> <span>Sign in with Google</span>
           </button>
 
-          <div class="bg-indigo-50 p-3 rounded-lg border border-indigo-200 space-y-1.5 text-indigo-950">
+          <div class="bg-indigo-50 p-3.5 rounded-2xl border border-indigo-200 space-y-1.5 text-indigo-950">
             <div class="font-bold">How the One-Time Cloud Vault Works:</div>
-            <p class="text-[11px]">1. Sign in with your Google account above.<br/>2. On your first login, you'll be prompted once to grab a free Gemini API key from Google AI Studio and paste it.<br/>3. Firebase locks it to your Google account so future logins unlock your key automatically.</p>
+            <p class="text-[11px]">1. Sign in with your Google account above.<br/>2. On your first login, paste your free Gemini API key once.<br/>3. Your profile picture appears in the top-right corner, and logging out deletes your session key immediately.</p>
           </div>
         </div>
 
         <!-- VIEW B: SIGNED IN TO GOOGLE, NEEDS ONE-TIME KEY LINKING -->
-        <div id="firstTimeKeyView" class="hidden space-y-3 bg-amber-50 p-3 rounded-lg border border-amber-300 text-amber-950">
+        <div id="firstTimeKeyView" class="hidden space-y-3 bg-amber-50 p-3.5 rounded-2xl border border-amber-300 text-amber-950">
           <div class="font-bold text-sm" id="welcomeNewMedico">👋 Welcome! Link Your Gemini API Key Once</div>
           <p class="text-[11px]">Your Google account is signed in, but no Gemini API key is stored in your Cloud Vault yet. Tap Step 1 below to create a free key in Google AI Studio, then paste it in Step 2:</p>
-          <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener" class="inline-block bg-indigo-700 hover:bg-indigo-800 text-white font-semibold px-3 py-1.5 rounded shadow">
+          <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener" class="chrome-pill-btn bg-indigo-700 hover:bg-indigo-800 text-white px-3.5 py-1.5 shadow">
             ↗ Step 1: Open Google AI Studio & Create Key
           </a>
           <div>
             <label class="block font-semibold mb-1">Step 2: Paste Your Gemini API Key (`AIzaSy...`)</label>
-            <input id="firstTimeKeyInput" type="password" placeholder="AIzaSy..." class="w-full border rounded p-2 text-sm bg-white" />
+            <input id="firstTimeKeyInput" type="password" placeholder="AIzaSy..." class="w-full border rounded-xl p-2 text-sm bg-white" />
           </div>
-          <button onclick="saveKeyToCloudVault('firstTimeKeyInput')" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 rounded-lg shadow">
+          <button onclick="saveKeyToCloudVault('firstTimeKeyInput')" class="w-full chrome-pill-btn justify-center bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 shadow">
             🔒 Lock Key Into My Firebase Cloud Vault
           </button>
           <button onclick="handleMedicoLogout()" class="w-full text-center text-red-600 hover:underline pt-1">
@@ -918,18 +1221,18 @@
 
         <!-- VIEW C: LOGGED IN & VAULT UNLOCKED -->
         <div id="loggedInView" class="hidden space-y-3">
-          <div class="bg-emerald-50 border border-emerald-300 p-3 rounded-lg text-emerald-950">
+          <div class="bg-emerald-50 border border-emerald-300 p-3.5 rounded-2xl text-emerald-950">
             <div class="font-bold text-sm" id="activeUserDisplay">Logged in</div>
-            <p class="text-[11px] mt-1">✅ Your personal Gemini API key is unlocked for this active session. Clicking Log Out below immediately deletes the session key from browser memory.</p>
+            <p class="text-[11px] mt-1">✅ Your personal Gemini API key is unlocked for this active session. Clicking Log Out deletes the session key from browser memory.</p>
           </div>
           <div>
             <label class="block font-semibold mb-1">Update / Replace Saved Cloud Vault Key</label>
             <div class="flex gap-2">
-              <input id="updateVaultKeyInput" type="password" placeholder="Paste new AIzaSy... key" class="w-full border rounded p-2 text-xs" />
-              <button onclick="saveKeyToCloudVault('updateVaultKeyInput')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3 rounded font-semibold">Save</button>
+              <input id="updateVaultKeyInput" type="password" placeholder="Paste new AIzaSy... key" class="w-full border rounded-xl p-2 text-xs" />
+              <button onclick="saveKeyToCloudVault('updateVaultKeyInput')" class="chrome-pill-btn bg-indigo-600 hover:bg-indigo-700 text-white px-4">Save</button>
             </div>
           </div>
-          <button onclick="handleMedicoLogout()" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2.5 rounded-lg shadow">
+          <button onclick="handleMedicoLogout()" class="w-full chrome-pill-btn justify-center bg-red-600 hover:bg-red-700 text-white font-bold py-2.5 shadow">
             🚪 Log Out & Delete Session Key
           </button>
         </div>
@@ -937,53 +1240,60 @@
     </div>
   </div>
 
-  <!-- 2. SETTINGS MODAL (THEME SWITCHER) -->
-  <div id="settingsModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 flex items-center justify-center p-4">
-    <div class="modal-card bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden border border-slate-200">
-      <div class="bg-slate-900 text-white px-4 py-3 flex items-center justify-between">
-        <h3 class="font-bold text-sm">⚙️ Display & Theme Settings</h3>
-        <button onclick="toggleSettingsModal()" class="text-white text-lg font-bold px-2">&times;</button>
+  <!-- 2. SETTINGS MODAL (THEME SWITCHER & VAULT ACCESS) -->
+  <div id="settingsModal" class="hidden fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="modal-card bg-white rounded-3xl shadow-2xl max-w-md w-full overflow-hidden border border-slate-200">
+      <div class="bg-slate-900 text-white px-5 py-4 flex items-center justify-between">
+        <h3 class="font-bold text-sm">⚙️ Display & Vault Settings</h3>
+        <button onclick="toggleSettingsModal()" class="text-white text-xl font-bold px-2">&times;</button>
       </div>
-      <div class="p-4 space-y-4 text-xs">
+      <div class="p-5 space-y-4 text-xs">
         <div>
           <label class="block font-bold mb-2 text-sm">Select Color Theme</label>
-          <div class="grid grid-cols-3 gap-2">
-            <button onclick="setTheme('light')" id="themeBtnLight" class="border rounded-lg p-3 font-semibold flex flex-col items-center gap-1 hover:bg-slate-100">
+          <div class="grid grid-cols-3 gap-2.5">
+            <button onclick="setTheme('light')" id="themeBtnLight" class="border rounded-2xl p-3 font-semibold flex flex-col items-center gap-1 hover:bg-slate-100">
               <span class="text-lg">☀️</span>
               <span>Light</span>
             </button>
-            <button onclick="setTheme('dark')" id="themeBtnDark" class="border rounded-lg p-3 font-semibold flex flex-col items-center gap-1 hover:bg-slate-100">
+            <button onclick="setTheme('dark')" id="themeBtnDark" class="border rounded-2xl p-3 font-semibold flex flex-col items-center gap-1 hover:bg-slate-100">
               <span class="text-lg">🌙</span>
               <span>Dark</span>
             </button>
-            <button onclick="setTheme('system')" id="themeBtnSystem" class="border rounded-lg p-3 font-semibold flex flex-col items-center gap-1 hover:bg-slate-100">
+            <button onclick="setTheme('system')" id="themeBtnSystem" class="border rounded-2xl p-3 font-semibold flex flex-col items-center gap-1 hover:bg-slate-100">
               <span class="text-lg">💻</span>
               <span>System</span>
             </button>
           </div>
         </div>
         <div class="border-t pt-3 flex justify-between items-center">
-          <span class="text-slate-500">Clear all 5 saved patient drafts</span>
-          <button onclick="clearAllDrafts()" class="bg-rose-100 text-rose-800 font-semibold px-3 py-1.5 rounded hover:bg-rose-200">Clear Drafts</button>
+          <span class="text-slate-600 dark:text-slate-300">Manage Cloud API Key Vault</span>
+          <button onclick="toggleSettingsModal(); toggleLoginModal();" class="chrome-pill-btn bg-indigo-100 text-indigo-900 px-3.5 py-1.5">🔑 Open Vault</button>
+        </div>
+        <div class="border-t pt-3 flex justify-between items-center">
+          <span class="text-slate-500">Clear all saved patient cases</span>
+          <button onclick="clearAllDrafts()" class="chrome-pill-btn bg-rose-100 text-rose-800 px-3.5 py-1.5 hover:bg-rose-200">Clear Storage</button>
         </div>
       </div>
     </div>
   </div>
 
   <!-- 3. GEMINI DYNAMIC CONTROL, PDF UPLOADER, VIVA & AUDITOR MODAL -->
-  <div id="geminiModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 flex items-center justify-center p-4">
-    <div class="modal-card bg-white rounded-2xl shadow-2xl max-w-2xl w-full overflow-hidden border border-purple-200 flex flex-col max-h-[92vh]">
-      <div class="bg-purple-900 text-white px-4 py-3 flex items-center justify-between">
-        <div>
-          <h3 class="font-bold text-sm">✨ Gemini Clinical Assistant, PDF Reader, Viva Examiner & Dynamic Controller</h3>
-          <p class="text-[11px] text-purple-200">Upload textbook PDFs/charts, ask doubts, auto-fill this page, practice viva, or audit code flaws</p>
+  <div id="geminiModal" class="hidden fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="modal-card bg-white rounded-3xl shadow-2xl max-w-2xl w-full overflow-hidden border border-purple-200 flex flex-col max-h-[92vh]">
+      <div class="gemini-chrome-fab text-white px-5 py-4 flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C12.5 7.5 16.5 11.5 22 12C16.5 12.5 12.5 16.5 12 22C11.5 16.5 7.5 12.5 2 12C7.5 11.5 11.5 7.5 12 2Z"/></svg>
+          <div>
+            <h3 class="font-bold text-sm">Ask Gemini Clinical Assistant</h3>
+            <p class="text-[11px] text-white/85">Upload textbook PDFs/charts, ask doubts, auto-fill this page, practice viva, or audit code</p>
+          </div>
         </div>
-        <button onclick="toggleGeminiModal()" class="text-white hover:text-purple-200 text-lg font-bold px-2">&times;</button>
+        <button onclick="toggleGeminiModal()" class="text-white hover:text-purple-200 text-xl font-bold px-2">&times;</button>
       </div>
 
-      <div class="p-4 space-y-3 overflow-y-auto flex-1">
+      <div class="p-5 space-y-3 overflow-y-auto flex-1">
         <!-- Multimodal Textbook PDF / Lab / Chart Uploader -->
-        <div class="bg-purple-50/70 border border-purple-200 p-2.5 rounded-lg flex flex-wrap items-center justify-between gap-2 text-xs">
+        <div class="bg-purple-50/70 border border-purple-200 p-3 rounded-2xl flex flex-wrap items-center justify-between gap-2 text-xs">
           <div>
             <span class="font-bold text-purple-950">📄 Attach Standard Textbook PDF / Growth Chart / Lab Photo:</span>
             <span id="attachedFileName" class="text-purple-700 ml-1">(None attached)</span>
@@ -997,22 +1307,22 @@
         <div>
           <div class="flex justify-between items-center mb-1">
             <label class="block text-xs font-semibold">Ask a Doubt, Reference Attached PDF, or Give a Dynamic Page Command</label>
-            <button type="button" onclick="startDictation('geminiUserPrompt')" class="text-[11px] bg-purple-100 text-purple-800 px-2 py-0.5 rounded font-semibold">🎤 Dictate</button>
+            <button type="button" onclick="startDictation('geminiUserPrompt')" class="chrome-pill-btn text-[11px] bg-purple-100 text-purple-800 px-2.5 py-0.5">🎤 Dictate</button>
           </div>
-          <textarea id="geminiUserPrompt" rows="3" class="w-full border rounded p-2 text-sm" placeholder="Examples:&#10;• PDF Reference: 'Compare this patient's anthropometry & history against the attached textbook PDF.'&#10;• Dynamic Command: 'Fill this form with a 3-year-old boy with fall from bed and acute fever.'"></textarea>
+          <textarea id="geminiUserPrompt" rows="3" class="w-full border rounded-2xl p-2.5 text-sm" placeholder="Examples:&#10;• PDF Reference: 'Compare this patient's anthropometry & history against the attached textbook PDF.'&#10;• Dynamic Command: 'Fill this form with a 3-year-old boy with fall from bed and acute fever.'"></textarea>
         </div>
 
         <div class="flex flex-wrap gap-2">
-          <button onclick="askGeminiDoubt()" class="bg-purple-700 hover:bg-purple-800 text-white text-xs font-semibold px-3 py-2 rounded-lg">
+          <button onclick="askGeminiDoubt()" class="chrome-pill-btn bg-purple-700 hover:bg-purple-800 text-white text-xs px-3.5 py-2">
             💬 Ask Doubt / Check PDF
           </button>
-          <button onclick="geminiControlPage()" class="bg-blue-700 hover:bg-blue-800 text-white text-xs font-semibold px-3 py-2 rounded-lg">
+          <button onclick="geminiControlPage()" class="chrome-pill-btn bg-blue-700 hover:bg-blue-800 text-white text-xs px-3.5 py-2">
             ⚡ Dynamically Fill / Control Page
           </button>
-          <button onclick="geminiVivaMode()" class="bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-semibold px-3 py-2 rounded-lg">
+          <button onclick="geminiVivaMode()" class="chrome-pill-btn bg-emerald-700 hover:bg-emerald-800 text-white text-xs px-3.5 py-2">
             🎓 Viva Examiner (5 Questions)
           </button>
-          <button onclick="geminiAuditFlaws()" class="bg-amber-600 hover:bg-amber-700 text-white text-xs font-semibold px-3 py-2 rounded-lg">
+          <button onclick="geminiAuditFlaws()" class="chrome-pill-btn bg-amber-600 hover:bg-amber-700 text-white text-xs px-3.5 py-2">
             🔍 Gather Coding & Form Flaws
           </button>
         </div>
@@ -1022,7 +1332,7 @@
             <label class="text-xs font-semibold text-slate-600">Gemini Output / Viva / Diagnostic Report</label>
             <button onclick="copyGeminiOutput()" class="text-[11px] text-blue-600 hover:underline">Copy Output</button>
           </div>
-          <textarea id="geminiModalOutput" rows="9" readonly class="w-full border rounded-lg p-3 text-xs bg-slate-50 font-mono leading-relaxed" placeholder="Gemini's response, PDF analysis, viva questions, or code flaw report will appear here..."></textarea>
+          <textarea id="geminiModalOutput" rows="9" readonly class="w-full border rounded-2xl p-3 text-xs bg-slate-50 font-mono leading-relaxed" placeholder="Gemini's response, PDF analysis, viva questions, or code flaw report will appear here..."></textarea>
         </div>
       </div>
     </div>
@@ -1048,39 +1358,207 @@
     const auth = firebase.auth();
     const db = firebase.firestore();
 
-    // --- 2. SESSION & VAULT STATE ---
+    // Default SVG Avatar Data URI
+    const DEFAULT_AVATAR_SVG = "data:image/svg+xml;utf8," + encodeURIComponent(
+      `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#1d4ed8"/><circle cx="50" cy="36" r="18" fill="#ffffff"/><path d="M20 86c0-16.5 13.5-30 30-30s30 13.5 30 30" fill="#ffffff"/></svg>`
+    );
+
+    // --- 2. SESSION, PROFILE & STORAGE STATE ---
     let currentGoogleUser = null;
     let activeSessionKey = sessionStorage.getItem('peds_active_session_key') || '';
-    let currentDraftKey = localStorage.getItem('peds_current_draft_slot') || 'draft_1';
     let attachedFileBase64 = null;
     let attachedFileMime = null;
 
     window.addEventListener('DOMContentLoaded', () => {
       initTheme();
-      document.getElementById('draftSelector').value = currentDraftKey;
-      loadPatientDraft(currentDraftKey);
+      loadMedicoProfileUI();
+      loadActiveWorkingDraft();
+      checkUrlForSharedCase();
       renderPedigree();
       renderSymptomTimeline();
+      updateSidebarCaseCount();
+
+      const savedSheetUrl = localStorage.getItem('peds_google_sheet_url') || '';
+      if (savedSheetUrl) document.getElementById('googleSheetUrlInput').value = savedSheetUrl;
 
       // Auto-save listener on all inputs
       document.querySelector('main').addEventListener('input', () => {
-        savePatientDraft(currentDraftKey);
+        saveActiveWorkingDraft();
       });
       document.querySelector('main').addEventListener('change', () => {
-        savePatientDraft(currentDraftKey);
+        saveActiveWorkingDraft();
+      });
+
+      // Close popups when clicking outside
+      document.addEventListener('click', (e) => {
+        const popup = document.getElementById('accountPopup');
+        const avatarBtn = document.getElementById('headerAvatarBtn');
+        if (popup && !popup.classList.contains('hidden') && !popup.contains(e.target) && !avatarBtn.contains(e.target)) {
+          popup.classList.add('hidden');
+        }
+        const searchDrop = document.getElementById('searchResultsDropdown');
+        const searchInput = document.getElementById('headerCaseSearch');
+        if (searchDrop && !searchDrop.classList.contains('hidden') && !searchDrop.contains(e.target) && e.target !== searchInput) {
+          searchDrop.classList.add('hidden');
+        }
       });
     });
 
-    // --- 3. FIREBASE AUTHENTICATION & FIRESTORE VAULT LISTENER ---
+    // --- SIDEBAR & POPUP CONTROLS ---
+    function toggleSidebar() {
+      const sb = document.getElementById('leftSidebar');
+      const ov = document.getElementById('sidebarOverlay');
+      const isClosed = sb.classList.contains('-translate-x-full');
+      if (isClosed) {
+        sb.classList.remove('-translate-x-full');
+        ov.classList.remove('hidden');
+        updateSidebarCaseCount();
+      } else {
+        sb.classList.add('-translate-x-full');
+        ov.classList.add('hidden');
+      }
+    }
+
+    function toggleAccountPopup(e) {
+      e.stopPropagation();
+      document.getElementById('accountPopup').classList.toggle('hidden');
+    }
+    function closeAccountPopup() {
+      document.getElementById('accountPopup').classList.add('hidden');
+    }
+
+    function openProfileModal() {
+      loadMedicoProfileUI();
+      document.getElementById('profileModal').classList.remove('hidden');
+    }
+    function closeProfileModal() {
+      document.getElementById('profileModal').classList.add('hidden');
+    }
+
+    function openStorageModal() {
+      renderStorageTable();
+      document.getElementById('storageModal').classList.remove('hidden');
+    }
+    function closeStorageModal() {
+      document.getElementById('storageModal').classList.add('hidden');
+    }
+
+    function openAboutModal() {
+      document.getElementById('aboutModal').classList.remove('hidden');
+    }
+    function closeAboutModal() {
+      document.getElementById('aboutModal').classList.add('hidden');
+    }
+
+    function toggleLoginModal() {
+      document.getElementById('loginModal').classList.toggle('hidden');
+    }
+    function toggleSettingsModal() {
+      document.getElementById('settingsModal').classList.toggle('hidden');
+    }
+    function toggleGeminiModal() {
+      document.getElementById('geminiModal').classList.toggle('hidden');
+    }
+
+    // --- 4. MEDICO PROFILE ENGINE (NAME, PHONE, INSTITUTION, COURSE, PHOTO) ---
+    function getSavedProfile() {
+      try {
+        return JSON.parse(localStorage.getItem('peds_medico_profile_v1') || '{}');
+      } catch {
+        return {};
+      }
+    }
+
+    function loadMedicoProfileUI() {
+      const prof = getSavedProfile();
+      const googlePhoto = currentGoogleUser?.photoURL || '';
+      const avatarSrc = prof.photoDataUrl || googlePhoto || DEFAULT_AVATAR_SVG;
+      const displayName = prof.name || currentGoogleUser?.displayName || 'Medico Profile';
+      const displayCourse = [prof.course, prof.institution].filter(Boolean).join(' • ') || 'Tap to add Name, College & Course';
+
+      ['headerAvatarImg', 'popupAvatarImg', 'sidebarAvatarImg', 'profileModalAvatarPreview'].forEach(id => {
+        const img = document.getElementById(id);
+        if (img) img.src = avatarSrc;
+      });
+
+      document.getElementById('sidebarProfileName').textContent = displayName;
+      document.getElementById('sidebarProfileCourse').textContent = displayCourse;
+      document.getElementById('popupUserName').textContent = displayName;
+      document.getElementById('popupUserMeta').textContent = displayCourse;
+      document.getElementById('popupUserEmail').textContent = currentGoogleUser?.email || prof.phone || 'Signed in';
+
+      document.getElementById('profName').value = prof.name || currentGoogleUser?.displayName || '';
+      document.getElementById('profPhone').value = prof.phone || '';
+      document.getElementById('profInstitution').value = prof.institution || '';
+      document.getElementById('profCourse').value = prof.course || '';
+    }
+
+    function handleProfilePicUpload(input) {
+      const file = input.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          const size = 180;
+          canvas.width = size;
+          canvas.height = size;
+          const ctx = canvas.getContext('2d');
+          const minDim = Math.min(img.width, img.height);
+          const sx = (img.width - minDim) / 2;
+          const sy = (img.height - minDim) / 2;
+          ctx.drawImage(img, sx, sy, minDim, minDim, 0, 0, size, size);
+          const compressed = canvas.toDataURL('image/jpeg', 0.85);
+          const prof = getSavedProfile();
+          prof.photoDataUrl = compressed;
+          localStorage.setItem('peds_medico_profile_v1', JSON.stringify(prof));
+          loadMedicoProfileUI();
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function resetProfilePicToGoogle() {
+      const prof = getSavedProfile();
+      delete prof.photoDataUrl;
+      localStorage.setItem('peds_medico_profile_v1', JSON.stringify(prof));
+      loadMedicoProfileUI();
+    }
+
+    async function saveMedicoProfile() {
+      const prof = getSavedProfile();
+      prof.name = document.getElementById('profName').value.trim();
+      prof.phone = document.getElementById('profPhone').value.trim();
+      prof.institution = document.getElementById('profInstitution').value.trim();
+      prof.course = document.getElementById('profCourse').value.trim();
+      localStorage.setItem('peds_medico_profile_v1', JSON.stringify(prof));
+      loadMedicoProfileUI();
+
+      if (currentGoogleUser) {
+        try {
+          await db.collection('medico_vault').doc(currentGoogleUser.uid).set({
+            profile: prof,
+            updatedAt: new Date().toISOString()
+          }, { merge: true });
+        } catch (e) {
+          console.warn('Profile cloud sync note:', e.message);
+        }
+      }
+      closeProfileModal();
+    }
+
+    // --- 3. FIREBASE AUTHENTICATION & UPPER-RIGHT AVATAR / VAULT ---
     auth.onAuthStateChanged(async (user) => {
       currentGoogleUser = user;
       const statusBox = document.getElementById('vaultSyncStatus');
 
       if (!user) {
-        // Logged out: wipe active session key immediately
         activeSessionKey = '';
         sessionStorage.removeItem('peds_active_session_key');
         updateAuthUI('logged_out');
+        loadMedicoProfileUI();
         return;
       }
 
@@ -1089,34 +1567,36 @@
 
       try {
         const docSnap = await db.collection('medico_vault').doc(user.uid).get();
-        if (docSnap.exists && docSnap.data().encryptedKey) {
-          loadedKey = atob(docSnap.data().encryptedKey);
-          statusBox.textContent = `☁️ Cloud Vault unlocked from Firestore for ${user.email}`;
+        if (docSnap.exists) {
+          const d = docSnap.data();
+          if (d.encryptedKey) {
+            loadedKey = atob(d.encryptedKey);
+            statusBox.textContent = `☁️ Cloud Vault unlocked from Firestore for ${user.email}`;
+          }
+          if (d.profile) {
+            const localProf = getSavedProfile();
+            localStorage.setItem('peds_medico_profile_v1', JSON.stringify({ ...d.profile, ...localProf }));
+          }
         }
       } catch (err) {
-        console.warn('Firestore read note:', err.message);
-        statusBox.textContent = `⚠️ Firestore note (${err.code || 'check rules'}) — Checking device backup vault...`;
+        statusBox.textContent = `⚠️ Using UID-locked device vault (${err.code || 'offline'})`;
       }
 
-      // Check UID-locked local backup if Firestore didn't return a key yet
       if (!loadedKey) {
         const localBackup = localStorage.getItem('peds_uid_vault_' + user.uid);
-        if (localBackup) {
-          loadedKey = atob(localBackup);
-          statusBox.textContent = `🔒 Unlocked from UID-bound backup vault for ${user.email}`;
-        }
+        if (localBackup) loadedKey = atob(localBackup);
       }
+
+      loadMedicoProfileUI();
 
       if (loadedKey) {
         activeSessionKey = loadedKey;
         sessionStorage.setItem('peds_active_session_key', loadedKey);
         updateAuthUI('unlocked');
       } else {
-        // First time this Google account has logged in — prompt once for Gemini key
         activeSessionKey = '';
         sessionStorage.removeItem('peds_active_session_key');
         updateAuthUI('needs_key');
-        // Automatically open the modal so the first-time user sees the 1-time link step
         document.getElementById('loginModal').classList.remove('hidden');
       }
     });
@@ -1146,8 +1626,6 @@
       }
 
       const encoded = btoa(rawKey);
-      const statusBox = document.getElementById('vaultSyncStatus');
-      // Always save a UID-locked fallback on device as well
       localStorage.setItem('peds_uid_vault_' + currentGoogleUser.uid, encoded);
 
       try {
@@ -1156,27 +1634,28 @@
           encryptedKey: encoded,
           updatedAt: new Date().toISOString()
         }, { merge: true });
-        statusBox.textContent = `✅ Saved to Firebase Cloud Vault for ${currentGoogleUser.email}`;
       } catch (err) {
         console.warn('Firestore write note:', err.message);
-        statusBox.textContent = `✅ Key locked to your Google UID (Publish Firestore Rules in console to sync across devices)`;
       }
 
       activeSessionKey = rawKey;
       sessionStorage.setItem('peds_active_session_key', rawKey);
       document.getElementById(inputElementId).value = '';
       updateAuthUI('unlocked');
+      document.getElementById('loginModal').classList.add('hidden');
     }
 
     async function handleMedicoLogout() {
       activeSessionKey = '';
       sessionStorage.removeItem('peds_active_session_key');
+      closeAccountPopup();
       await auth.signOut();
       updateAuthUI('logged_out');
     }
 
     function updateAuthUI(state) {
-      const btn = document.getElementById('headerLoginBtn');
+      const loginBtn = document.getElementById('headerLoginBtn');
+      const avatarBtn = document.getElementById('headerAvatarBtn');
       const loggedOut = document.getElementById('loggedOutView');
       const firstTime = document.getElementById('firstTimeKeyView');
       const loggedIn = document.getElementById('loggedInView');
@@ -1186,35 +1665,304 @@
       firstTime.classList.add('hidden');
       loggedIn.classList.add('hidden');
 
-      if (state === 'unlocked' && currentGoogleUser) {
-        const shortName = (currentGoogleUser.displayName || currentGoogleUser.email).split(' ')[0];
-        btn.innerHTML = `👤 ${shortName} (Active)`;
-        btn.className = 'text-xs bg-emerald-600 hover:bg-emerald-500 text-white font-semibold px-2.5 py-1.5 rounded shadow flex items-center gap-1';
-        loggedIn.classList.remove('hidden');
-        document.getElementById('activeUserDisplay').textContent = `Signed in as ${currentGoogleUser.email}`;
-        banner.textContent = `✅ Firebase Cloud API Vault active for ${currentGoogleUser.email}`;
-      } else if (state === 'needs_key' && currentGoogleUser) {
-        btn.innerHTML = `⚠️ Link Key`;
-        btn.className = 'text-xs bg-amber-500 hover:bg-amber-600 text-white font-semibold px-2.5 py-1.5 rounded shadow flex items-center gap-1';
-        firstTime.classList.remove('hidden');
-        document.getElementById('welcomeNewMedico').textContent = `👋 Welcome, ${currentGoogleUser.displayName || currentGoogleUser.email}!`;
-        banner.textContent = `⚠️ Signed in as ${currentGoogleUser.email} — Paste your Gemini API key once to finish setup`;
+      if (currentGoogleUser) {
+        // Requirement 8: After login, show ONLY the profile picture in the upper-right corner
+        loginBtn.classList.add('hidden');
+        avatarBtn.classList.remove('hidden');
+
+        if (state === 'unlocked') {
+          loggedIn.classList.remove('hidden');
+          document.getElementById('activeUserDisplay').textContent = `Signed in as ${currentGoogleUser.email}`;
+          banner.textContent = `✅ Firebase Cloud API Vault active for ${currentGoogleUser.email}`;
+        } else {
+          firstTime.classList.remove('hidden');
+          document.getElementById('welcomeNewMedico').textContent = `👋 Welcome, ${currentGoogleUser.displayName || currentGoogleUser.email}!`;
+          banner.textContent = `⚠️ Signed in as ${currentGoogleUser.email} — Click your top-right avatar to link your Gemini key`;
+        }
       } else {
-        btn.innerHTML = '🔑 Login';
-        btn.className = 'text-xs bg-indigo-600 hover:bg-indigo-500 text-white font-semibold px-2.5 py-1.5 rounded shadow flex items-center gap-1';
+        loginBtn.classList.remove('hidden');
+        avatarBtn.classList.add('hidden');
         loggedOut.classList.remove('hidden');
-        banner.textContent = '🔓 Not logged in — Clicking AI buttons will use Zero-Key Copy & Launch mode (or click Login to unlock your Cloud Vault)';
+        banner.textContent = '🔓 Not signed in — Clicking AI buttons uses Zero-Key Copy & Launch mode (or click Sign in)';
       }
     }
 
-    function toggleLoginModal() {
-      document.getElementById('loginModal').classList.toggle('hidden');
+    // --- 6 & 9. PATIENT CASE STORAGE, SEARCH BAR & 2-COLUMN GOOGLE SHEET HYPERLINK ENGINE ---
+    function getStoredCases() {
+      try {
+        return JSON.parse(localStorage.getItem('peds_saved_cases_db_v1') || '[]');
+      } catch {
+        return [];
+      }
     }
-    function toggleSettingsModal() {
-      document.getElementById('settingsModal').classList.toggle('hidden');
+
+    function setStoredCases(cases) {
+      localStorage.setItem('peds_saved_cases_db_v1', JSON.stringify(cases));
+      updateSidebarCaseCount();
     }
-    function toggleGeminiModal() {
-      document.getElementById('geminiModal').classList.toggle('hidden');
+
+    function updateSidebarCaseCount() {
+      const countEl = document.getElementById('sidebarCaseCount');
+      if (countEl) countEl.textContent = getStoredCases().length;
+    }
+
+    function collectFormSnapshot() {
+      const data = {};
+      document.querySelectorAll('main input[id], main select[id], main textarea[id]').forEach(el => {
+        if (el.type === 'file') return;
+        data[el.id] = el.type === 'checkbox' ? el.checked : el.value;
+      });
+      return data;
+    }
+
+    function applyFormSnapshot(data) {
+      if (!data) return;
+      Object.keys(data).forEach(id => {
+        const el = document.getElementById(id);
+        if (el && el.type !== 'file') {
+          if (el.type === 'checkbox') el.checked = Boolean(data[id]);
+          else el.value = data[id];
+        }
+      });
+      toggleModules();
+      calcMPH();
+      calcFluids();
+      calcCorrectedAge();
+      calcDQ();
+      calcDietDeficit();
+      checkPcmDose();
+      checkVitals();
+      renderSymptomTimeline();
+      renderPedigree();
+    }
+
+    function saveActiveWorkingDraft() {
+      const snap = collectFormSnapshot();
+      localStorage.setItem('peds_working_draft_v1', JSON.stringify(snap));
+      const badge = document.getElementById('autoSaveBadge');
+      if (badge) {
+        badge.textContent = `✓ Auto-saved at ${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`;
+      }
+    }
+
+    function loadActiveWorkingDraft() {
+      const raw = localStorage.getItem('peds_working_draft_v1');
+      if (!raw) return;
+      try {
+        applyFormSnapshot(JSON.parse(raw));
+      } catch (e) {
+        console.warn('Draft restore note:', e);
+      }
+    }
+
+    function buildCaseShareUrl(caseObj) {
+      const baseUrl = window.location.origin + window.location.pathname;
+      const minimal = {
+        id: caseObj.id,
+        ptName: caseObj.name,
+        chiefComplaints: caseObj.chiefComplaints,
+        ptAge: caseObj.formData?.ptAge || '',
+        ptSex: caseObj.formData?.ptSex || 'male',
+        outputParagraphs: caseObj.formData?.outputParagraphs || ''
+      };
+      const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(minimal))));
+      return `${baseUrl}#case=${encoded}`;
+    }
+
+    function checkUrlForSharedCase() {
+      const hash = window.location.hash || '';
+      if (hash.startsWith('#case=')) {
+        try {
+          const encoded = hash.replace('#case=', '');
+          const decoded = JSON.parse(decodeURIComponent(escape(atob(encoded))));
+          // First check if full case exists locally by ID
+          const existing = getStoredCases().find(c => c.id === decoded.id);
+          if (existing && existing.formData) {
+            applyFormSnapshot(existing.formData);
+          } else {
+            applyFormSnapshot(decoded);
+          }
+        } catch (e) {
+          console.warn('Shared case link decode error:', e);
+        }
+      }
+    }
+
+    function saveCurrentCaseToStorage(showToast = false) {
+      if (!document.getElementById('outputParagraphs').value.trim()) {
+        generateHistoryParagraphs(false);
+      }
+      const snap = collectFormSnapshot();
+      const ptName = (snap.ptName || '').trim() || 'Unnamed Patient';
+      const cc = (snap.chiefComplaints || '').trim() || 'No chief complaints recorded';
+
+      const cases = getStoredCases();
+      const existingIdx = cases.findIndex(c => c.name.toLowerCase() === ptName.toLowerCase());
+      const caseRecord = {
+        id: existingIdx >= 0 ? cases[existingIdx].id : 'case_' + Date.now(),
+        name: ptName,
+        chiefComplaints: cc,
+        updatedAt: new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }),
+        formData: snap
+      };
+      caseRecord.shareUrl = buildCaseShareUrl(caseRecord);
+
+      if (existingIdx >= 0) {
+        cases[existingIdx] = caseRecord;
+      } else {
+        cases.unshift(caseRecord);
+      }
+      setStoredCases(cases);
+      if (showToast) {
+        alert(`✅ Saved "${ptName}" to Storage!\n\nYou can now search this patient by name in the top bar or export the 2-column hyperlink row to your Google Sheet.`);
+      }
+    }
+
+    function loadCaseById(caseId) {
+      const found = getStoredCases().find(c => c.id === caseId);
+      if (!found) return;
+      applyFormSnapshot(found.formData);
+      saveActiveWorkingDraft();
+      closeStorageModal();
+      document.getElementById('searchResultsDropdown').classList.add('hidden');
+    }
+
+    function deleteCaseById(caseId) {
+      const updated = getStoredCases().filter(c => c.id !== caseId);
+      setStoredCases(updated);
+      renderStorageTable();
+    }
+
+    function startBlankPatientCase() {
+      localStorage.removeItem('peds_working_draft_v1');
+      window.location.hash = '';
+      window.location.reload();
+    }
+
+    function renderStorageTable() {
+      const tbody = document.getElementById('storageTableBody');
+      const cases = getStoredCases();
+      if (cases.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="3" class="py-6 px-4 text-center text-slate-400">
+              No patient cases saved yet. Fill in a patient's name & chief complaints and click <strong>"💾 Save Case"</strong> or <strong>"⚡ Generate & Save Case"</strong>.
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      tbody.innerHTML = cases.map(c => `
+        <tr class="hover:bg-blue-50/50 dark:hover:bg-slate-800/60 transition-colors">
+          <td class="py-2.5 px-3.5 font-bold">
+            <a href="${c.shareUrl}" onclick="event.preventDefault(); loadCaseById('${c.id}');" class="text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1.5">
+              <span>🔗 ${c.name}</span>
+            </a>
+            <div class="text-[10px] text-slate-400 font-normal">Saved ${c.updatedAt}</div>
+          </td>
+          <td class="py-2.5 px-3.5 text-slate-700 dark:text-slate-300">${c.chiefComplaints}</td>
+          <td class="py-2.5 px-3 text-right space-x-1">
+            <button onclick="loadCaseById('${c.id}')" class="text-blue-600 hover:underline font-semibold">Open</button>
+            <button onclick="deleteCaseById('${c.id}')" class="text-rose-600 hover:underline ml-1">Delete</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function saveGoogleSheetUrl() {
+      const url = document.getElementById('googleSheetUrlInput').value.trim();
+      localStorage.setItem('peds_google_sheet_url', url);
+      alert('✅ Google Sheet link saved!');
+    }
+
+    function openLinkedGoogleSheet() {
+      const url = document.getElementById('googleSheetUrlInput').value.trim() || localStorage.getItem('peds_google_sheet_url');
+      if (url) {
+        window.open(url, '_blank');
+      } else {
+        window.open('https://sheets.new', '_blank');
+      }
+    }
+
+    function copyTwoColumnForGoogleSheet() {
+      let cases = getStoredCases();
+      if (cases.length === 0) {
+        saveCurrentCaseToStorage(false);
+        cases = getStoredCases();
+      }
+      // Build 2-column TSV where Column 1 is =HYPERLINK("url", "Patient Name") and Column 2 is Chief Complaints
+      const header = "Patient's Name (Case History Link)\tChief Complaints";
+      const rows = cases.map(c => {
+        const safeName = c.name.replace(/"/g, '""');
+        const safeCC = c.chiefComplaints.replace(/[\t\r\n]+/g, ' ');
+        const formula = `=HYPERLINK("${c.shareUrl}", "${safeName}")`;
+        return `${formula}\t${safeCC}`;
+      });
+      const tsv = [header, ...rows].join('\n');
+      navigator.clipboard.writeText(tsv);
+      alert('✅ Copied 2-Column Table (with clickable Patient Name Hyperlinks & Chief Complaints)!\n\nOpen your Google Sheet, click cell A1, and press Ctrl + V (Paste).');
+    }
+
+    function exportTwoColumnCSV() {
+      let cases = getStoredCases();
+      if (cases.length === 0) {
+        saveCurrentCaseToStorage(false);
+        cases = getStoredCases();
+      }
+      const header = `"Patient's Name (Hyperlinked to Case History)","Chief Complaints"`;
+      const rows = cases.map(c => {
+        const safeName = c.name.replace(/"/g, '""');
+        const safeCC = c.chiefComplaints.replace(/"/g, '""');
+        const formula = `=HYPERLINK(""${c.shareUrl}"", ""${safeName}"")`;
+        return `"${formula}","${safeCC}"`;
+      });
+      const csvContent = "data:text/csv;charset=utf-8," + encodeURIComponent([header, ...rows].join('\n'));
+      const link = document.createElement('a');
+      link.setAttribute('href', csvContent);
+      link.setAttribute('download', 'Pediatric_Cases_2Column_Sheet.csv');
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    }
+
+    // --- 9. TOP HEADER SEARCH BAR ENGINE ---
+    function handleCaseSearch(query) {
+      const q = query.trim().toLowerCase();
+      const dropdown = document.getElementById('searchResultsDropdown');
+      const clearBtn = document.getElementById('clearSearchBtn');
+      clearBtn.classList.toggle('hidden', !q);
+
+      const cases = getStoredCases();
+      if (!q && cases.length === 0) {
+        dropdown.classList.add('hidden');
+        return;
+      }
+
+      const matches = q
+        ? cases.filter(c => c.name.toLowerCase().includes(q) || c.chiefComplaints.toLowerCase().includes(q))
+        : cases.slice(0, 5);
+
+      if (matches.length === 0) {
+        dropdown.innerHTML = `<div class="p-3.5 text-xs text-slate-400 text-center">No saved patient case found matching "${query}"</div>`;
+      } else {
+        dropdown.innerHTML = matches.map(c => `
+          <div onclick="loadCaseById('${c.id}')" class="px-4 py-2.5 hover:bg-blue-50 dark:hover:bg-slate-700 cursor-pointer border-b last:border-b-0 flex items-center justify-between gap-2">
+            <div class="overflow-hidden">
+              <div class="font-bold text-xs text-blue-600 dark:text-blue-400 truncate">🔗 ${c.name}</div>
+              <div class="text-[11px] text-slate-500 dark:text-slate-300 truncate">${c.chiefComplaints}</div>
+            </div>
+            <span class="text-[10px] text-slate-400 shrink-0">${c.updatedAt}</span>
+          </div>
+        `).join('');
+      }
+      dropdown.classList.remove('hidden');
+    }
+
+    function clearCaseSearch() {
+      document.getElementById('headerCaseSearch').value = '';
+      document.getElementById('clearSearchBtn').classList.add('hidden');
+      document.getElementById('searchResultsDropdown').classList.add('hidden');
     }
 
     // --- THEME CONTROLLER (LIGHT / DARK / SYSTEM) ---
@@ -1239,57 +1987,10 @@
       });
     }
 
-    // --- MULTI-PATIENT AUTO-SAVE DRAFTS ---
-    function savePatientDraft(slot) {
-      const data = {};
-      document.querySelectorAll('main input[id], main select[id], main textarea[id]').forEach(el => {
-        if (el.type === 'file') return;
-        data[el.id] = el.type === 'checkbox' ? el.checked : el.value;
-      });
-      localStorage.setItem('peds_draft_' + slot, JSON.stringify(data));
-      const badge = document.getElementById('autoSaveBadge');
-      if (badge) {
-        badge.textContent = `✓ Auto-saved (${slot.replace('_', ' ')}) at ${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`;
-      }
-    }
-
-    function loadPatientDraft(slot) {
-      const raw = localStorage.getItem('peds_draft_' + slot);
-      if (!raw) return;
-      try {
-        const data = JSON.parse(raw);
-        Object.keys(data).forEach(id => {
-          const el = document.getElementById(id);
-          if (el && el.type !== 'file') {
-            if (el.type === 'checkbox') el.checked = Boolean(data[id]);
-            else el.value = data[id];
-          }
-        });
-        toggleModules();
-        calcMPH();
-        calcFluids();
-        calcCorrectedAge();
-        calcDQ();
-        calcDietDeficit();
-        checkPcmDose();
-        checkVitals();
-        renderSymptomTimeline();
-        renderPedigree();
-      } catch (e) {
-        console.warn('Draft load error:', e);
-      }
-    }
-
-    function switchPatientDraft(slot) {
-      savePatientDraft(currentDraftKey);
-      currentDraftKey = slot;
-      localStorage.setItem('peds_current_draft_slot', slot);
-      loadPatientDraft(slot);
-    }
-
     function clearAllDrafts() {
-      if (confirm('Delete all 5 saved patient drafts?')) {
-        ['draft_1','draft_2','draft_3','draft_4','draft_5'].forEach(s => localStorage.removeItem('peds_draft_' + s));
+      if (confirm('Delete all saved patient cases from Storage?')) {
+        localStorage.removeItem('peds_saved_cases_db_v1');
+        localStorage.removeItem('peds_working_draft_v1');
         window.location.reload();
       }
     }
@@ -1656,12 +2357,12 @@
     }
 
     function scrollToSummary() {
-      generateHistoryParagraphs();
+      generateHistoryParagraphs(true);
       document.getElementById('summarySection').scrollIntoView({ behavior: 'smooth' });
     }
 
     // --- GENERATE CASE PARAGRAPHS ---
-    function generateHistoryParagraphs() {
+    function generateHistoryParagraphs(autoArchive = false) {
       const name = document.getElementById('ptName').value.trim() || 'The patient';
       const age = document.getElementById('ptAge').value.trim() || 'an unspecified age';
       const sex = document.getElementById('ptSex').value;
@@ -1781,11 +2482,15 @@
       let para5 = `ALLERGEN, ADDICTION, FAMILY & GENERAL EXAMINATION:\nAllergen History: ${allergens.length ? allergens.join(', ') : 'No known drug, food, or environmental allergies.'}\nAddiction History: ${addictions.length ? addictions.join(', ') : 'No active substance abuse or passive smoke exposure.'}\nFamily History: ${famH} ${socH}\nGeneral Exam & Vitals: ${vitalsLine || 'Vitals not recorded.'} | Positive GPE signs: ${gpeChecked.length ? gpeChecked.join(', ') : 'No pallor, icterus, cyanosis, clubbing, lymphadenopathy, or edema.'}`;
 
       document.getElementById('outputParagraphs').value = [para1, para2, para3, para4, para5].join('\n\n');
+      saveActiveWorkingDraft();
+      if (autoArchive && document.getElementById('ptName').value.trim()) {
+        saveCurrentCaseToStorage(false);
+      }
     }
 
     function copySummary() {
       const out = document.getElementById('outputParagraphs');
-      if (!out.value.trim()) generateHistoryParagraphs();
+      if (!out.value.trim()) generateHistoryParagraphs(true);
       out.select();
       navigator.clipboard.writeText(out.value);
       alert('Case presentation copied to clipboard!');
@@ -1793,7 +2498,7 @@
 
     function shareWhatsApp() {
       const out = document.getElementById('outputParagraphs');
-      if (!out.value.trim()) generateHistoryParagraphs();
+      if (!out.value.trim()) generateHistoryParagraphs(true);
       const url = 'https://wa.me/?text=' + encodeURIComponent(out.value);
       window.open(url, '_blank');
     }
@@ -1807,8 +2512,7 @@
 
     function resetForm() {
       if (confirm('Clear current patient form?')) {
-        localStorage.removeItem('peds_draft_' + currentDraftKey);
-        window.location.reload();
+        startBlankPatientCase();
       }
     }
 
@@ -1875,11 +2579,11 @@
       const btn = document.getElementById('aiBtn');
       try {
         if (!document.getElementById('outputParagraphs').value.trim()) {
-          generateHistoryParagraphs();
+          generateHistoryParagraphs(true);
         }
         const rawCase = document.getElementById('outputParagraphs').value;
         btn.disabled = true;
-        btn.textContent = 'Polishing with Gemini...';
+        btn.innerHTML = '<span>Polishing with Gemini...</span>';
 
         const reply = await callGeminiAPI(
           `You are a Senior Professor of Pediatrics. Rewrite the following pediatric history notes into a fluent, formal bedside clinical case presentation. Preserve all clinical calculations and pertinent negatives. At the end, add "SYNDROMIC IMPRESSION & TOP 3 DIFFERENTIAL DIAGNOSES".\n\nRAW CASE NOTES:\n${rawCase}`
@@ -1889,7 +2593,7 @@
         console.log(err.message);
       } finally {
         btn.disabled = false;
-        btn.textContent = '✨ Polish Case & Generate Differential Diagnosis';
+        btn.innerHTML = `<svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C12.5 7.5 16.5 11.5 22 12C16.5 12.5 12.5 16.5 12 22C11.5 16.5 7.5 12.5 2 12C7.5 11.5 11.5 7.5 12 2Z"/></svg><span>Polish Case & Generate Differential Diagnosis</span>`;
       }
     }
 
@@ -1900,7 +2604,7 @@
         alert('Please type a question or attach a textbook PDF/chart first.');
         return;
       }
-      generateHistoryParagraphs();
+      generateHistoryParagraphs(false);
       const currentCase = document.getElementById('outputParagraphs').value;
       out.value = 'Analyzing case & attached reference document...';
       try {
@@ -1915,7 +2619,7 @@
 
     async function geminiVivaMode() {
       const out = document.getElementById('geminiModalOutput');
-      generateHistoryParagraphs();
+      generateHistoryParagraphs(false);
       const currentCase = document.getElementById('outputParagraphs').value;
       out.value = 'Generating 5 bedside practical viva questions & answers...';
       try {
@@ -2029,8 +2733,7 @@ USER COMMAND: ${command}`;
           }
         }
 
-        savePatientDraft(currentDraftKey);
-        generateHistoryParagraphs();
+        generateHistoryParagraphs(true);
         out.value = `✅ Page Updated Dynamically!\n\n${actions.summaryMessage || 'Form fields and clinical summary updated.'}`;
       } catch (err) {
         out.value = 'Dynamic control note: ' + err.message;
