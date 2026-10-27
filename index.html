@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="light">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -8,13 +8,18 @@
   <meta name="google-site-verification" content="I0785uVeIRkrW6Ue63YVX0HmrvEGWhRWJCt3I32gG9Q" />
 
   <!-- 2. SEO Title & Description Shown on Google Search -->
-  <title>Pediatric History | Dr. Danny</title>
-  <meta name="description" content="Interactive pediatric clinical history taking guide, bedside proforma, and checklist by Dr. Danny (danny-code-2029)." />
-  <meta name="keywords" content="Dr. Danny, Dr Danny peds, pediatric history, peds history, clinical pediatrics, danny-code-2029" />
+  <title>Pediatric History Performa | Dr. Danny</title>
+  <meta name="description" content="Interactive Pediatric History Performa, clinical calculators, pedigree builder, and AI case generator by Dr. Danny (danny-code-2029)." />
+  <meta name="keywords" content="Dr. Danny, Dr Danny peds, pediatric history performa, pediatric history, peds history, clinical pediatrics, danny-code-2029" />
   <meta name="robots" content="index, follow" />
   <link rel="canonical" href="https://danny-code-2029.github.io/peds-history/" />
 
   <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class'
+    };
+  </script>
   <style>
     .ask-prompt {
       background-color: #eff6ff;
@@ -25,7 +30,7 @@
       margin-bottom: 0.5rem;
       border-radius: 0 0.35rem 0.35rem 0;
     }
-    .ghai-pearl {
+    .clinical-pearl {
       background-color: #f0fdf4;
       border-left: 3px solid #16a34a;
       padding: 0.35rem 0.6rem;
@@ -36,19 +41,75 @@
     }
     details > summary { list-style: none; }
     details > summary::-webkit-details-marker { display: none; }
+
+    /* Dark Mode Overrides */
+    html.dark body { background-color: #0f172a; color: #e2e8f0; }
+    html.dark details, html.dark section, html.dark .modal-card {
+      background-color: #1e293b !important;
+      border-color: #334155 !important;
+      color: #f1f5f9 !important;
+    }
+    html.dark summary {
+      background-color: #0f172a !important;
+      color: #f8fafc !important;
+      border-color: #334155 !important;
+    }
+    html.dark input, html.dark select, html.dark textarea {
+      background-color: #0f172a !important;
+      border-color: #475569 !important;
+      color: #f8fafc !important;
+    }
+    html.dark .bg-slate-50 { background-color: #0f172a !important; border-color: #334155 !important; }
+    html.dark .ask-prompt { background-color: #1e3a8a40; color: #bfdbfe; border-left-color: #60a5fa; }
+    html.dark .clinical-pearl { background-color: #14532d40; color: #bbf7d0; border-left-color: #4ade80; }
+
+    /* Clean A4 Print Stylesheet */
+    @media print {
+      header, .no-print, #geminiFloatBtn, #geminiModal, #settingsModal, #loginModal { display: none !important; }
+      body { background: white !important; color: black !important; padding: 0 !important; }
+      main { max-width: 100% !important; }
+    }
   </style>
 </head>
-<body class="bg-slate-100 text-slate-800 min-h-screen pb-16">
+<body class="bg-slate-100 text-slate-800 min-h-screen pb-24 transition-colors duration-200">
 
-  <!-- Sticky Header -->
+  <!-- STICKY HEADER -->
   <header class="bg-blue-950 text-white sticky top-0 z-30 shadow-md">
     <div class="max-w-5xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-2">
-      <div>
-        <h1 class="text-lg font-bold tracking-tight">Pediatric History Proforma | Dr. Danny</h1>
-        <p class="text-xs text-blue-200">Interactive Pediatric History & Clinical Calculator by Dr. Danny — Ask prompted questions & generate case paragraphs</p>
+      <div class="flex items-center gap-3">
+        <div>
+          <h1 class="text-lg font-bold tracking-tight">Pediatric History Performa</h1>
+          <p class="text-[11px] text-blue-200">Auto-saving bedside history, clinical calculators, pedigree & AI assistant</p>
+        </div>
       </div>
-      <div class="flex items-center gap-2">
-        <button onclick="resetForm()" class="text-xs bg-blue-900 hover:bg-blue-800 px-3 py-1.5 rounded border border-blue-700">
+
+      <div class="flex flex-wrap items-center gap-1.5">
+        <!-- Multi-Patient Draft Selector -->
+        <select id="draftSelector" onchange="switchPatientDraft(this.value)" class="text-xs bg-blue-900 text-white border border-blue-700 rounded px-2 py-1.5 font-semibold" title="Auto-saved patient drafts">
+          <option value="draft_1">📁 Patient 1</option>
+          <option value="draft_2">📁 Patient 2</option>
+          <option value="draft_3">📁 Patient 3</option>
+          <option value="draft_4">📁 Patient 4</option>
+          <option value="draft_5">📁 Patient 5</option>
+        </select>
+
+        <!-- Ask Gemini Button -->
+        <button onclick="toggleGeminiModal()" class="text-xs bg-purple-600 hover:bg-purple-500 text-white font-semibold px-2.5 py-1.5 rounded shadow flex items-center gap-1">
+          ✨ Ask Gemini
+        </button>
+
+        <!-- Login / Vault Button -->
+        <button id="headerLoginBtn" onclick="toggleLoginModal()" class="text-xs bg-indigo-600 hover:bg-indigo-500 text-white font-semibold px-2.5 py-1.5 rounded shadow flex items-center gap-1">
+          🔑 Login
+        </button>
+
+        <!-- Settings (Theme) Button -->
+        <button onclick="toggleSettingsModal()" class="text-xs bg-slate-800 hover:bg-slate-700 text-white px-2.5 py-1.5 rounded border border-slate-600" title="Theme & Vault Settings">
+          ⚙️ Settings
+        </button>
+
+        <!-- Reset & Generate -->
+        <button onclick="resetForm()" class="text-xs bg-blue-900 hover:bg-blue-800 px-2.5 py-1.5 rounded border border-blue-700">
           Reset
         </button>
         <button onclick="scrollToSummary()" class="text-xs bg-emerald-500 hover:bg-emerald-600 text-white font-semibold px-3 py-1.5 rounded shadow">
@@ -61,39 +122,42 @@
   <main class="max-w-5xl mx-auto px-3 sm:px-4 pt-4 space-y-4">
 
     <!-- Focused Symptom & Age Module Toggles -->
-    <section class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
-      <h2 class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2.5">Activate Focused Clinical Modules (As Needed)</h2>
+    <section class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 no-print">
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-2.5">
+        <h2 class="text-xs font-bold uppercase tracking-wider text-slate-500">Activate Focused Clinical Modules (As Needed)</h2>
+        <span id="autoSaveBadge" class="text-[11px] text-emerald-600 font-medium">✓ Auto-saved locally</span>
+      </div>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
         <label class="flex items-center gap-2 bg-amber-50 border border-amber-300 px-3 py-2 rounded-lg cursor-pointer select-none">
           <input type="checkbox" id="toggleFever" onchange="toggleModules()" class="w-4 h-4 text-amber-600 rounded" />
-          <span class="text-xs font-semibold text-amber-900">🔥 Fever Proforma (8 Attributes)</span>
+          <span class="text-xs font-semibold text-amber-900">🔥 Fever Module</span>
         </label>
         <label class="flex items-center gap-2 bg-cyan-50 border border-cyan-300 px-3 py-2 rounded-lg cursor-pointer select-none">
           <input type="checkbox" id="toggleCough" onchange="toggleModules()" class="w-4 h-4 text-cyan-600 rounded" />
-          <span class="text-xs font-semibold text-cyan-900">🫁 Cough & Respiratory Sheet</span>
+          <span class="text-xs font-semibold text-cyan-900">🫁 Cough & Respiratory</span>
         </label>
         <label class="flex items-center gap-2 bg-rose-50 border border-rose-300 px-3 py-2 rounded-lg cursor-pointer select-none">
           <input type="checkbox" id="toggleDehydration" onchange="toggleModules()" class="w-4 h-4 text-rose-600 rounded" />
-          <span class="text-xs font-semibold text-rose-900">💧 Dehydration & Fluid Deficit</span>
+          <span class="text-xs font-semibold text-rose-900">💧 Dehydration & Fluids</span>
         </label>
         <label class="flex items-center gap-2 bg-purple-50 border border-purple-300 px-3 py-2 rounded-lg cursor-pointer select-none">
           <input type="checkbox" id="toggleAdolescent" onchange="toggleModules()" class="w-4 h-4 text-purple-600 rounded" />
-          <span class="text-xs font-semibold text-purple-900">🧑 Adolescent Clinic (10–19 yr)</span>
+          <span class="text-xs font-semibold text-purple-900">🧑 Adolescent Health</span>
         </label>
       </div>
     </section>
 
-    <!-- 1. DEMOGRAPHICS & INFORMANT -->
+    <!-- 1. DEMOGRAPHIC HISTORY -->
     <details open class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
       <summary class="bg-slate-50 px-4 py-3 font-bold text-slate-800 cursor-pointer flex justify-between items-center border-b">
-        <span>1. Demographic Profile & Informant Reliability</span>
+        <span>1. Demographic History</span>
         <span class="text-xs text-blue-600 font-normal">Tap to collapse/expand</span>
       </summary>
       <div class="p-4 space-y-3">
         <div class="ask-prompt">
-          <strong>Ask the informant:</strong> "What is the child's full name, exact age (or date of birth), and birth order? Who is the primary caregiver giving this history today, and where is your current residence and native place?"
+          <strong>Ask the informant:</strong> "What is the child's full name, exact age (or date of birth), and birth order? Who is the primary caregiver giving this history today, and where is your current residence?"
         </div>
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
           <div>
             <label class="block text-xs font-semibold mb-1">Child's Name</label>
             <input id="ptName" type="text" placeholder="e.g., Master Aarav" class="w-full border rounded p-2 text-sm" />
@@ -103,8 +167,12 @@
             <input id="ptAge" type="text" placeholder="e.g., 2 years 6 months" class="w-full border rounded p-2 text-sm" />
           </div>
           <div>
+            <label class="block text-xs font-semibold mb-1">Age in Months (For Calculators)</label>
+            <input id="ptAgeMonths" type="number" step="0.5" placeholder="e.g., 30" oninput="calcCorrectedAge(); checkVitals();" class="w-full border rounded p-2 text-sm" />
+          </div>
+          <div>
             <label class="block text-xs font-semibold mb-1">Sex</label>
-            <select id="ptSex" onchange="calcMPH(); updateICMR();" class="w-full border rounded p-2 text-sm">
+            <select id="ptSex" onchange="calcMPH(); updateRDA(); renderPedigree();" class="w-full border rounded p-2 text-sm">
               <option value="male">Male</option>
               <option value="female">Female</option>
             </select>
@@ -118,69 +186,66 @@
             <input id="ptAddress" type="text" placeholder="e.g., Durg, Chhattisgarh" class="w-full border rounded p-2 text-sm" />
           </div>
           <div>
-            <label class="block text-xs font-semibold mb-1">Mother Tongue / Religion</label>
-            <input id="ptReligion" type="text" placeholder="e.g., Hindi / Hindu" class="w-full border rounded p-2 text-sm" />
-          </div>
-          <div>
             <label class="block text-xs font-semibold mb-1">Informant (Relation)</label>
             <input id="ptInformant" type="text" value="Mother" class="w-full border rounded p-2 text-sm" />
           </div>
           <div>
             <label class="block text-xs font-semibold mb-1">Informant Reliability</label>
             <select id="ptReliability" class="w-full border rounded p-2 text-sm">
-              <option value="good">Good (Close primary caregiver, consistent)</option>
+              <option value="good">Good (Consistent caregiver)</option>
               <option value="fair">Fair</option>
-              <option value="poor">Poor (Distant relative or inconsistent)</option>
+              <option value="poor">Poor (Inconsistent)</option>
             </select>
           </div>
         </div>
       </div>
     </details>
 
-    <!-- 2. RED-FLAG & IMNCI EMERGENCY TRIAGE -->
-    <details open class="bg-white rounded-xl shadow-sm border border-red-200 overflow-hidden">
-      <summary class="bg-red-50 px-4 py-3 font-bold text-red-900 cursor-pointer flex justify-between items-center border-b border-red-200">
-        <span>2. Clinical Red-Flags </span>
-        <span class="text-xs text-red-600 font-semibold">Screen Every Sick Child</span>
-      </summary>
-      <div class="p-4 space-y-3">
-        <div class="ask-prompt">
-          <strong>Ask urgently:</strong> "Is the child able to drink or breastfeed? Does the child vomit everything they take? Have they had any fits (convulsions) during this illness, or are they unusually sleepy/difficult to wake? Have they passed urine in the last 12 hours?"
-        </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm">
-          <label class="flex items-center gap-2"><input type="checkbox" class="danger-sign" value="inability to drink or breastfeed" /> Unable to drink or breastfeed</label>
-          <label class="flex items-center gap-2"><input type="checkbox" class="danger-sign" value="vomiting everything" /> Vomits everything</label>
-          <label class="flex items-center gap-2"><input type="checkbox" class="danger-sign" value="convulsions in current illness" /> Convulsions / Neck stiffness / Bulging fontanelle</label>
-          <label class="flex items-center gap-2"><input type="checkbox" class="danger-sign" value="lethargy or unconsciousness" /> Lethargic / Unconscious / Inconsolable high-pitched cry</label>
-          <label class="flex items-center gap-2"><input type="checkbox" class="danger-sign" value="central cyanosis" /> Central cyanosis (blue lips/tongue)</label>
-          <label class="flex items-center gap-2"><input type="checkbox" class="danger-sign" value="severe chest indrawing or nasal flaring" /> Severe subcostal indrawing / Nasal flaring / Grunting</label>
-          <label class="flex items-center gap-2"><input type="checkbox" class="danger-sign" value="stridor at rest or silent chest" /> Stridor at rest / Silent chest</label>
-          <label class="flex items-center gap-2"><input type="checkbox" class="danger-sign" value="non-blanching petechial rash or mottled skin" /> Non-blanching petechial rash / Cold extremities</label>
-          <label class="flex items-center gap-2"><input type="checkbox" class="danger-sign" value="decreased urine output (<12 hrs)" /> No urine output &gt;12 hrs / Sunken eyes</label>
-          <label class="flex items-center gap-2"><input type="checkbox" class="danger-sign" value="age <3 months with fever ≥38°C" /> Age &lt;3 months with Temp ≥38°C (100.4°F)</label>
-        </div>
-      </div>
-    </details>
-
-    <!-- 3. CHIEF COMPLAINTS & HPI -->
+    <!-- 2. CHIEF COMPLAINTS & PRESENT ILLNESS -->
     <details open class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
       <summary class="bg-slate-50 px-4 py-3 font-bold text-slate-800 cursor-pointer flex justify-between items-center border-b">
-        <span>3. Chief Complaints & History of Present Illness (HPI)</span>
-        <span class="text-xs text-blue-600 font-normal">Chronological order in patient's words</span>
+        <span>2. Chief Complaints & Present Illness</span>
+        <span class="text-xs text-blue-600 font-normal">Timeline, triage & dose check</span>
       </summary>
-      <div class="p-4 space-y-3">
-        <div class="ask-prompt">
-          <strong>Ask the informant:</strong> "What are the main complaints that brought you here today, and how many days has each been present? When was the child last completely well and playful? Did the illness start suddenly or gradually?"
+      <div class="p-4 space-y-4">
+        <!-- Emergency Red Flags -->
+        <div class="bg-red-50/70 p-3 rounded-lg border border-red-200 space-y-2">
+          <div class="text-xs font-bold text-red-900 uppercase tracking-wide">Emergency Red-Flag Triage</div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-1.5 text-xs">
+            <label class="flex items-center gap-2"><input type="checkbox" class="danger-sign" value="inability to drink or breastfeed" /> Unable to drink or breastfeed</label>
+            <label class="flex items-center gap-2"><input type="checkbox" class="danger-sign" value="vomiting everything" /> Vomits everything</label>
+            <label class="flex items-center gap-2"><input type="checkbox" class="danger-sign" value="convulsions in current illness" /> Convulsions / Neck stiffness / Bulging fontanelle</label>
+            <label class="flex items-center gap-2"><input type="checkbox" class="danger-sign" value="lethargy or unconsciousness" /> Lethargic / Unconscious / High-pitched cry</label>
+            <label class="flex items-center gap-2"><input type="checkbox" class="danger-sign" value="central cyanosis" /> Central cyanosis (blue lips/tongue)</label>
+            <label class="flex items-center gap-2"><input type="checkbox" class="danger-sign" value="severe chest indrawing or nasal flaring" /> Severe chest indrawing / Nasal flaring / Grunting</label>
+            <label class="flex items-center gap-2"><input type="checkbox" class="danger-sign" value="stridor at rest or silent chest" /> Stridor at rest / Silent chest</label>
+            <label class="flex items-center gap-2"><input type="checkbox" class="danger-sign" value="non-blanching petechial rash or mottled skin" /> Non-blanching rash / Cold extremities</label>
+            <label class="flex items-center gap-2"><input type="checkbox" class="danger-sign" value="decreased urine output (<12 hrs)" /> No urine output &gt;12 hrs / Sunken eyes</label>
+            <label class="flex items-center gap-2"><input type="checkbox" class="danger-sign" value="age <3 months with fever ≥38°C" /> Age &lt;3 months with Temp ≥38°C (100.4°F)</label>
+          </div>
         </div>
+
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <div class="sm:col-span-2">
-            <label class="block text-xs font-semibold mb-1">Chief Complaints (Chronological order, longest duration first)</label>
-            <input id="chiefComplaints" type="text" placeholder="e.g., 1. Fever for 5 days; 2. Cough for 3 days; 3. Fast breathing for 1 day" class="w-full border rounded p-2 text-sm" />
+            <div class="flex justify-between items-center mb-1">
+              <label class="block text-xs font-semibold">Chief Complaints (Format: "Fever for 5 days; Cough for 3 days")</label>
+              <button type="button" onclick="startDictation('chiefComplaints')" class="text-[11px] bg-blue-100 hover:bg-blue-200 text-blue-800 px-2 py-0.5 rounded font-semibold">🎤 Dictate</button>
+            </div>
+            <input id="chiefComplaints" type="text" oninput="renderSymptomTimeline()" placeholder="e.g., Fever for 5 days; Cough for 3 days; Fast breathing for 1 day" class="w-full border rounded p-2 text-sm" />
           </div>
           <div>
             <label class="block text-xs font-semibold mb-1">Apparently Well Until</label>
             <input id="wellUntil" type="text" placeholder="e.g., 5 days ago" class="w-full border rounded p-2 text-sm" />
           </div>
+        </div>
+
+        <!-- Visual Symptom Timeline Bar -->
+        <div id="timelineContainer" class="hidden bg-slate-50 p-3 rounded-lg border border-slate-200 space-y-1.5">
+          <div class="text-xs font-bold text-slate-600 uppercase tracking-wider">📅 Visual Symptom Evolution Timeline</div>
+          <div id="timelineBars" class="space-y-1.5 text-xs"></div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <div>
             <label class="block text-xs font-semibold mb-1">Mode of Onset</label>
             <select id="hpiOnset" class="w-full border rounded p-2 text-sm">
@@ -190,270 +255,275 @@
             </select>
           </div>
           <div class="sm:col-span-2">
-            <label class="block text-xs font-semibold mb-1">Progression, Aggravating/Relieving Factors & Prior Medications Received</label>
-            <input id="hpiNarrative" type="text" placeholder="e.g., Progressively worsened; given Paracetamol syrup (5 mL) with temporary relief; no prior antibiotics" class="w-full border rounded p-2 text-sm" />
+            <div class="flex justify-between items-center mb-1">
+              <label class="block text-xs font-semibold">Course, Progression & Aggravating/Relieving Factors</label>
+              <button type="button" onclick="startDictation('hpiNarrative')" class="text-[11px] bg-blue-100 hover:bg-blue-200 text-blue-800 px-2 py-0.5 rounded font-semibold">🎤 Dictate</button>
+            </div>
+            <input id="hpiNarrative" type="text" placeholder="e.g., Progressively worsened; temporary relief with antipyretics" class="w-full border rounded p-2 text-sm" />
           </div>
         </div>
-      </div>
-    </details>
 
-    <!-- MODULE 3A: FEVER PROFORMA -->
-    <details id="feverModule" class="hidden bg-amber-50/50 rounded-xl shadow-sm border-2 border-amber-300 overflow-hidden" open>
-      <summary class="bg-amber-100 px-4 py-3 font-bold text-amber-900 cursor-pointer flex justify-between items-center border-b border-amber-300">
-        <span>3A. Detailed Fever Proforma (The 8 Core Attributes & Tropical Exposures)</span>
-        <span class="text-xs font-semibold">Active Module</span>
-      </summary>
-      <div class="p-4 space-y-3">
-        <div class="ask-prompt">
-          <strong>Ask the 8 Fever Attributes:</strong> "Was the temperature measured with a thermometer? Does it touch normal baseline every day (intermittent) or stay elevated all day (continuous/remittent)? Are there chills/rigors or night sweats? Crucially: between fever spikes when the temperature drops, is the child active and playing, or still dull and irritable?"
-        </div>
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-          <div>
-            <label class="block text-xs font-semibold mb-1">1. Duration & Onset Type</label>
-            <input id="fevDuration" type="text" placeholder="e.g., 5 days, abrupt onset" class="w-full border rounded p-2 text-sm bg-white" />
-          </div>
-          <div>
-            <label class="block text-xs font-semibold mb-1">2. Thermometry & Max Temp</label>
-            <input id="fevTemp" type="text" placeholder="e.g., Documented axillary 102.8°F" class="w-full border rounded p-2 text-sm bg-white" />
-          </div>
-          <div>
-            <label class="block text-xs font-semibold mb-1">3. Grade of Fever</label>
-            <select id="fevGrade" class="w-full border rounded p-2 text-sm bg-white">
-              <option value="low-grade (<100.4°F / 38°C)">Low-grade (&lt;100.4°F / 38°C)</option>
-              <option value="moderate (100.4–102.2°F)" selected>Moderate (100.4–102.2°F)</option>
-              <option value="high-grade (>102.2°F / 39°C)">High-grade (&gt;102.2°F / 39°C)</option>
-              <option value="hyperpyrexia (>106°F / 41.1°C)">Hyperpyrexia (&gt;106°F / 41.1°C)</option>
-            </select>
-          </div>
-          <div>
-            <label class="block text-xs font-semibold mb-1">4. Classical Pattern / Periodicity</label>
-            <select id="fevPattern" class="w-full border rounded p-2 text-sm bg-white">
-              <option value="intermittent (touches baseline daily; quotidian)">Intermittent (Quotidian 24h)</option>
-              <option value="intermittent tertian (48h) or quartan (72h)">Intermittent (Tertian 48h / Quartan 72h)</option>
-              <option value="continuous (fluctuation <1°C, never touches baseline)">Continuous (&lt;1°C fluctuation)</option>
-              <option value="remittent (fluctuation >1°C, never touches baseline)">Remittent (&gt;1°C fluctuation)</option>
-              <option value="biphasic / saddleback">Biphasic / Saddleback (Dengue/Lepto)</option>
-              <option value="step-ladder rise">Step-ladder rise</option>
-            </select>
-          </div>
-          <div>
-            <label class="block text-xs font-semibold mb-1">5. Diurnal Variation & Sweats</label>
-            <input id="fevDiurnal" type="text" placeholder="e.g., Evening rise; no night sweats" class="w-full border rounded p-2 text-sm bg-white" />
-          </div>
-          <div>
-            <label class="block text-xs font-semibold mb-1">6. Chills, Rigors & Defervescence</label>
-            <input id="fevChills" type="text" placeholder="e.g., Chills present; falls by crisis with sweating" class="w-full border rounded p-2 text-sm bg-white" />
-          </div>
-          <div class="sm:col-span-2">
-            <label class="block text-xs font-semibold mb-1">7. Inter-Febrile State (Between Fever Spikes)</label>
-            <select id="fevInterfebrile" class="w-full border rounded p-2 text-sm bg-white">
-              <option value="active, alert, playful, and feeding well between fever spikes">Active, alert, playful & feeding well (Suggests viral/benign illness)</option>
-              <option value="persistently irritable, dull, lethargic, and refusing feeds even between spikes">Persistently irritable, dull, lethargic & refusing feeds (Suggests serious bacterial sepsis/meningitis)</option>
-            </select>
-          </div>
-          <div>
-            <label class="block text-xs font-semibold mb-1">8. Antipyretic Dose & Response</label>
-            <input id="fevAntipyretic" type="text" placeholder="e.g., Subsides with Paracetamol, recurs in 6h" class="w-full border rounded p-2 text-sm bg-white" />
-          </div>
-          <div class="sm:col-span-3">
-            <label class="block text-xs font-semibold mb-1">Rash Timeline (Day of Fever) & Vector / Animal / Travel / Street Food Exposure</label>
-            <input id="fevRashEpi" type="text" placeholder="e.g., No rash; day-biting mosquitoes present; no tick/bush exposure, floodwater wading, unpasteurized milk, or recent travel" class="w-full border rounded p-2 text-sm bg-white" />
+        <!-- Prior Medication Dose-Adequacy Checker -->
+        <div class="bg-blue-50/60 p-3 rounded-lg border border-blue-200">
+          <div class="text-xs font-bold text-blue-900 mb-2">💊 Prior Antipyretic / Syrup Dose-Adequacy Check (10–15 mg/kg/dose)</div>
+          <div class="grid grid-cols-1 sm:grid-cols-4 gap-2.5">
+            <div>
+              <label class="block text-[11px] font-semibold mb-1">Syrup Strength</label>
+              <select id="pcmStrength" onchange="checkPcmDose()" class="w-full border rounded p-1.5 text-xs bg-white">
+                <option value="125">Paracetamol 125 mg / 5 mL</option>
+                <option value="250">Paracetamol 250 mg / 5 mL</option>
+                <option value="100">Paracetamol Drops 100 mg / 1 mL</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-[11px] font-semibold mb-1">Volume Given per Dose (mL)</label>
+              <input id="pcmMl" type="number" step="0.5" placeholder="e.g., 5" oninput="checkPcmDose()" class="w-full border rounded p-1.5 text-xs bg-white" />
+            </div>
+            <div class="sm:col-span-2">
+              <label class="block text-[11px] font-semibold mb-1">Dose Adequacy Verdict (Uses Child Weight in Section 6)</label>
+              <input id="pcmVerdict" type="text" readonly placeholder="Enter mL given & child's weight" class="w-full border rounded p-1.5 text-xs bg-slate-100 font-bold text-blue-900" />
+            </div>
           </div>
         </div>
-      </div>
-    </details>
 
-    <!-- MODULE 3B: COUGH & RESPIRATORY PROFORMA -->
-    <details id="coughModule" class="hidden bg-cyan-50/50 rounded-xl shadow-sm border-2 border-cyan-300 overflow-hidden" open>
-      <summary class="bg-cyan-100 px-4 py-3 font-bold text-cyan-900 cursor-pointer flex justify-between items-center border-b border-cyan-300">
-        <span>3B. Detailed Cough & Respiratory Proforma</span>
-        <span class="text-xs font-semibold">Active Module</span>
-      </summary>
-      <div class="p-4 space-y-3">
-        <div class="ask-prompt">
-          <strong>Ask about Cough & Breathing:</strong> "Did the cough start suddenly while eating/playing (foreign body) or gradually? Is it dry, wet, barking like a seal, or coming in fits with a 'whoop' and vomiting? Is it worse at night? Is there any whistling sound (wheeze), harsh inspiratory noise (stridor), or cough while drinking milk?"
-        </div>
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <!-- Systemic Review -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 border-t">
           <div>
-            <label class="block text-xs font-semibold mb-1">Duration & Onset</label>
-            <select id="coughDuration" class="w-full border rounded p-2 text-sm bg-white">
-              <option value="acute (<2 weeks) with gradual onset">Acute (&lt;2 wks) — Gradual onset</option>
-              <option value="acute (<2 weeks) with sudden onset (foreign body check)">Acute (&lt;2 wks) — Sudden onset (FB check)</option>
-              <option value="persistent (2–4 weeks)">Persistent (2–4 wks)</option>
-              <option value="chronic (>4 weeks)">Chronic (&gt;4 wks — Asthma/TB/Bronchiectasis)</option>
-            </select>
-          </div>
-          <div>
-            <label class="block text-xs font-semibold mb-1">Acoustic Quality of Cough</label>
-            <select id="coughQuality" class="w-full border rounded p-2 text-sm bg-white">
-              <option value="dry and hacking">Dry / Hacking (Viral URI, allergy)</option>
-              <option value="loose, productive, and wet">Loose / Productive / Wet</option>
-              <option value="paroxysmal with inspiratory whoop">Paroxysmal with Whoop (Pertussis)</option>
-              <option value="brassy, barking, or seal-like">Brassy / Barking / Seal-like (Croup)</option>
-              <option value="bovine or brass-bound">Bovine / Brass-bound</option>
-              <option value="psychogenic/habit (disappears during sleep)">Habit Cough (absent in sleep)</option>
-            </select>
-          </div>
-          <div>
-            <label class="block text-xs font-semibold mb-1">Timing & Circadian Variation</label>
-            <input id="coughTiming" type="text" placeholder="e.g., Worse at night/early morning; triggered by cold air" class="w-full border rounded p-2 text-sm bg-white" />
-          </div>
-          <div>
-            <label class="block text-xs font-semibold mb-1">Post-Tussive Vomiting / Sputum</label>
-            <input id="coughPostTussive" type="text" placeholder="e.g., Post-tussive vomiting present; no apnea/cyanosis" class="w-full border rounded p-2 text-sm bg-white" />
-          </div>
-          <div>
-            <label class="block text-xs font-semibold mb-1">Wheeze / Stridor / Upper Airway</label>
-            <input id="coughNoisy" type="text" placeholder="e.g., Audible wheeze present; no stridor; clear nasal discharge" class="w-full border rounded p-2 text-sm bg-white" />
-          </div>
-          <div>
-            <label class="block text-xs font-semibold mb-1">Atopy, GERD/Aspiration & Nebulization Response</label>
-            <input id="coughAtopy" type="text" placeholder="e.g., Dust trigger; no choking during feeds; good relief with salbutamol nebulization" class="w-full border rounded p-2 text-sm bg-white" />
-          </div>
-        </div>
-      </div>
-    </details>
-
-    <!-- MODULE 3C: DEHYDRATION & FLUID DEFICIT -->
-    <details id="dehydrationModule" class="hidden bg-rose-50/50 rounded-xl shadow-sm border-2 border-rose-300 overflow-hidden" open>
-      <summary class="bg-rose-100 px-4 py-3 font-bold text-rose-900 cursor-pointer flex justify-between items-center border-b border-rose-300">
-        <span>3C. Hydration Status</span>
-        <span class="text-xs font-semibold">Active Module</span>
-      </summary>
-      <div class="p-4 space-y-3">
-        <div class="ask-prompt">
-          <strong>Ask for Fluid Losses & Hydration Clues:</strong> "How many watery stools or vomiting episodes has the child had? Is the child drinking eagerly/thirsty, or too weak to drink? Are the eyes sunken, tears absent when crying, mouth dry, and urine output reduced?"
-        </div>
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-          <div>
-            <label class="block text-xs font-semibold mb-1">Stool & Vomiting Losses</label>
-            <input id="dehydLosses" type="text" placeholder="e.g., 6 watery non-bloody stools/day and 3 non-bilious vomiting episodes" class="w-full border rounded p-2 text-sm bg-white" />
-          </div>
-          <div>
-            <label class="block text-xs font-semibold mb-1">Thirst & Mental Status</label>
-            <select id="dehydThirst" class="w-full border rounded p-2 text-sm bg-white">
-              <option value="normal thirst and alert mental status (No Dehydration)">Normal thirst & alert (No Dehydration)</option>
-              <option value="eager/increased thirst and irritable mental status (Some Dehydration)">Drinks eagerly, thirsty & irritable (Some Dehydration)</option>
-              <option value="unable to drink and lethargic/comatose mental status (Severe Dehydration)">Unable to drink & lethargic/comatose (Severe Dehydration)</option>
-            </select>
-          </div>
-          <div>
-            <label class="block text-xs font-semibold mb-1">Eyes, Mucosa, Skin Turgor & Urine Output</label>
-            <input id="dehydSigns" type="text" placeholder="e.g., Sunken eyes, dry oral mucosa, mild delay in skin pinch, and decreased urine output" class="w-full border rounded p-2 text-sm bg-white" />
-          </div>
-        </div>
-      </div>
-    </details>
-
-    <!-- 4. HEAD-TO-TOE SYSTEMIC REVIEW (PERTINENT NEGATIVES) -->
-    <details open class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-      <summary class="bg-slate-50 px-4 py-3 font-bold text-slate-800 cursor-pointer flex justify-between items-center border-b">
-        <span>4. Systemic Review & Pertinent Negatives</span>
-        <span class="text-xs text-blue-600 font-normal">Rule out other organ foci</span>
-      </summary>
-      <div class="p-4 space-y-3">
-        <div class="ask-prompt">
-          <strong>Ask systematically:</strong> "Does the child have headache, fits, ear pain/discharge, sore throat, vomiting, loose motions, crying while passing urine, red/cola-colored urine, puffiness around the eyes, suck-rest-suck cycle while feeding, joint swelling, or bleeding spots?"
-        </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <div>
-            <label class="block text-xs font-semibold mb-1">CNS & ENT Inquiry</label>
+            <label class="block text-xs font-semibold mb-1">CNS & ENT Review</label>
             <input id="sysCnsEnt" type="text" value="No seizures, altered sensorium, photophobia, ear pain/discharge, or throat pain." class="w-full border rounded p-2 text-sm" />
           </div>
           <div>
-            <label class="block text-xs font-semibold mb-1">GI & Hepatic Inquiry</label>
+            <label class="block text-xs font-semibold mb-1">GI & Hepatic Review</label>
             <input id="sysGi" type="text" value="No loose stools, bilious/projectile vomiting, abdominal pain, or jaundice." class="w-full border rounded p-2 text-sm" />
           </div>
           <div>
-            <label class="block text-xs font-semibold mb-1">Renal & Urinary Tract</label>
+            <label class="block text-xs font-semibold mb-1">Renal & Urinary Review</label>
             <input id="sysRenal" type="text" value="No dysuria, frequency, hematuria, oliguria, or periorbital puffiness." class="w-full border rounded p-2 text-sm" />
           </div>
           <div>
-            <label class="block text-xs font-semibold mb-1">Cardiac, Musculoskeletal & Hematolymphoid</label>
-            <input id="sysCardiac" type="text" value="No suck-rest-suck cycle, forehead sweating on feeds, cyanotic spells, joint swelling, lymphadenopathy, or bleeding." class="w-full border rounded p-2 text-sm" />
+            <label class="block text-xs font-semibold mb-1">Cardiac, Joint & Hematology Review</label>
+            <input id="sysCardiac" type="text" value="No suck-rest-suck cycle, forehead sweating on feeds, cyanotic spells, joint swelling, or bleeding." class="w-full border rounded p-2 text-sm" />
           </div>
         </div>
       </div>
     </details>
 
-    <!-- 5. PAST, SURGICAL, ALLERGEN & ADDICTION HISTORY -->
-    <details class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+    <!-- OPTIONAL FOCUSED MODULES -->
+    <details id="feverModule" class="hidden bg-amber-50/50 rounded-xl shadow-sm border-2 border-amber-300 overflow-hidden" open>
+      <summary class="bg-amber-100 px-4 py-3 font-bold text-amber-900 cursor-pointer flex justify-between items-center border-b border-amber-300">
+        <span>Fever Module</span>
+        <span class="text-xs font-semibold">Active Module</span>
+      </summary>
+      <div class="p-4 grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <div>
+          <label class="block text-xs font-semibold mb-1">1. Duration & Onset</label>
+          <input id="fevDuration" type="text" placeholder="e.g., 5 days, abrupt onset" class="w-full border rounded p-2 text-sm bg-white" />
+        </div>
+        <div>
+          <label class="block text-xs font-semibold mb-1">2. Max Documented Temp</label>
+          <input id="fevTemp" type="text" placeholder="e.g., Axillary 102.8°F" class="w-full border rounded p-2 text-sm bg-white" />
+        </div>
+        <div>
+          <label class="block text-xs font-semibold mb-1">3. Grade of Fever</label>
+          <select id="fevGrade" class="w-full border rounded p-2 text-sm bg-white">
+            <option value="low-grade (<100.4°F / 38°C)">Low-grade (&lt;100.4°F / 38°C)</option>
+            <option value="moderate (100.4–102.2°F)" selected>Moderate (100.4–102.2°F)</option>
+            <option value="high-grade (>102.2°F / 39°C)">High-grade (&gt;102.2°F / 39°C)</option>
+            <option value="hyperpyrexia (>106°F / 41.1°C)">Hyperpyrexia (&gt;106°F / 41.1°C)</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold mb-1">4. Pattern / Periodicity</label>
+          <select id="fevPattern" class="w-full border rounded p-2 text-sm bg-white">
+            <option value="intermittent (touches baseline daily)">Intermittent (Quotidian 24h)</option>
+            <option value="intermittent tertian (48h) or quartan (72h)">Intermittent (Tertian 48h / Quartan 72h)</option>
+            <option value="continuous (fluctuation <1°C)">Continuous (&lt;1°C fluctuation)</option>
+            <option value="remittent (fluctuation >1°C)">Remittent (&gt;1°C fluctuation)</option>
+            <option value="biphasic / saddleback">Biphasic / Saddleback</option>
+            <option value="step-ladder rise">Step-ladder rise</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold mb-1">5. Diurnal Variation & Sweats</label>
+          <input id="fevDiurnal" type="text" placeholder="e.g., Evening rise; no night sweats" class="w-full border rounded p-2 text-sm bg-white" />
+        </div>
+        <div>
+          <label class="block text-xs font-semibold mb-1">6. Chills & Rigors</label>
+          <input id="fevChills" type="text" placeholder="e.g., Chills present; subsides with sweating" class="w-full border rounded p-2 text-sm bg-white" />
+        </div>
+        <div class="sm:col-span-2">
+          <label class="block text-xs font-semibold mb-1">7. Inter-Febrile State (Between Spikes)</label>
+          <select id="fevInterfebrile" class="w-full border rounded p-2 text-sm bg-white">
+            <option value="active, alert, playful, and feeding well between fever spikes">Active, alert, playful & feeding well</option>
+            <option value="persistently irritable, dull, lethargic, and refusing feeds even between spikes">Persistently irritable, dull, lethargic & refusing feeds</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold mb-1">8. Rash & Exposure Screen</label>
+          <input id="fevRashEpi" type="text" placeholder="e.g., No rash; mosquito exposure" class="w-full border rounded p-2 text-sm bg-white" />
+        </div>
+      </div>
+    </details>
+
+    <details id="coughModule" class="hidden bg-cyan-50/50 rounded-xl shadow-sm border-2 border-cyan-300 overflow-hidden" open>
+      <summary class="bg-cyan-100 px-4 py-3 font-bold text-cyan-900 cursor-pointer flex justify-between items-center border-b border-cyan-300">
+        <span>Cough & Respiratory Module</span>
+        <span class="text-xs font-semibold">Active Module</span>
+      </summary>
+      <div class="p-4 grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <div>
+          <label class="block text-xs font-semibold mb-1">Duration & Onset</label>
+          <select id="coughDuration" class="w-full border rounded p-2 text-sm bg-white">
+            <option value="acute (<2 weeks) with gradual onset">Acute (&lt;2 wks) — Gradual onset</option>
+            <option value="acute (<2 weeks) with sudden onset">Acute (&lt;2 wks) — Sudden onset</option>
+            <option value="persistent (2–4 weeks)">Persistent (2–4 wks)</option>
+            <option value="chronic (>4 weeks)">Chronic (&gt;4 wks)</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold mb-1">Character of Cough</label>
+          <select id="coughQuality" class="w-full border rounded p-2 text-sm bg-white">
+            <option value="dry and hacking">Dry / Hacking</option>
+            <option value="loose, productive, and wet">Loose / Productive / Wet</option>
+            <option value="paroxysmal with inspiratory whoop">Paroxysmal with Whoop</option>
+            <option value="brassy, barking, or seal-like">Brassy / Barking / Seal-like</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold mb-1">Timing & Wheeze/Stridor</label>
+          <input id="coughNoisy" type="text" placeholder="e.g., Worse at night; audible wheeze" class="w-full border rounded p-2 text-sm bg-white" />
+        </div>
+      </div>
+    </details>
+
+    <details id="dehydrationModule" class="hidden bg-rose-50/50 rounded-xl shadow-sm border-2 border-rose-300 overflow-hidden" open>
+      <summary class="bg-rose-100 px-4 py-3 font-bold text-rose-900 cursor-pointer flex justify-between items-center border-b border-rose-300">
+        <span>Dehydration & Fluid Deficit Module</span>
+        <span class="text-xs font-semibold">Active Module</span>
+      </summary>
+      <div class="p-4 grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <div>
+          <label class="block text-xs font-semibold mb-1">Stool & Vomiting Losses</label>
+          <input id="dehydLosses" type="text" placeholder="e.g., 6 watery stools/day, 3 vomiting episodes" class="w-full border rounded p-2 text-sm bg-white" />
+        </div>
+        <div>
+          <label class="block text-xs font-semibold mb-1">Thirst & Mental Status</label>
+          <select id="dehydThirst" class="w-full border rounded p-2 text-sm bg-white">
+            <option value="normal thirst and alert mental status (No Dehydration)">Normal thirst & alert (No Dehydration)</option>
+            <option value="eager/increased thirst and irritable mental status (Some Dehydration)">Drinks eagerly, thirsty & irritable (Some Dehydration)</option>
+            <option value="unable to drink and lethargic/comatose mental status (Severe Dehydration)">Unable to drink & lethargic (Severe Dehydration)</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold mb-1">Eyes, Mucosa, Skin Pinch & Urine</label>
+          <input id="dehydSigns" type="text" placeholder="e.g., Sunken eyes, dry mucosa, delayed skin pinch" class="w-full border rounded p-2 text-sm bg-white" />
+        </div>
+      </div>
+    </details>
+
+    <!-- 3. PAST HISTORY -->
+    <details open class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
       <summary class="bg-slate-50 px-4 py-3 font-bold text-slate-800 cursor-pointer flex justify-between items-center border-b">
-        <span>5. Past Medical, Surgical, Allergen & Addiction History</span>
-        <span class="text-xs text-blue-600 font-normal">Tap to expand</span>
+        <span>3. Past History</span>
+        <span class="text-xs text-blue-600 font-normal">Medical events, falls, admissions</span>
       </summary>
       <div class="p-4 space-y-3">
-        <div class="ask-prompt">
-          <strong>Ask about Past History:</strong> "Has the child had similar illnesses, hospital admissions, prior surgeries, or known drug/food allergies? For adolescents or older children, inquire about tobacco, alcohol, or substance habits."
+        <div id="pastHistoryContainer" class="space-y-3">
+          <div class="past-entry bg-slate-50 p-3 rounded-lg border border-slate-200 space-y-2">
+            <div>
+              <label class="block text-xs font-semibold mb-1">Past Complaint / Event (e.g., Fall, Febrile Seizure, Asthma, Hospitalization)</label>
+              <input type="text" class="past-complaint w-full border rounded p-2 text-sm bg-white" placeholder="e.g., Fall from bed / No significant past complaint" />
+            </div>
+            <div>
+              <label class="block text-xs font-semibold mb-1">Explanation / Details of the Event</label>
+              <textarea rows="2" class="past-explanation w-full border rounded p-2 text-sm bg-white" placeholder="Explain when it happened, mechanism/severity, treatment received, and recovery..."></textarea>
+            </div>
+          </div>
         </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <button type="button" onclick="addPastEntry()" class="text-xs bg-blue-50 hover:bg-blue-100 text-blue-800 font-semibold px-3 py-1.5 rounded border border-blue-300">
+          + Add Another Past Complaint
+        </button>
+      </div>
+    </details>
+
+    <!-- 4. SURGICAL HISTORY -->
+    <details open class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+      <summary class="bg-slate-50 px-4 py-3 font-bold text-slate-800 cursor-pointer flex justify-between items-center border-b">
+        <span>4. Surgical History</span>
+        <span class="text-xs text-blue-600 font-normal">Trauma, falls, procedures, operations</span>
+      </summary>
+      <div class="p-4 space-y-3">
+        <div id="surgicalHistoryContainer" class="space-y-3">
+          <div class="surgical-entry bg-slate-50 p-3 rounded-lg border border-slate-200 space-y-2">
+            <div>
+              <label class="block text-xs font-semibold mb-1">Surgical Complaint / Trauma / Procedure (e.g., Fall Injury, Herniotomy, None)</label>
+              <input type="text" class="surg-complaint w-full border rounded p-2 text-sm bg-white" placeholder="e.g., Fall with forehead laceration / No past surgical history" />
+            </div>
+            <div>
+              <label class="block text-xs font-semibold mb-1">Explanation / Operative & Post-Op Details</label>
+              <textarea rows="2" class="surg-explanation w-full border rounded p-2 text-sm bg-white" placeholder="Explain how the injury/condition occurred, date/hospital, procedure performed, and healing..."></textarea>
+            </div>
+          </div>
+        </div>
+        <button type="button" onclick="addSurgicalEntry()" class="text-xs bg-blue-50 hover:bg-blue-100 text-blue-800 font-semibold px-3 py-1.5 rounded border border-blue-300">
+          + Add Another Surgical Entry
+        </button>
+      </div>
+    </details>
+
+    <!-- 5. BIRTH HISTORY (WITH PRETERM CORRECTED AGE ADJUSTER) -->
+    <details class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+      <summary class="bg-slate-50 px-4 py-3 font-bold text-slate-800 cursor-pointer flex justify-between items-center border-b">
+        <span>5. Birth History</span>
+        <span class="text-xs text-blue-600 font-normal">Antenatal, Natal, Postnatal & Preterm Correction</span>
+      </summary>
+      <div class="p-4 space-y-3">
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 bg-indigo-50/60 p-3 rounded-lg border border-indigo-200">
           <div>
-            <label class="block text-xs font-semibold mb-1">Past Medical & Hospitalization History</label>
-            <input id="pastHistory" type="text" value="No similar past illnesses, recurrent infections, or previous hospital admissions." class="w-full border rounded p-2 text-sm" />
+            <label class="block text-xs font-semibold mb-1">Gestational Age at Birth (Weeks)</label>
+            <input id="gestWeeks" type="number" value="39" min="24" max="42" oninput="calcCorrectedAge()" class="w-full border rounded p-1.5 text-sm bg-white" />
           </div>
           <div>
-            <label class="block text-xs font-semibold mb-1">Surgical & Procedural History</label>
-            <input id="surgicalHistory" type="text" value="No history of prior surgeries, major trauma, or blood transfusions." class="w-full border rounded p-2 text-sm" />
+            <label class="block text-xs font-semibold mb-1">Birth Weight (kg)</label>
+            <input id="birthWt" type="number" step="0.1" value="2.9" class="w-full border rounded p-1.5 text-sm bg-white" />
           </div>
           <div>
-            <label class="block text-xs font-semibold mb-1">Allergen & Drug Allergy History</label>
-            <input id="allergenHistory" type="text" value="No known allergies to foods, drugs (such as penicillin/sulfa), or environmental allergens." class="w-full border rounded p-2 text-sm" />
+            <label class="block text-xs font-semibold mb-1">Corrected Age (For Preterm &lt;37 wks)</label>
+            <input id="correctedAgeOutput" type="text" readonly placeholder="Term gestation (No correction needed)" class="w-full border rounded p-1.5 text-xs bg-slate-100 font-bold text-indigo-900" />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div>
+            <label class="block text-xs font-semibold mb-1">Antenatal History</label>
+            <textarea id="ancHistory" rows="3" class="w-full border rounded p-2 text-sm">Booked and supervised pregnancy; took Folic acid in 1st trimester, Iron, Calcium, and 2 Td doses in 2nd trimester; no maternal fever with rash, hypertension, diabetes, or teratogenic exposure.</textarea>
           </div>
           <div>
-            <label class="block text-xs font-semibold mb-1">Addiction & Substance Inquiry (If applicable)</label>
-            <input id="addictionHistory" type="text" value="No history of tobacco, alcohol, or substance use." class="w-full border rounded p-2 text-sm" />
+            <label class="block text-xs font-semibold mb-1">Natal History</label>
+            <textarea id="natalHistory" rows="3" class="w-full border rounded p-2 text-sm">Full-term normal vaginal institutional delivery with clear liquor; cried immediately after birth.</textarea>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold mb-1">Postnatal / Neonatal History</label>
+            <textarea id="neonatalHistory" rows="3" class="w-full border rounded p-2 text-sm">Passed meconium within 24 hrs and urine within 48 hrs; no neonatal jaundice, respiratory distress, seizures, or NICU admission.</textarea>
           </div>
         </div>
       </div>
     </details>
 
-    <!-- 6. BIRTH & NEONATAL HISTORY -->
+    <!-- 6. GROWTH HISTORY -->
     <details class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
       <summary class="bg-slate-50 px-4 py-3 font-bold text-slate-800 cursor-pointer flex justify-between items-center border-b">
-        <span>6. Antenatal, Birth & Neonatal History</span>
-        <span class="text-xs text-blue-600 font-normal">Tap to expand</span>
+        <span>6. Growth History</span>
+        <span class="text-xs text-blue-600 font-normal">Anthropometry & Maintenance Fluids</span>
       </summary>
       <div class="p-4 space-y-3">
-        <div class="ask-prompt">
-          <strong>Ask the mother:</strong> "During pregnancy, did you take regular supplements and checkups? Was there any high BP, bleeding, or infection? Did the baby cry right after birth, and what was the birth weight? Did the baby pass meconium and urine normally?"
-        </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <div>
-            <label class="block text-xs font-semibold mb-1">Antenatal Trimester-Wise History</label>
-            <input id="ancHistory" type="text" value="Booked and supervised pregnancy; took standard iron, calcium, and tetanus shots; normal fetal movements; no history of high BP, gestational diabetes, or teratogenic exposure." class="w-full border rounded p-2 text-sm" />
-          </div>
-          <div>
-            <label class="block text-xs font-semibold mb-1">Birth & Natal History (Gestation, Mode, Cry, Birth Weight)</label>
-            <input id="natalHistory" type="text" value="Full-term normal vaginal delivery with clear liquor; cried immediately after birth; birth weight was 2.9 kg." class="w-full border rounded p-2 text-sm" />
-          </div>
-          <div>
-            <label class="block text-xs font-semibold mb-1">Neonatal History (First 28 Days & NICU)</label>
-            <input id="neonatalHistory" type="text" value="Passed meconium within 24 hours and urine within 48 hours; umbilical cord fell off normally; no neonatal jaundice, seizures, or NICU admission." class="w-full border rounded p-2 text-sm" />
-          </div>
-        </div>
-      </div>
-    </details>
-
-    <!-- 7. GROWTH & DEVELOPMENTAL HISTORY -->
-    <details class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-      <summary class="bg-slate-50 px-4 py-3 font-bold text-slate-800 cursor-pointer flex justify-between items-center border-b">
-        <span>7. Growth, Anthropometry & Developmental History</span>
-        <span class="text-xs text-blue-600 font-normal">Includes MPH, Fluids & DQ Calculators</span>
-      </summary>
-      <div class="p-4 space-y-3">
-        <div class="ghai-pearl">
-          <strong>Clinical Growth & Development Reference:</strong> Birth weight (3 kg) triples by 1 yr (9 kg) and quadruples by 2 yr (12 kg). Head circumference: 34 cm at birth, 46 cm at 1 yr. Milestones: Neck holding at 3 mo, sitting alone at 8 mo, walking alone at 15 mo, meaningful words at 12 mo.
-        </div>
-        <div class="ask-prompt">
-          <strong>Ask the parents:</strong> "Has the child been gaining weight and height normally? When did milestones like neck holding, sitting, and walking occur? What is the daily screen time or any behavioral habits?"
-        </div>
         <div class="grid grid-cols-2 sm:grid-cols-6 gap-2.5 bg-slate-50 p-3 rounded-lg border">
           <div>
-            <label class="block text-xs font-semibold mb-1">Current Weight (kg)</label>
-            <input id="ptWeight" type="number" step="0.1" placeholder="e.g., 12" oninput="calcFluids()" class="w-full border rounded p-1.5 text-sm bg-white" />
+            <label class="block text-xs font-semibold mb-1">Weight (kg)</label>
+            <input id="ptWeight" type="number" step="0.1" placeholder="e.g., 12" oninput="calcFluids(); checkPcmDose();" class="w-full border rounded p-1.5 text-sm bg-white" />
           </div>
           <div>
-            <label class="block text-xs font-semibold mb-1">Length/Height (cm)</label>
+            <label class="block text-xs font-semibold mb-1">Height/Length (cm)</label>
             <input id="ptHeight" type="number" step="0.5" placeholder="e.g., 88" class="w-full border rounded p-1.5 text-sm bg-white" />
           </div>
           <div>
@@ -473,58 +543,75 @@
             <input id="motherHt" type="number" placeholder="e.g., 158" oninput="calcMPH()" class="w-full border rounded p-1.5 text-sm bg-white" />
           </div>
           <div class="col-span-2 sm:col-span-3">
-            <label class="block text-xs font-semibold mb-1">Auto Target Mid-Parental Height (MPH)</label>
+            <label class="block text-xs font-semibold mb-1">Mid-Parental Height (MPH)</label>
             <input id="mphOutput" type="text" readonly placeholder="Enter parental heights" class="w-full border rounded p-1.5 text-xs bg-slate-100 font-bold text-blue-900" />
           </div>
           <div class="col-span-2 sm:col-span-3">
-            <label class="block text-xs font-semibold mb-1">Holliday-Segar Maintenance Fluid</label>
+            <label class="block text-xs font-semibold mb-1">24h Maintenance Fluid</label>
             <input id="fluidOutput" type="text" readonly placeholder="Enter child weight" class="w-full border rounded p-1.5 text-xs bg-slate-100 font-bold text-rose-900" />
           </div>
         </div>
+        <div>
+          <label class="block text-xs font-semibold mb-1">Growth Trajectory & Dentition Notes</label>
+          <input id="growthNotes" type="text" value="Normal physical growth trajectory and age-appropriate dentition." class="w-full border rounded p-2 text-sm" />
+        </div>
+      </div>
+    </details>
+
+    <!-- 7. DEVELOPMENTAL HISTORY -->
+    <details class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+      <summary class="bg-slate-50 px-4 py-3 font-bold text-slate-800 cursor-pointer flex justify-between items-center border-b">
+        <span>7. Developmental History</span>
+        <span class="text-xs text-blue-600 font-normal">Milestones, DQ & Behavior</span>
+      </summary>
+      <div class="p-4 space-y-3">
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 bg-slate-50 p-3 rounded border">
           <div>
-            <label class="block text-xs font-semibold mb-1">Chronological Age (mo)</label>
-            <input id="dqChrono" type="number" placeholder="e.g., 24" oninput="calcDQ()" class="w-full border rounded p-1.5 text-sm bg-white" />
+            <label class="block text-xs font-semibold mb-1">Effective/Corrected Age (mo)</label>
+            <input id="dqChrono" type="number" step="0.5" placeholder="e.g., 24" oninput="calcDQ()" class="w-full border rounded p-1.5 text-sm bg-white" />
           </div>
           <div>
-            <label class="block text-xs font-semibold mb-1">Attained Dev. Age (mo)</label>
-            <input id="dqDev" type="number" placeholder="e.g., 24" oninput="calcDQ()" class="w-full border rounded p-1.5 text-sm bg-white" />
+            <label class="block text-xs font-semibold mb-1">Attained Developmental Age (mo)</label>
+            <input id="dqDev" type="number" step="0.5" placeholder="e.g., 24" oninput="calcDQ()" class="w-full border rounded p-1.5 text-sm bg-white" />
           </div>
           <div>
             <label class="block text-xs font-semibold mb-1">Developmental Quotient (DQ)</label>
             <input id="dqResult" type="text" readonly placeholder="Auto-calculated" class="w-full border rounded p-1.5 text-sm bg-slate-100 font-bold text-blue-900" />
           </div>
         </div>
-        <div>
-          <label class="block text-xs font-semibold mb-1">Growth Trajectory & Developmental Milestones Summary</label>
-          <input id="growthNotes" type="text" value="Normal somatic growth velocity and age-appropriate milestones attained across all domains with no regression." class="w-full border rounded p-2 text-sm" />
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-semibold mb-1">Milestones (Gross, Fine, Social, Language, Vision/Hearing)</label>
+            <input id="devSummary" type="text" value="Age-appropriate milestones attained across all domains with no developmental regression." class="w-full border rounded p-2 text-sm" />
+          </div>
+          <div>
+            <label class="block text-xs font-semibold mb-1">Behavioral & Screen Time Notes</label>
+            <input id="behavSummary" type="text" value="Screen viewing is <1 hour/day; no pica, breath-holding spells, or behavioral concerns." class="w-full border rounded p-2 text-sm" />
+          </div>
         </div>
       </div>
     </details>
 
-    <!-- 8. NUTRITIONAL & IMMUNIZATION HISTORY -->
+    <!-- 8. NUTRITIONAL HISTORY -->
     <details class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
       <summary class="bg-slate-50 px-4 py-3 font-bold text-slate-800 cursor-pointer flex justify-between items-center border-b">
-        <span>8. Nutritional History & Immunization</span>
-        <span class="text-xs text-blue-600 font-normal">Auto Calorie & Protein Deficit</span>
+        <span>8. Nutritional History</span>
+        <span class="text-xs text-blue-600 font-normal">Breastfeeding, Weaning & 24h Recall</span>
       </summary>
       <div class="p-4 space-y-3">
-        <div class="ask-prompt">
-          <strong>Ask about Feeding & Immunization:</strong> "Was breastfeeding started within 1 hour and exclusively for 6 months? When was complementary feeding started? What did the child eat yesterday? Are vaccinations up to date?"
-        </div>
         <div class="grid grid-cols-1 sm:grid-cols-5 gap-2.5 bg-emerald-50/60 p-3 rounded-lg border border-emerald-200">
           <div class="sm:col-span-2">
-            <label class="block text-xs font-semibold mb-1">Select Age Group (RDA Standard)</label>
-            <select id="icmrAgeGroup" onchange="updateICMR()" class="w-full border rounded p-1.5 text-xs bg-white">
-              <option value="1060|16.7">1–3 years (RDA: 1060 kcal, 16.7 g protein)</option>
-              <option value="1350|20.1">4–6 years (RDA: 1350 kcal, 20.1 g protein)</option>
-              <option value="1690|29.5">7–9 years (RDA: 1690 kcal, 29.5 g protein)</option>
-              <option value="2190|39.9">Boys 10–12 yr (RDA: 2190 kcal, 39.9 g protein)</option>
-              <option value="2010|40.4">Girls 10–12 yr (RDA: 2010 kcal, 40.4 g protein)</option>
-              <option value="2750|54.3">Boys 13–15 yr (RDA: 2750 kcal, 54.3 g protein)</option>
-              <option value="2330|51.9">Girls 13–15 yr (RDA: 2330 kcal, 51.9 g protein)</option>
-              <option value="3020|61.5">Boys 16–17 yr (RDA: 3020 kcal, 61.5 g protein)</option>
-              <option value="2440|55.5">Girls 16–17 yr (RDA: 2440 kcal, 55.5 g protein)</option>
+            <label class="block text-xs font-semibold mb-1">Select Age Group (Daily Requirement)</label>
+            <select id="rdaAgeGroup" onchange="updateRDA()" class="w-full border rounded p-1.5 text-xs bg-white">
+              <option value="1060|16.7">1–3 years (1060 kcal, 16.7 g protein)</option>
+              <option value="1350|20.1">4–6 years (1350 kcal, 20.1 g protein)</option>
+              <option value="1690|29.5">7–9 years (1690 kcal, 29.5 g protein)</option>
+              <option value="2190|39.9">Boys 10–12 yr (2190 kcal, 39.9 g protein)</option>
+              <option value="2010|40.4">Girls 10–12 yr (2010 kcal, 40.4 g protein)</option>
+              <option value="2750|54.3">Boys 13–15 yr (2750 kcal, 54.3 g protein)</option>
+              <option value="2330|51.9">Girls 13–15 yr (2330 kcal, 51.9 g protein)</option>
+              <option value="3020|61.5">Boys 16–17 yr (3020 kcal, 61.5 g protein)</option>
+              <option value="2440|55.5">Girls 16–17 yr (2440 kcal, 55.5 g protein)</option>
             </select>
           </div>
           <div>
@@ -536,64 +623,198 @@
             <input id="actualProt" type="number" step="0.1" placeholder="e.g., 13" oninput="calcDietDeficit()" class="w-full border rounded p-1.5 text-sm bg-white" />
           </div>
           <div>
-            <label class="block text-xs font-semibold mb-1">Auto Deficit Result</label>
-            <input id="deficitOutput" type="text" readonly placeholder="Enter actual intake" class="w-full border rounded p-1.5 text-xs bg-white font-bold text-emerald-900" />
+            <label class="block text-xs font-semibold mb-1">Calculated Deficit</label>
+            <input id="deficitOutput" type="text" readonly placeholder="Auto-calculated" class="w-full border rounded p-1.5 text-xs bg-white font-bold text-emerald-900" />
           </div>
         </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <div>
-            <label class="block text-xs font-semibold mb-1">Feeding History & Weaning Details</label>
-            <input id="nutriEarly" type="text" value="Breastfeeding initiated within 1 hour; exclusive breastfeeding for 6 months; timely introduction of complementary feeds." class="w-full border rounded p-2 text-sm" />
-          </div>
-          <div>
-            <label class="block text-xs font-semibold mb-1">Immunization Status & BCG Scar</label>
-            <input id="immStatus" type="text" value="Completely immunized for age as per National Immunization Schedule; BCG scar present on left deltoid." class="w-full border rounded p-2 text-sm" />
-          </div>
+        <div>
+          <label class="block text-xs font-semibold mb-1">Breastfeeding, Complementary Feeding & 24-Hour Dietary Recall</label>
+          <input id="nutriEarly" type="text" value="Breastfeeding initiated within 1 hour of birth; exclusively breastfed for 6 months with no bottle feeding; complementary feeding started at 6 months." class="w-full border rounded p-2 text-sm" />
         </div>
       </div>
     </details>
 
-    <!-- MODULE 8B: ADOLESCENT CLINIC CHECKLIST -->
-    <details id="adolescentModule" class="hidden bg-purple-50/50 rounded-xl shadow-sm border-2 border-purple-300 overflow-hidden" open>
-      <summary class="bg-purple-100 px-4 py-3 font-bold text-purple-900 cursor-pointer flex justify-between items-center border-b border-purple-300">
-        <span>8B. Adolescent Health & HEADSS Inquiry (Ages 10–19 yr)</span>
-        <span class="text-xs font-semibold">Active Module</span>
-      </summary>
-      <div class="p-4 space-y-3">
-        <div class="ask-prompt">
-          <strong>Adolescent Checklist:</strong> Assess academics, sleep, diet, pubertal development (SMR), emotional well-being, peer relations, and confidential health habits.
-        </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <div>
-            <label class="block text-xs font-semibold mb-1">Pubertal / SMR Trajectory, Sleep & Academics</label>
-            <input id="adolGeneral" type="text" placeholder="e.g., Age-appropriate pubertal progression; regular sleep and good school attendance" class="w-full border rounded p-2 text-sm bg-white" />
-          </div>
-          <div>
-            <label class="block text-xs font-semibold mb-1">Confidential Psychosocial & Vaccine Screen</label>
-            <input id="adolConfidential" type="text" placeholder="e.g., Stable mental health and peer relations; no high-risk behaviors" class="w-full border rounded p-2 text-sm bg-white" />
-          </div>
-        </div>
-      </div>
-    </details>
-
-    <!-- 9. FAMILY, SOCIO-ECONOMIC & WASH ENVIRONMENT -->
+    <!-- 9. IMMUNIZATION HISTORY (INTERACTIVE NIS VACCINE CHECKLIST) -->
     <details class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
       <summary class="bg-slate-50 px-4 py-3 font-bold text-slate-800 cursor-pointer flex justify-between items-center border-b">
-        <span>9. Family History, Socio-Economic Class & WASH Environment</span>
-        <span class="text-xs text-blue-600 font-normal">Tap to expand</span>
+        <span>9. Immunization History</span>
+        <span class="text-xs text-blue-600 font-normal">Interactive NIS Vaccine Checklist & BCG Scar</span>
       </summary>
       <div class="p-4 space-y-3">
-        <div class="ask-prompt">
-          <strong>Ask the family:</strong> "Are parents related by blood? Any family history of TB, asthma, or genetic disorders? What is the family income, housing, and drinking water source?"
+        <div class="text-xs text-slate-500">Uncheck any vaccine dose that the child has <strong>missed</strong> to auto-update the immunization summary:</div>
+        <div id="vaccineChecklist" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2 text-xs">
+          <label class="flex items-center gap-1.5 bg-emerald-50 border border-emerald-200 p-2 rounded cursor-pointer"><input type="checkbox" checked onchange="updateVaccineSummary()" class="vax-chip" value="Birth (BCG, OPV-0, HepB)" /> Birth (BCG/OPV0)</label>
+          <label class="flex items-center gap-1.5 bg-emerald-50 border border-emerald-200 p-2 rounded cursor-pointer"><input type="checkbox" checked onchange="updateVaccineSummary()" class="vax-chip" value="6 Weeks (Penta-1, Rota-1, PCV-1, fIPV-1)" /> 6 Wks (Penta-1)</label>
+          <label class="flex items-center gap-1.5 bg-emerald-50 border border-emerald-200 p-2 rounded cursor-pointer"><input type="checkbox" checked onchange="updateVaccineSummary()" class="vax-chip" value="10 Weeks (Penta-2, Rota-2)" /> 10 Wks (Penta-2)</label>
+          <label class="flex items-center gap-1.5 bg-emerald-50 border border-emerald-200 p-2 rounded cursor-pointer"><input type="checkbox" checked onchange="updateVaccineSummary()" class="vax-chip" value="14 Weeks (Penta-3, Rota-3, PCV-2, fIPV-2)" /> 14 Wks (Penta-3)</label>
+          <label class="flex items-center gap-1.5 bg-emerald-50 border border-emerald-200 p-2 rounded cursor-pointer"><input type="checkbox" checked onchange="updateVaccineSummary()" class="vax-chip" value="9 Months (MR-1, PCV-Booster, Vit-A, fIPV-3)" /> 9 Mo (MR-1/PCV-B)</label>
+          <label class="flex items-center gap-1.5 bg-emerald-50 border border-emerald-200 p-2 rounded cursor-pointer"><input type="checkbox" checked onchange="updateVaccineSummary()" class="vax-chip" value="16–24 Months (MR-2, DPT-B1, OPV-B)" /> 16–24 Mo (MR-2/DPT)</label>
         </div>
+        <div>
+          <label class="block text-xs font-semibold mb-1">Immunization Summary & BCG Scar Status</label>
+          <input id="immStatus" type="text" value="Completely immunized for age as per National Immunization Schedule; BCG scar present on left deltoid." class="w-full border rounded p-2 text-sm" />
+        </div>
+      </div>
+    </details>
+
+    <!-- 10. ALLERGEN HISTORY -->
+    <details open class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+      <summary class="bg-slate-50 px-4 py-3 font-bold text-slate-800 cursor-pointer flex justify-between items-center border-b">
+        <span>10. Allergen History</span>
+        <span class="text-xs text-blue-600 font-normal">Drugs, foods, dust, environment</span>
+      </summary>
+      <div class="p-4 space-y-3">
+        <div id="allergenContainer" class="space-y-2">
+          <div class="allergen-entry grid grid-cols-1 sm:grid-cols-12 gap-2 bg-slate-50 p-2.5 rounded border">
+            <div class="sm:col-span-5">
+              <label class="block text-xs font-semibold mb-1">Allergen (Drug / Food / Environmental)</label>
+              <input type="text" class="allergen-name w-full border rounded p-1.5 text-sm bg-white" placeholder="e.g., Penicillin / Peanuts / Dust / None" />
+            </div>
+            <div class="sm:col-span-7">
+              <label class="block text-xs font-semibold mb-1">Reaction / Manifestation</label>
+              <input type="text" class="allergen-reaction w-full border rounded p-1.5 text-sm bg-white" placeholder="e.g., Urticarial rash / Wheezing / No known allergies" />
+            </div>
+          </div>
+        </div>
+        <button type="button" onclick="addAllergenEntry()" class="text-xs bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-semibold px-3 py-1.5 rounded border border-emerald-300">
+          + Add Allergen
+        </button>
+      </div>
+    </details>
+
+    <!-- 11. ADDICTION HISTORY -->
+    <details open class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+      <summary class="bg-slate-50 px-4 py-3 font-bold text-slate-800 cursor-pointer flex justify-between items-center border-b">
+        <span>11. Addiction History</span>
+        <span class="text-xs text-blue-600 font-normal">Substance use, passive smoke, screen/habit</span>
+      </summary>
+      <div class="p-4 space-y-3">
+        <div id="addictionContainer" class="space-y-2">
+          <div class="addiction-entry grid grid-cols-1 sm:grid-cols-12 gap-2 bg-slate-50 p-2.5 rounded border">
+            <div class="sm:col-span-5">
+              <label class="block text-xs font-semibold mb-1">Substance / Habit / Household Smoke Exposure</label>
+              <input type="text" class="addiction-name w-full border rounded p-1.5 text-sm bg-white" placeholder="e.g., Tobacco / Alcohol / Passive smoking / None" />
+            </div>
+            <div class="sm:col-span-7">
+              <label class="block text-xs font-semibold mb-1">Duration, Frequency & Details</label>
+              <input type="text" class="addiction-details w-full border rounded p-1.5 text-sm bg-white" placeholder="e.g., No active substance abuse or passive household smoke exposure" />
+            </div>
+          </div>
+        </div>
+        <button type="button" onclick="addAddictionEntry()" class="text-xs bg-purple-50 hover:bg-purple-100 text-purple-800 font-semibold px-3 py-1.5 rounded border border-purple-300">
+          + Add Addiction
+        </button>
+      </div>
+    </details>
+
+    <!-- ADOLESCENT MODULE (OPTIONAL) -->
+    <details id="adolescentModule" class="hidden bg-purple-50/50 rounded-xl shadow-sm border-2 border-purple-300 overflow-hidden" open>
+      <summary class="bg-purple-100 px-4 py-3 font-bold text-purple-900 cursor-pointer flex justify-between items-center border-b border-purple-300">
+        <span>Adolescent Health Module</span>
+        <span class="text-xs font-semibold">Active Module</span>
+      </summary>
+      <div class="p-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div>
+          <label class="block text-xs font-semibold mb-1">Pubertal Trajectory, Menstrual History, Sleep & Academics</label>
+          <input id="adolGeneral" type="text" placeholder="e.g., Age-appropriate pubertal progression; sleeps 8 hrs/night" class="w-full border rounded p-2 text-sm bg-white" />
+        </div>
+        <div>
+          <label class="block text-xs font-semibold mb-1">Confidential Psychosocial Screen (HEADSS)</label>
+          <input id="adolConfidential" type="text" placeholder="e.g., Healthy peer relations; no emotional stress" class="w-full border rounded p-2 text-sm bg-white" />
+        </div>
+      </div>
+    </details>
+
+    <!-- 12. FAMILY HISTORY (WITH 3-GENERATION PEDIGREE BUILDER) -->
+    <details class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+      <summary class="bg-slate-50 px-4 py-3 font-bold text-slate-800 cursor-pointer flex justify-between items-center border-b">
+        <span>12. Family History</span>
+        <span class="text-xs text-blue-600 font-normal">3-Generation Pedigree Builder & Environment</span>
+      </summary>
+      <div class="p-4 space-y-4">
+        <div class="bg-slate-50 p-3 rounded-lg border border-slate-200 space-y-3">
+          <div class="text-xs font-bold text-slate-700 uppercase">🧬 Interactive 3-Generation Pedigree Chart Builder</div>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+            <div>
+              <label class="block font-semibold mb-1">Consanguinity</label>
+              <select id="pedConsang" onchange="renderPedigree()" class="w-full border rounded p-1.5 bg-white">
+                <option value="no">Non-Consanguineous (Single Line)</option>
+                <option value="yes">Consanguineous (Double Line =)</option>
+              </select>
+            </div>
+            <div>
+              <label class="block font-semibold mb-1">Male Siblings (Brothers)</label>
+              <input id="pedBrothers" type="number" min="0" max="5" value="1" oninput="renderPedigree()" class="w-full border rounded p-1.5 bg-white" />
+            </div>
+            <div>
+              <label class="block font-semibold mb-1">Female Siblings (Sisters)</label>
+              <input id="pedSisters" type="number" min="0" max="5" value="0" oninput="renderPedigree()" class="w-full border rounded p-1.5 bg-white" />
+            </div>
+            <div>
+              <label class="block font-semibold mb-1">Affected Family Member</label>
+              <select id="pedAffected" onchange="renderPedigree()" class="w-full border rounded p-1.5 bg-white">
+                <option value="index">Only Index Child Affected</option>
+                <option value="father">Father + Index Child</option>
+                <option value="mother">Mother (Carrier/Affected) + Index</option>
+                <option value="sibling">One Sibling + Index Child</option>
+              </select>
+            </div>
+          </div>
+          <div id="pedigreeSvgContainer" class="bg-white border rounded-lg p-3 flex justify-center overflow-x-auto"></div>
+        </div>
+
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
-            <label class="block text-xs font-semibold mb-1">Family Pedigree & Genetic/Chronic Disease Contacts</label>
-            <input id="famHistory" type="text" value="Non-consanguineous nuclear family; siblings healthy; no family history of tuberculosis, asthma, or seizure disorders." class="w-full border rounded p-2 text-sm" />
+            <label class="block text-xs font-semibold mb-1">Family Type, Consanguinity, Siblings & Hereditary/TB Contacts</label>
+            <input id="famHistory" type="text" value="Born of a non-consanguineous marriage in a nuclear family; siblings are healthy; no family history of tuberculosis, asthma, epilepsy, or bleeding disorders." class="w-full border rounded p-2 text-sm" />
           </div>
           <div>
-            <label class="block text-xs font-semibold mb-1">Socio-Economic Class (Kuppuswamy) & WASH Environment</label>
-            <input id="socioHistory" type="text" value="Middle socio-economic class; lives in pucca house with clean drinking water and sanitary toilet facilities." class="w-full border rounded p-2 text-sm" />
+            <label class="block text-xs font-semibold mb-1">Socio-Economic Class, Housing, Water & Sanitation</label>
+            <input id="socioHistory" type="text" value="Lives in a pucca house with cross-ventilation, LPG cooking fuel, filtered drinking water, and sanitary toilet." class="w-full border rounded p-2 text-sm" />
+          </div>
+        </div>
+      </div>
+    </details>
+
+    <!-- 13. GENERAL PHYSICAL EXAM (GPE) & VITALS CHECKER -->
+    <details class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+      <summary class="bg-slate-50 px-4 py-3 font-bold text-slate-800 cursor-pointer flex justify-between items-center border-b">
+        <span>13. General Physical Exam & Vitals</span>
+        <span class="text-xs text-blue-600 font-normal">Vitals, Age-Specific Tachypnea & PICCLE</span>
+      </summary>
+      <div class="p-4 space-y-3">
+        <div class="grid grid-cols-2 sm:grid-cols-5 gap-2.5 bg-slate-50 p-3 rounded-lg border">
+          <div>
+            <label class="block text-xs font-semibold mb-1">Temp (°F)</label>
+            <input id="vitalTemp" type="text" placeholder="e.g., 98.6°F" class="w-full border rounded p-1.5 text-sm bg-white" />
+          </div>
+          <div>
+            <label class="block text-xs font-semibold mb-1">Heart Rate (/min)</label>
+            <input id="vitalHR" type="number" placeholder="e.g., 110" class="w-full border rounded p-1.5 text-sm bg-white" />
+          </div>
+          <div>
+            <label class="block text-xs font-semibold mb-1">Resp. Rate (/min)</label>
+            <input id="vitalRR" type="number" placeholder="e.g., 32" oninput="checkVitals()" class="w-full border rounded p-1.5 text-sm bg-white" />
+          </div>
+          <div>
+            <label class="block text-xs font-semibold mb-1">SpO2 (%)</label>
+            <input id="vitalSpo2" type="text" placeholder="e.g., 99% RA" class="w-full border rounded p-1.5 text-sm bg-white" />
+          </div>
+          <div class="col-span-2 sm:col-span-1">
+            <label class="block text-xs font-semibold mb-1">Tachypnea Check</label>
+            <input id="tachypneaAlert" type="text" readonly placeholder="Enter RR & Age(mo)" class="w-full border rounded p-1.5 text-xs bg-slate-100 font-bold" />
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold mb-1.5">General Examination Signs (Check if PRESENT)</label>
+          <div class="grid grid-cols-2 sm:grid-cols-6 gap-2 text-xs">
+            <label class="flex items-center gap-1.5 border p-2 rounded cursor-pointer"><input type="checkbox" class="gpe-sign" value="Pallor" /> Pallor</label>
+            <label class="flex items-center gap-1.5 border p-2 rounded cursor-pointer"><input type="checkbox" class="gpe-sign" value="Icterus" /> Icterus</label>
+            <label class="flex items-center gap-1.5 border p-2 rounded cursor-pointer"><input type="checkbox" class="gpe-sign" value="Cyanosis" /> Cyanosis</label>
+            <label class="flex items-center gap-1.5 border p-2 rounded cursor-pointer"><input type="checkbox" class="gpe-sign" value="Clubbing" /> Clubbing</label>
+            <label class="flex items-center gap-1.5 border p-2 rounded cursor-pointer"><input type="checkbox" class="gpe-sign" value="Lymphadenopathy" /> Lymphadenopathy</label>
+            <label class="flex items-center gap-1.5 border p-2 rounded cursor-pointer"><input type="checkbox" class="gpe-sign" value="Pedal Edema" /> Edema</label>
           </div>
         </div>
       </div>
@@ -603,43 +824,475 @@
     <section id="summarySection" class="bg-white p-5 rounded-xl shadow-md border-2 border-blue-900 space-y-4">
       <div class="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h2 class="text-base font-bold text-blue-950">Formal Clinical Case Presentation (Paragraph Format)</h2>
-          <p class="text-xs text-slate-500">Synthesizes all entered findings and clinical calculations into cohesive bedside paragraphs.</p>
+          <h2 class="text-base font-bold text-blue-950">Formal Clinical Case Presentation</h2>
+          <p class="text-xs text-slate-500">Synthesizes all entered findings into structured bedside paragraphs.</p>
         </div>
-        <div class="flex flex-wrap gap-2">
-          <button onclick="generateHistoryParagraphs()" class="bg-blue-800 hover:bg-blue-900 text-white text-sm font-semibold px-4 py-2 rounded-lg shadow">
+        <div class="flex flex-wrap gap-2 no-print">
+          <button onclick="generateHistoryParagraphs()" class="bg-blue-800 hover:bg-blue-900 text-white text-xs font-semibold px-3.5 py-2 rounded-lg shadow">
             Generate Case Paragraphs
           </button>
-          <button onclick="copySummary()" class="bg-slate-200 hover:bg-slate-300 text-slate-800 text-sm font-semibold px-3 py-2 rounded-lg">
-            Copy Text
+          <button onclick="copySummary()" class="bg-slate-200 hover:bg-slate-300 text-slate-800 text-xs font-semibold px-3 py-2 rounded-lg">
+            📋 Copy
+          </button>
+          <button onclick="shareWhatsApp()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold px-3 py-2 rounded-lg">
+            📲 WhatsApp
+          </button>
+          <button onclick="window.print()" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold px-3 py-2 rounded-lg">
+            🖨️ Print / PDF
           </button>
         </div>
       </div>
 
       <textarea id="outputParagraphs" rows="15" class="w-full border border-slate-300 rounded-lg p-3.5 text-sm leading-relaxed font-serif bg-slate-50" placeholder="Tap 'Generate Case Paragraphs' above to compile the patient's history..."></textarea>
 
-      <!-- Optional Gemini AI Polish & DDx -->
-      <div class="border-t pt-3 flex flex-wrap items-center justify-between gap-2">
-        <div class="flex items-center gap-2 flex-1 min-w-[240px]">
-          <input id="geminiKey" type="password" placeholder="Optional: Paste Gemini API Key for AI Polish & Differential Diagnosis" class="w-full border rounded px-2.5 py-1.5 text-xs" />
+      <!-- Gemini AI Polish & DDx -->
+      <div class="border-t pt-3 flex flex-wrap items-center justify-between gap-2 no-print">
+        <div class="text-xs text-slate-500" id="vaultStatusBanner">
+          🔒 Using Firebase Cloud API Vault (or Smart Zero-Key Fallback if not logged in)
         </div>
-        <button onclick="polishWithGemini()" id="aiBtn" class="bg-purple-700 hover:bg-purple-800 text-white text-xs font-semibold px-3 py-2 rounded-lg">
-          ✨ Polish Prose & Generate Differential Diagnosis with Gemini AI
-        </button>
+        <div class="flex flex-wrap gap-2">
+          <button onclick="polishWithGemini()" id="aiBtn" class="bg-purple-700 hover:bg-purple-800 text-white text-xs font-semibold px-3.5 py-2 rounded-lg shadow">
+            ✨ Polish Case & Generate Differential Diagnosis
+          </button>
+        </div>
       </div>
     </section>
 
-    <footer class="text-center text-xs text-slate-500 pt-4">
-      Pediatric History Proforma & Clinical Calculator by <strong>Dr. Danny</strong> (danny-code-2029)
+    <footer class="text-center text-xs text-slate-400 pt-4">
+      Pediatric History Performa • Dr. Danny (danny-code-2029)
     </footer>
 
   </main>
 
+  <!-- FLOATING ASK GEMINI BUTTON -->
+  <button id="geminiFloatBtn" onclick="toggleGeminiModal()" class="fixed bottom-5 right-5 z-40 bg-purple-700 hover:bg-purple-800 text-white font-bold px-4 py-3 rounded-full shadow-xl flex items-center gap-2 border-2 border-purple-300">
+    <span>✨ Ask Gemini</span>
+  </button>
+
+  <!-- 1. FIREBASE GOOGLE LOGIN & CLOUD API VAULT MODAL -->
+  <div id="loginModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 flex items-center justify-center p-4">
+    <div class="modal-card bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden border border-indigo-200">
+      <div class="bg-indigo-900 text-white px-4 py-3 flex items-center justify-between">
+        <div>
+          <h3 class="font-bold text-sm">🔑 Medico Google Login & Cloud API Vault</h3>
+          <p class="text-[11px] text-indigo-200">Firebase Cloud Vault — Active while logged in, cleared on logout</p>
+        </div>
+        <button onclick="toggleLoginModal()" class="text-white text-lg font-bold px-2">&times;</button>
+      </div>
+
+      <div class="p-4 space-y-3 text-xs">
+        <div id="vaultSyncStatus" class="text-[11px] bg-slate-100 text-slate-700 px-2.5 py-1.5 rounded border">
+          ☁️ Connected to Firebase (`danny-code-peds-history-vault`)
+        </div>
+
+        <!-- VIEW A: LOGGED OUT -->
+        <div id="loggedOutView" class="space-y-3">
+          <button onclick="signInWithGoogle()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 px-4 rounded-lg shadow flex items-center justify-center gap-2 text-sm">
+            <span>G</span> Sign in with Google
+          </button>
+
+          <div class="bg-indigo-50 p-3 rounded-lg border border-indigo-200 space-y-1.5 text-indigo-950">
+            <div class="font-bold">How the One-Time Cloud Vault Works:</div>
+            <p class="text-[11px]">1. Sign in with your Google account above.<br/>2. On your first login, you'll be prompted once to grab a free Gemini API key from Google AI Studio and paste it.<br/>3. Firebase locks it to your Google account so future logins unlock your key automatically.</p>
+          </div>
+        </div>
+
+        <!-- VIEW B: SIGNED IN TO GOOGLE, NEEDS ONE-TIME KEY LINKING -->
+        <div id="firstTimeKeyView" class="hidden space-y-3 bg-amber-50 p-3 rounded-lg border border-amber-300 text-amber-950">
+          <div class="font-bold text-sm" id="welcomeNewMedico">👋 Welcome! Link Your Gemini API Key Once</div>
+          <p class="text-[11px]">Your Google account is signed in, but no Gemini API key is stored in your Cloud Vault yet. Tap Step 1 below to create a free key in Google AI Studio, then paste it in Step 2:</p>
+          <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener" class="inline-block bg-indigo-700 hover:bg-indigo-800 text-white font-semibold px-3 py-1.5 rounded shadow">
+            ↗ Step 1: Open Google AI Studio & Create Key
+          </a>
+          <div>
+            <label class="block font-semibold mb-1">Step 2: Paste Your Gemini API Key (`AIzaSy...`)</label>
+            <input id="firstTimeKeyInput" type="password" placeholder="AIzaSy..." class="w-full border rounded p-2 text-sm bg-white" />
+          </div>
+          <button onclick="saveKeyToCloudVault('firstTimeKeyInput')" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 rounded-lg shadow">
+            🔒 Lock Key Into My Firebase Cloud Vault
+          </button>
+          <button onclick="handleMedicoLogout()" class="w-full text-center text-red-600 hover:underline pt-1">
+            Cancel & Sign Out
+          </button>
+        </div>
+
+        <!-- VIEW C: LOGGED IN & VAULT UNLOCKED -->
+        <div id="loggedInView" class="hidden space-y-3">
+          <div class="bg-emerald-50 border border-emerald-300 p-3 rounded-lg text-emerald-950">
+            <div class="font-bold text-sm" id="activeUserDisplay">Logged in</div>
+            <p class="text-[11px] mt-1">✅ Your personal Gemini API key is unlocked for this active session. Clicking Log Out below immediately deletes the session key from browser memory.</p>
+          </div>
+          <div>
+            <label class="block font-semibold mb-1">Update / Replace Saved Cloud Vault Key</label>
+            <div class="flex gap-2">
+              <input id="updateVaultKeyInput" type="password" placeholder="Paste new AIzaSy... key" class="w-full border rounded p-2 text-xs" />
+              <button onclick="saveKeyToCloudVault('updateVaultKeyInput')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3 rounded font-semibold">Save</button>
+            </div>
+          </div>
+          <button onclick="handleMedicoLogout()" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2.5 rounded-lg shadow">
+            🚪 Log Out & Delete Session Key
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. SETTINGS MODAL (THEME SWITCHER) -->
+  <div id="settingsModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 flex items-center justify-center p-4">
+    <div class="modal-card bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden border border-slate-200">
+      <div class="bg-slate-900 text-white px-4 py-3 flex items-center justify-between">
+        <h3 class="font-bold text-sm">⚙️ Display & Theme Settings</h3>
+        <button onclick="toggleSettingsModal()" class="text-white text-lg font-bold px-2">&times;</button>
+      </div>
+      <div class="p-4 space-y-4 text-xs">
+        <div>
+          <label class="block font-bold mb-2 text-sm">Select Color Theme</label>
+          <div class="grid grid-cols-3 gap-2">
+            <button onclick="setTheme('light')" id="themeBtnLight" class="border rounded-lg p-3 font-semibold flex flex-col items-center gap-1 hover:bg-slate-100">
+              <span class="text-lg">☀️</span>
+              <span>Light</span>
+            </button>
+            <button onclick="setTheme('dark')" id="themeBtnDark" class="border rounded-lg p-3 font-semibold flex flex-col items-center gap-1 hover:bg-slate-100">
+              <span class="text-lg">🌙</span>
+              <span>Dark</span>
+            </button>
+            <button onclick="setTheme('system')" id="themeBtnSystem" class="border rounded-lg p-3 font-semibold flex flex-col items-center gap-1 hover:bg-slate-100">
+              <span class="text-lg">💻</span>
+              <span>System</span>
+            </button>
+          </div>
+        </div>
+        <div class="border-t pt-3 flex justify-between items-center">
+          <span class="text-slate-500">Clear all 5 saved patient drafts</span>
+          <button onclick="clearAllDrafts()" class="bg-rose-100 text-rose-800 font-semibold px-3 py-1.5 rounded hover:bg-rose-200">Clear Drafts</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. GEMINI DYNAMIC CONTROL, PDF UPLOADER, VIVA & AUDITOR MODAL -->
+  <div id="geminiModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 flex items-center justify-center p-4">
+    <div class="modal-card bg-white rounded-2xl shadow-2xl max-w-2xl w-full overflow-hidden border border-purple-200 flex flex-col max-h-[92vh]">
+      <div class="bg-purple-900 text-white px-4 py-3 flex items-center justify-between">
+        <div>
+          <h3 class="font-bold text-sm">✨ Gemini Clinical Assistant, PDF Reader, Viva Examiner & Dynamic Controller</h3>
+          <p class="text-[11px] text-purple-200">Upload textbook PDFs/charts, ask doubts, auto-fill this page, practice viva, or audit code flaws</p>
+        </div>
+        <button onclick="toggleGeminiModal()" class="text-white hover:text-purple-200 text-lg font-bold px-2">&times;</button>
+      </div>
+
+      <div class="p-4 space-y-3 overflow-y-auto flex-1">
+        <!-- Multimodal Textbook PDF / Lab / Chart Uploader -->
+        <div class="bg-purple-50/70 border border-purple-200 p-2.5 rounded-lg flex flex-wrap items-center justify-between gap-2 text-xs">
+          <div>
+            <span class="font-bold text-purple-950">📄 Attach Standard Textbook PDF / Growth Chart / Lab Photo:</span>
+            <span id="attachedFileName" class="text-purple-700 ml-1">(None attached)</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <input type="file" id="geminiFileInput" accept="application/pdf,image/*" onchange="handleFileAttachment(this)" class="text-[11px] max-w-[210px]" />
+            <button type="button" onclick="clearAttachment()" class="text-[11px] text-red-600 hover:underline">Clear</button>
+          </div>
+        </div>
+
+        <div>
+          <div class="flex justify-between items-center mb-1">
+            <label class="block text-xs font-semibold">Ask a Doubt, Reference Attached PDF, or Give a Dynamic Page Command</label>
+            <button type="button" onclick="startDictation('geminiUserPrompt')" class="text-[11px] bg-purple-100 text-purple-800 px-2 py-0.5 rounded font-semibold">🎤 Dictate</button>
+          </div>
+          <textarea id="geminiUserPrompt" rows="3" class="w-full border rounded p-2 text-sm" placeholder="Examples:&#10;• PDF Reference: 'Compare this patient's anthropometry & history against the attached textbook PDF.'&#10;• Dynamic Command: 'Fill this form with a 3-year-old boy with fall from bed and acute fever.'"></textarea>
+        </div>
+
+        <div class="flex flex-wrap gap-2">
+          <button onclick="askGeminiDoubt()" class="bg-purple-700 hover:bg-purple-800 text-white text-xs font-semibold px-3 py-2 rounded-lg">
+            💬 Ask Doubt / Check PDF
+          </button>
+          <button onclick="geminiControlPage()" class="bg-blue-700 hover:bg-blue-800 text-white text-xs font-semibold px-3 py-2 rounded-lg">
+            ⚡ Dynamically Fill / Control Page
+          </button>
+          <button onclick="geminiVivaMode()" class="bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-semibold px-3 py-2 rounded-lg">
+            🎓 Viva Examiner (5 Questions)
+          </button>
+          <button onclick="geminiAuditFlaws()" class="bg-amber-600 hover:bg-amber-700 text-white text-xs font-semibold px-3 py-2 rounded-lg">
+            🔍 Gather Coding & Form Flaws
+          </button>
+        </div>
+
+        <div>
+          <div class="flex justify-between items-center mb-1">
+            <label class="text-xs font-semibold text-slate-600">Gemini Output / Viva / Diagnostic Report</label>
+            <button onclick="copyGeminiOutput()" class="text-[11px] text-blue-600 hover:underline">Copy Output</button>
+          </div>
+          <textarea id="geminiModalOutput" rows="9" readonly class="w-full border rounded-lg p-3 text-xs bg-slate-50 font-mono leading-relaxed" placeholder="Gemini's response, PDF analysis, viva questions, or code flaw report will appear here..."></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- OFFICIAL FIREBASE SDKs (AUTH + FIRESTORE) -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
   <script>
+    // --- 1. INITIALIZE FIREBASE WITH YOUR PROJECT CONFIG ---
+    const firebaseConfig = {
+      apiKey: "AIzaSyCzYceOpLoSm-S7EEQ_H5WgN12d4JlqUXQ",
+      authDomain: "danny-code-peds-history-vault.firebaseapp.com",
+      projectId: "danny-code-peds-history-vault",
+      storageBucket: "danny-code-peds-history-vault.firebasestorage.app",
+      messagingSenderId: "323627663661",
+      appId: "1:323627663661:web:fe7b1854cb21e1720c93a4"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    // --- 2. SESSION & VAULT STATE ---
+    let currentGoogleUser = null;
+    let activeSessionKey = sessionStorage.getItem('peds_active_session_key') || '';
+    let currentDraftKey = localStorage.getItem('peds_current_draft_slot') || 'draft_1';
+    let attachedFileBase64 = null;
+    let attachedFileMime = null;
+
     window.addEventListener('DOMContentLoaded', () => {
-      const savedKey = localStorage.getItem('peds_gemini_key');
-      if (savedKey) document.getElementById('geminiKey').value = savedKey;
+      initTheme();
+      document.getElementById('draftSelector').value = currentDraftKey;
+      loadPatientDraft(currentDraftKey);
+      renderPedigree();
+      renderSymptomTimeline();
+
+      // Auto-save listener on all inputs
+      document.querySelector('main').addEventListener('input', () => {
+        savePatientDraft(currentDraftKey);
+      });
+      document.querySelector('main').addEventListener('change', () => {
+        savePatientDraft(currentDraftKey);
+      });
     });
+
+    // --- 3. FIREBASE AUTHENTICATION & FIRESTORE VAULT LISTENER ---
+    auth.onAuthStateChanged(async (user) => {
+      currentGoogleUser = user;
+      const statusBox = document.getElementById('vaultSyncStatus');
+
+      if (!user) {
+        // Logged out: wipe active session key immediately
+        activeSessionKey = '';
+        sessionStorage.removeItem('peds_active_session_key');
+        updateAuthUI('logged_out');
+        return;
+      }
+
+      statusBox.textContent = `🔄 Signed in as ${user.email} — Checking Cloud Vault...`;
+      let loadedKey = '';
+
+      try {
+        const docSnap = await db.collection('medico_vault').doc(user.uid).get();
+        if (docSnap.exists && docSnap.data().encryptedKey) {
+          loadedKey = atob(docSnap.data().encryptedKey);
+          statusBox.textContent = `☁️ Cloud Vault unlocked from Firestore for ${user.email}`;
+        }
+      } catch (err) {
+        console.warn('Firestore read note:', err.message);
+        statusBox.textContent = `⚠️ Firestore note (${err.code || 'check rules'}) — Checking device backup vault...`;
+      }
+
+      // Check UID-locked local backup if Firestore didn't return a key yet
+      if (!loadedKey) {
+        const localBackup = localStorage.getItem('peds_uid_vault_' + user.uid);
+        if (localBackup) {
+          loadedKey = atob(localBackup);
+          statusBox.textContent = `🔒 Unlocked from UID-bound backup vault for ${user.email}`;
+        }
+      }
+
+      if (loadedKey) {
+        activeSessionKey = loadedKey;
+        sessionStorage.setItem('peds_active_session_key', loadedKey);
+        updateAuthUI('unlocked');
+      } else {
+        // First time this Google account has logged in — prompt once for Gemini key
+        activeSessionKey = '';
+        sessionStorage.removeItem('peds_active_session_key');
+        updateAuthUI('needs_key');
+        // Automatically open the modal so the first-time user sees the 1-time link step
+        document.getElementById('loginModal').classList.remove('hidden');
+      }
+    });
+
+    async function signInWithGoogle() {
+      const provider = new firebase.auth.GoogleAuthProvider();
+      try {
+        await auth.signInWithPopup(provider);
+      } catch (err) {
+        if (err.code === 'auth/popup-blocked' || err.code === 'auth/cancelled-popup-request') {
+          await auth.signInWithRedirect(provider);
+        } else {
+          alert('Google Sign-In Error: ' + err.message);
+        }
+      }
+    }
+
+    async function saveKeyToCloudVault(inputElementId) {
+      if (!currentGoogleUser) {
+        alert('Please sign in with Google first.');
+        return;
+      }
+      const rawKey = document.getElementById(inputElementId).value.trim();
+      if (!rawKey) {
+        alert('Please paste your Gemini API key (starts with AIzaSy...)');
+        return;
+      }
+
+      const encoded = btoa(rawKey);
+      const statusBox = document.getElementById('vaultSyncStatus');
+      // Always save a UID-locked fallback on device as well
+      localStorage.setItem('peds_uid_vault_' + currentGoogleUser.uid, encoded);
+
+      try {
+        await db.collection('medico_vault').doc(currentGoogleUser.uid).set({
+          email: currentGoogleUser.email,
+          encryptedKey: encoded,
+          updatedAt: new Date().toISOString()
+        }, { merge: true });
+        statusBox.textContent = `✅ Saved to Firebase Cloud Vault for ${currentGoogleUser.email}`;
+      } catch (err) {
+        console.warn('Firestore write note:', err.message);
+        statusBox.textContent = `✅ Key locked to your Google UID (Publish Firestore Rules in console to sync across devices)`;
+      }
+
+      activeSessionKey = rawKey;
+      sessionStorage.setItem('peds_active_session_key', rawKey);
+      document.getElementById(inputElementId).value = '';
+      updateAuthUI('unlocked');
+    }
+
+    async function handleMedicoLogout() {
+      activeSessionKey = '';
+      sessionStorage.removeItem('peds_active_session_key');
+      await auth.signOut();
+      updateAuthUI('logged_out');
+    }
+
+    function updateAuthUI(state) {
+      const btn = document.getElementById('headerLoginBtn');
+      const loggedOut = document.getElementById('loggedOutView');
+      const firstTime = document.getElementById('firstTimeKeyView');
+      const loggedIn = document.getElementById('loggedInView');
+      const banner = document.getElementById('vaultStatusBanner');
+
+      loggedOut.classList.add('hidden');
+      firstTime.classList.add('hidden');
+      loggedIn.classList.add('hidden');
+
+      if (state === 'unlocked' && currentGoogleUser) {
+        const shortName = (currentGoogleUser.displayName || currentGoogleUser.email).split(' ')[0];
+        btn.innerHTML = `👤 ${shortName} (Active)`;
+        btn.className = 'text-xs bg-emerald-600 hover:bg-emerald-500 text-white font-semibold px-2.5 py-1.5 rounded shadow flex items-center gap-1';
+        loggedIn.classList.remove('hidden');
+        document.getElementById('activeUserDisplay').textContent = `Signed in as ${currentGoogleUser.email}`;
+        banner.textContent = `✅ Firebase Cloud API Vault active for ${currentGoogleUser.email}`;
+      } else if (state === 'needs_key' && currentGoogleUser) {
+        btn.innerHTML = `⚠️ Link Key`;
+        btn.className = 'text-xs bg-amber-500 hover:bg-amber-600 text-white font-semibold px-2.5 py-1.5 rounded shadow flex items-center gap-1';
+        firstTime.classList.remove('hidden');
+        document.getElementById('welcomeNewMedico').textContent = `👋 Welcome, ${currentGoogleUser.displayName || currentGoogleUser.email}!`;
+        banner.textContent = `⚠️ Signed in as ${currentGoogleUser.email} — Paste your Gemini API key once to finish setup`;
+      } else {
+        btn.innerHTML = '🔑 Login';
+        btn.className = 'text-xs bg-indigo-600 hover:bg-indigo-500 text-white font-semibold px-2.5 py-1.5 rounded shadow flex items-center gap-1';
+        loggedOut.classList.remove('hidden');
+        banner.textContent = '🔓 Not logged in — Clicking AI buttons will use Zero-Key Copy & Launch mode (or click Login to unlock your Cloud Vault)';
+      }
+    }
+
+    function toggleLoginModal() {
+      document.getElementById('loginModal').classList.toggle('hidden');
+    }
+    function toggleSettingsModal() {
+      document.getElementById('settingsModal').classList.toggle('hidden');
+    }
+    function toggleGeminiModal() {
+      document.getElementById('geminiModal').classList.toggle('hidden');
+    }
+
+    // --- THEME CONTROLLER (LIGHT / DARK / SYSTEM) ---
+    function initTheme() {
+      const savedTheme = localStorage.getItem('peds_theme_pref') || 'light';
+      applyTheme(savedTheme);
+    }
+
+    function setTheme(mode) {
+      localStorage.setItem('peds_theme_pref', mode);
+      applyTheme(mode);
+    }
+
+    function applyTheme(mode) {
+      const root = document.documentElement;
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const isDark = mode === 'dark' || (mode === 'system' && prefersDark);
+      root.classList.toggle('dark', isDark);
+      ['Light', 'Dark', 'System'].forEach(m => {
+        const btn = document.getElementById('themeBtn' + m);
+        if (btn) btn.classList.toggle('ring-2', mode === m.toLowerCase());
+      });
+    }
+
+    // --- MULTI-PATIENT AUTO-SAVE DRAFTS ---
+    function savePatientDraft(slot) {
+      const data = {};
+      document.querySelectorAll('main input[id], main select[id], main textarea[id]').forEach(el => {
+        if (el.type === 'file') return;
+        data[el.id] = el.type === 'checkbox' ? el.checked : el.value;
+      });
+      localStorage.setItem('peds_draft_' + slot, JSON.stringify(data));
+      const badge = document.getElementById('autoSaveBadge');
+      if (badge) {
+        badge.textContent = `✓ Auto-saved (${slot.replace('_', ' ')}) at ${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`;
+      }
+    }
+
+    function loadPatientDraft(slot) {
+      const raw = localStorage.getItem('peds_draft_' + slot);
+      if (!raw) return;
+      try {
+        const data = JSON.parse(raw);
+        Object.keys(data).forEach(id => {
+          const el = document.getElementById(id);
+          if (el && el.type !== 'file') {
+            if (el.type === 'checkbox') el.checked = Boolean(data[id]);
+            else el.value = data[id];
+          }
+        });
+        toggleModules();
+        calcMPH();
+        calcFluids();
+        calcCorrectedAge();
+        calcDQ();
+        calcDietDeficit();
+        checkPcmDose();
+        checkVitals();
+        renderSymptomTimeline();
+        renderPedigree();
+      } catch (e) {
+        console.warn('Draft load error:', e);
+      }
+    }
+
+    function switchPatientDraft(slot) {
+      savePatientDraft(currentDraftKey);
+      currentDraftKey = slot;
+      localStorage.setItem('peds_current_draft_slot', slot);
+      loadPatientDraft(slot);
+    }
+
+    function clearAllDrafts() {
+      if (confirm('Delete all 5 saved patient drafts?')) {
+        ['draft_1','draft_2','draft_3','draft_4','draft_5'].forEach(s => localStorage.removeItem('peds_draft_' + s));
+        window.location.reload();
+      }
+    }
 
     function toggleModules() {
       document.getElementById('feverModule').classList.toggle('hidden', !document.getElementById('toggleFever').checked);
@@ -648,6 +1301,289 @@
       document.getElementById('adolescentModule').classList.toggle('hidden', !document.getElementById('toggleAdolescent').checked);
     }
 
+    // --- VOICE DICTATION (WEB SPEECH API) ---
+    function startDictation(targetId) {
+      const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRec) {
+        alert('Voice dictation requires Google Chrome or Edge.');
+        return;
+      }
+      const rec = new SpeechRec();
+      rec.lang = 'en-IN';
+      rec.interimResults = false;
+      rec.onresult = (e) => {
+        const transcript = e.results[0][0].transcript;
+        const el = document.getElementById(targetId);
+        el.value = el.value ? el.value + ' ' + transcript : transcript;
+        el.dispatchEvent(new Event('input', { bubbles: true }));
+      };
+      rec.start();
+    }
+
+    // --- VISUAL SYMPTOM TIMELINE BAR ---
+    function renderSymptomTimeline() {
+      const raw = document.getElementById('chiefComplaints').value.trim();
+      const container = document.getElementById('timelineContainer');
+      const bars = document.getElementById('timelineBars');
+      if (!raw) {
+        container.classList.add('hidden');
+        return;
+      }
+      const segments = raw.split(/[;,]+/).map(s => s.trim()).filter(Boolean);
+      const parsed = segments.map(seg => {
+        const m = seg.match(/(\d+)\s*(day|days|d|wk|weeks|mo|months)/i);
+        let days = m ? parseInt(m[1], 10) : 1;
+        if (m && /wk|week/i.test(m[2])) days *= 7;
+        if (m && /mo|month/i.test(m[2])) days *= 30;
+        return { label: seg, days };
+      });
+      const maxDays = Math.max(...parsed.map(p => p.days), 1);
+      bars.innerHTML = parsed.map(p => {
+        const widthPct = Math.max(15, Math.min(100, Math.round((p.days / maxDays) * 100)));
+        return `
+          <div class="flex items-center gap-2">
+            <div class="w-40 truncate font-semibold">${p.label}</div>
+            <div class="flex-1 bg-slate-200 rounded-full h-3 overflow-hidden">
+              <div class="bg-blue-600 h-3 rounded-full" style="width:${widthPct}%"></div>
+            </div>
+            <div class="w-14 text-right text-[11px] font-mono">Day -${p.days}</div>
+          </div>
+        `;
+      }).join('');
+      container.classList.remove('hidden');
+    }
+
+    // --- PRIOR ANTIPYRETIC DOSE ADEQUACY CHECKER ---
+    function checkPcmDose() {
+      const strength = parseFloat(document.getElementById('pcmStrength').value);
+      const ml = parseFloat(document.getElementById('pcmMl').value);
+      const wt = parseFloat(document.getElementById('ptWeight').value);
+      const out = document.getElementById('pcmVerdict');
+      if (!ml || !wt) {
+        out.value = '';
+        return;
+      }
+      const mgPerMl = strength === 100 ? 100 : strength / 5;
+      const totalMg = ml * mgPerMl;
+      const mgPerKg = totalMg / wt;
+      let status = 'Adequate therapeutic dose (10–15 mg/kg)';
+      if (mgPerKg < 10) status = '⚠️ Sub-therapeutic / Under-dosed (<10 mg/kg)';
+      else if (mgPerKg > 15) status = '⚠️ Supratherapeutic / Over-dosed (>15 mg/kg)';
+      out.value = `${totalMg.toFixed(0)} mg given (${mgPerKg.toFixed(1)} mg/kg) — ${status}`;
+    }
+
+    // --- PRETERM CORRECTED AGE CALCULATOR ---
+    function calcCorrectedAge() {
+      const gest = parseFloat(document.getElementById('gestWeeks').value);
+      const chronoMo = parseFloat(document.getElementById('ptAgeMonths').value);
+      const out = document.getElementById('correctedAgeOutput');
+      if (!gest || gest >= 37) {
+        out.value = 'Term gestation (≥37 wks) — Use chronological age';
+        if (chronoMo > 0) document.getElementById('dqChrono').value = chronoMo;
+        return;
+      }
+      const weeksPremature = 40 - gest;
+      const monthsSubtract = weeksPremature / 4;
+      if (chronoMo > 0) {
+        const corrected = Math.max(0, chronoMo - monthsSubtract);
+        out.value = `${corrected.toFixed(1)} months (Corrected for ${weeksPremature} wks prematurity)`;
+        document.getElementById('dqChrono').value = corrected.toFixed(1);
+        calcDQ();
+      } else {
+        out.value = `Preterm (${weeksPremature} wks early — enter Age in Months in Sec 1)`;
+      }
+    }
+
+    // --- INTERACTIVE NIS VACCINE CHECKLIST ---
+    function updateVaccineSummary() {
+      const missed = Array.from(document.querySelectorAll('.vax-chip:not(:checked)')).map(c => c.value);
+      const input = document.getElementById('immStatus');
+      if (missed.length === 0) {
+        input.value = 'Completely immunized for age as per National Immunization Schedule; BCG scar present on left deltoid.';
+      } else {
+        input.value = `Partially immunized for age; missed scheduled doses: ${missed.join(', ')}.`;
+      }
+    }
+
+    // --- 3-GENERATION SVG PEDIGREE BUILDER ---
+    function renderPedigree() {
+      const consang = document.getElementById('pedConsang').value === 'yes';
+      const brothers = parseInt(document.getElementById('pedBrothers').value || '0', 10);
+      const sisters = parseInt(document.getElementById('pedSisters').value || '0', 10);
+      const affected = document.getElementById('pedAffected').value;
+      const indexSex = document.getElementById('ptSex').value;
+
+      const fatherFill = affected === 'father' ? '#1e293b' : '#ffffff';
+      const motherFill = affected === 'mother' ? '#1e293b' : '#ffffff';
+
+      const children = [];
+      for (let i = 0; i < brothers; i++) {
+        children.push({ sex: 'male', isIndex: false, affected: affected === 'sibling' && i === 0 });
+      }
+      for (let i = 0; i < sisters; i++) {
+        children.push({ sex: 'female', isIndex: false, affected: affected === 'sibling' && brothers === 0 && i === 0 });
+      }
+      children.push({ sex: indexSex, isIndex: true, affected: true });
+
+      const spacing = 70;
+      const startX = 220 - ((children.length - 1) * spacing) / 2;
+
+      let childNodes = '';
+      children.forEach((ch, idx) => {
+        const cx = startX + idx * spacing;
+        const fill = ch.affected ? '#1e293b' : '#ffffff';
+        const shape = ch.sex === 'male'
+          ? `<rect x="${cx - 14}" y="165" width="28" height="28" fill="${fill}" stroke="#0f172a" stroke-width="2"/>`
+          : `<circle cx="${cx}" cy="179" r="14" fill="${fill}" stroke="#0f172a" stroke-width="2"/>`;
+        const arrow = ch.isIndex
+          ? `<text x="${cx - 24}" y="212" font-size="11" font-weight="bold" fill="#dc2626">↗ Proband</text>`
+          : '';
+        childNodes += `
+          <line x1="${cx}" y1="140" x2="${cx}" y2="165" stroke="#0f172a" stroke-width="2"/>
+          ${shape}
+          ${arrow}
+        `;
+      });
+
+      const sibLine = children.length > 1
+        ? `<line x1="${startX}" y1="140" x2="${startX + (children.length - 1) * spacing}" y2="140" stroke="#0f172a" stroke-width="2"/>`
+        : '';
+
+      const marriageLine = consang
+        ? `<line x1="164" y1="92" x2="276" y2="92" stroke="#dc2626" stroke-width="2.5"/>
+           <line x1="164" y1="98" x2="276" y2="98" stroke="#dc2626" stroke-width="2.5"/>`
+        : `<line x1="164" y1="95" x2="276" y2="95" stroke="#0f172a" stroke-width="2"/>`;
+
+      const svg = `
+        <svg width="440" height="225" viewBox="0 0 440 225" xmlns="http://www.w3.org/2000/svg">
+          <text x="10" y="30" font-size="10" fill="#64748b" font-weight="bold">Gen I</text>
+          <text x="10" y="98" font-size="10" fill="#64748b" font-weight="bold">Gen II</text>
+          <text x="10" y="182" font-size="10" fill="#64748b" font-weight="bold">Gen III</text>
+
+          <rect x="105" y="14" width="22" height="22" fill="#fff" stroke="#64748b" stroke-width="1.5"/>
+          <circle cx="175" cy="25" r="11" fill="#fff" stroke="#64748b" stroke-width="1.5"/>
+          <line x1="127" y1="25" x2="164" y2="25" stroke="#64748b" stroke-width="1.5"/>
+          <line x1="145" y1="25" x2="145" y2="81" stroke="#64748b" stroke-width="1.5"/>
+
+          <rect x="255" y="14" width="22" height="22" fill="#fff" stroke="#64748b" stroke-width="1.5"/>
+          <circle cx="325" cy="25" r="11" fill="#fff" stroke="#64748b" stroke-width="1.5"/>
+          <line x1="277" y1="25" x2="314" y2="25" stroke="#64748b" stroke-width="1.5"/>
+          <line x1="295" y1="25" x2="295" y2="81" stroke="#64748b" stroke-width="1.5"/>
+
+          <rect x="136" y="81" width="28" height="28" fill="${fatherFill}" stroke="#0f172a" stroke-width="2"/>
+          <circle cx="290" cy="95" r="14" fill="${motherFill}" stroke="#0f172a" stroke-width="2"/>
+          ${marriageLine}
+          <line x1="220" y1="95" x2="220" y2="140" stroke="#0f172a" stroke-width="2"/>
+
+          ${sibLine}
+          ${childNodes}
+        </svg>
+      `;
+      document.getElementById('pedigreeSvgContainer').innerHTML = svg;
+    }
+
+    // --- VITALS & AGE-SPECIFIC TACHYPNEA CHECKER ---
+    function checkVitals() {
+      const rr = parseFloat(document.getElementById('vitalRR').value);
+      const ageMo = parseFloat(document.getElementById('ptAgeMonths').value);
+      const out = document.getElementById('tachypneaAlert');
+      if (!rr) {
+        out.value = '';
+        return;
+      }
+      let cutoff = 40;
+      if (ageMo < 2) cutoff = 60;
+      else if (ageMo < 12) cutoff = 50;
+      else if (ageMo <= 60) cutoff = 40;
+      else cutoff = 30;
+
+      if (rr >= cutoff) {
+        out.value = `⚠️ Tachypnea (≥${cutoff}/min)`;
+        out.className = 'w-full border rounded p-1.5 text-xs bg-red-100 text-red-900 font-bold';
+      } else {
+        out.value = `Normal (<${cutoff}/min)`;
+        out.className = 'w-full border rounded p-1.5 text-xs bg-emerald-100 text-emerald-900 font-bold';
+      }
+    }
+
+    // --- DYNAMIC ADD ROWS ---
+    function addPastEntry(complaint = '', explanation = '') {
+      const container = document.getElementById('pastHistoryContainer');
+      const div = document.createElement('div');
+      div.className = 'past-entry bg-slate-50 p-3 rounded-lg border border-slate-200 space-y-2 relative';
+      div.innerHTML = `
+        <button type="button" onclick="this.parentElement.remove()" class="absolute top-2 right-2 text-xs text-red-600 hover:underline">Remove</button>
+        <div>
+          <label class="block text-xs font-semibold mb-1">Past Complaint / Event (e.g., Fall, Seizure, Admission)</label>
+          <input type="text" class="past-complaint w-full border rounded p-2 text-sm bg-white" value="${complaint}" placeholder="e.g., Fall from stairs" />
+        </div>
+        <div>
+          <label class="block text-xs font-semibold mb-1">Explanation / Details of the Event</label>
+          <textarea rows="2" class="past-explanation w-full border rounded p-2 text-sm bg-white" placeholder="Explain when it happened, severity, treatment, and recovery...">${explanation}</textarea>
+        </div>
+      `;
+      container.appendChild(div);
+    }
+
+    function addSurgicalEntry(complaint = '', explanation = '') {
+      const container = document.getElementById('surgicalHistoryContainer');
+      const div = document.createElement('div');
+      div.className = 'surgical-entry bg-slate-50 p-3 rounded-lg border border-slate-200 space-y-2 relative';
+      div.innerHTML = `
+        <button type="button" onclick="this.parentElement.remove()" class="absolute top-2 right-2 text-xs text-red-600 hover:underline">Remove</button>
+        <div>
+          <label class="block text-xs font-semibold mb-1">Surgical Complaint / Trauma / Procedure</label>
+          <input type="text" class="surg-complaint w-full border rounded p-2 text-sm bg-white" value="${complaint}" placeholder="e.g., Fall injury / Herniotomy" />
+        </div>
+        <div>
+          <label class="block text-xs font-semibold mb-1">Explanation / Operative & Post-Op Details</label>
+          <textarea rows="2" class="surg-explanation w-full border rounded p-2 text-sm bg-white" placeholder="Explain date, hospital, procedure performed, and recovery...">${explanation}</textarea>
+        </div>
+      `;
+      container.appendChild(div);
+    }
+
+    function addAllergenEntry(name = '', reaction = '') {
+      const container = document.getElementById('allergenContainer');
+      const div = document.createElement('div');
+      div.className = 'allergen-entry grid grid-cols-1 sm:grid-cols-12 gap-2 bg-slate-50 p-2.5 rounded border items-end';
+      div.innerHTML = `
+        <div class="sm:col-span-5">
+          <label class="block text-xs font-semibold mb-1">Allergen</label>
+          <input type="text" class="allergen-name w-full border rounded p-1.5 text-sm bg-white" value="${name}" placeholder="e.g., Amoxicillin / Egg" />
+        </div>
+        <div class="sm:col-span-6">
+          <label class="block text-xs font-semibold mb-1">Reaction / Manifestation</label>
+          <input type="text" class="allergen-reaction w-full border rounded p-1.5 text-sm bg-white" value="${reaction}" placeholder="e.g., Maculopapular rash / Anaphylaxis" />
+        </div>
+        <div class="sm:col-span-1 text-right">
+          <button type="button" onclick="this.parentElement.parentElement.remove()" class="text-xs text-red-600 hover:underline py-1.5">✕</button>
+        </div>
+      `;
+      container.appendChild(div);
+    }
+
+    function addAddictionEntry(name = '', details = '') {
+      const container = document.getElementById('addictionContainer');
+      const div = document.createElement('div');
+      div.className = 'addiction-entry grid grid-cols-1 sm:grid-cols-12 gap-2 bg-slate-50 p-2.5 rounded border items-end';
+      div.innerHTML = `
+        <div class="sm:col-span-5">
+          <label class="block text-xs font-semibold mb-1">Substance / Habit</label>
+          <input type="text" class="addiction-name w-full border rounded p-1.5 text-sm bg-white" value="${name}" placeholder="e.g., Passive smoking / Areca nut" />
+        </div>
+        <div class="sm:col-span-6">
+          <label class="block text-xs font-semibold mb-1">Duration, Frequency & Details</label>
+          <input type="text" class="addiction-details w-full border rounded p-1.5 text-sm bg-white" value="${details}" placeholder="e.g., Daily indoor exposure for 2 years" />
+        </div>
+        <div class="sm:col-span-1 text-right">
+          <button type="button" onclick="this.parentElement.parentElement.remove()" class="text-xs text-red-600 hover:underline py-1.5">✕</button>
+        </div>
+      `;
+      container.appendChild(div);
+    }
+
+    // --- CLINICAL CALCULATORS ---
     function calcMPH() {
       const f = parseFloat(document.getElementById('fatherHt').value);
       const m = parseFloat(document.getElementById('motherHt').value);
@@ -655,7 +1591,7 @@
       const out = document.getElementById('mphOutput');
       if (f > 0 && m > 0) {
         const mph = sex === 'male' ? ((f + m) / 2) + 6.5 : ((f + m) / 2) - 6.5;
-        out.value = `${mph.toFixed(1)} cm (${sex === 'male' ? 'Boy: Mean + 6.5 cm' : 'Girl: Mean - 6.5 cm'})`;
+        out.value = `${mph.toFixed(1)} cm`;
       } else {
         out.value = '';
       }
@@ -682,19 +1618,19 @@
       const out = document.getElementById('dqResult');
       if (chrono > 0 && dev > 0) {
         const dq = ((dev / chrono) * 100).toFixed(1);
-        const status = dq >= 85 ? 'Normal (≥85%)' : (dq < 70 ? 'Developmental Delay (<70%)' : 'Borderline (70–84%)');
+        const status = dq >= 85 ? 'Normal (≥85%)' : (dq < 70 ? 'Delay (<70%)' : 'Borderline (70–84%)');
         out.value = `${dq}% — ${status}`;
       } else {
         out.value = '';
       }
     }
 
-    function updateICMR() {
+    function updateRDA() {
       calcDietDeficit();
     }
 
     function calcDietDeficit() {
-      const [reqKcalStr, reqProtStr] = document.getElementById('icmrAgeGroup').value.split('|');
+      const [reqKcalStr, reqProtStr] = document.getElementById('rdaAgeGroup').value.split('|');
       const reqKcal = parseFloat(reqKcalStr);
       const reqProt = parseFloat(reqProtStr);
       const actKcal = parseFloat(document.getElementById('actualKcal').value);
@@ -724,190 +1660,400 @@
       document.getElementById('summarySection').scrollIntoView({ behavior: 'smooth' });
     }
 
+    // --- GENERATE CASE PARAGRAPHS ---
     function generateHistoryParagraphs() {
       const name = document.getElementById('ptName').value.trim() || 'The patient';
       const age = document.getElementById('ptAge').value.trim() || 'an unspecified age';
       const sex = document.getElementById('ptSex').value;
       const possLower = sex === 'female' ? 'her' : 'his';
       const birthOrder = document.getElementById('ptBirthOrder').value.trim();
-      const wt = document.getElementById('ptWeight').value.trim();
-      const ht = document.getElementById('ptHeight').value.trim();
-      const hc = document.getElementById('ptHC').value.trim();
-      const muac = document.getElementById('ptMUAC').value.trim();
       const address = document.getElementById('ptAddress').value.trim() || 'the local area';
-      const religion = document.getElementById('ptReligion').value.trim();
       const informant = document.getElementById('ptInformant').value.trim() || 'Mother';
       const reliability = document.getElementById('ptReliability').value;
 
-      let para1 = `DEMOGRAPHICS & CHIEF COMPLAINTS:\n${name}, a ${age}-old ${sex} child${birthOrder ? ` (${birthOrder} in birth order)` : ''}${religion ? ` belonging to a ${religion} family` : ''} residing in ${address}, was brought to the pediatric department. The clinical history was narrated by ${possLower} ${informant.toLowerCase()}, whose reliability is judged to be ${reliability}. `;
+      let para1 = `DEMOGRAPHIC HISTORY & CHIEF COMPLAINTS:\n${name}, a ${age}-old ${sex} child${birthOrder ? ` (${birthOrder} in birth order)` : ''} residing in ${address}, presented to the pediatric department. History was narrated by ${possLower} ${informant.toLowerCase()} (reliability: ${reliability}). `;
       const cc = document.getElementById('chiefComplaints').value.trim() || 'acute clinical symptoms';
-      para1 += `The child presented with chief complaints of ${cc}.`;
+      para1 += `Chief complaints: ${cc}.`;
 
-      const wellUntil = document.getElementById('wellUntil').value.trim() || 'the onset of the current illness';
+      const wellUntil = document.getElementById('wellUntil').value.trim() || 'the onset of current illness';
       const onset = document.getElementById('hpiOnset').value;
       const narrative = document.getElementById('hpiNarrative').value.trim();
-
-      let para2 = `HISTORY OF PRESENT ILLNESS (HPI):\nThe child was apparently well until ${wellUntil}, when the illness started with an ${onset} onset. `;
+      const pcmCheck = document.getElementById('pcmVerdict').value.trim();
+      let para2 = `HISTORY OF PRESENT ILLNESS:\nThe child was apparently well until ${wellUntil}, when symptoms began with an ${onset} onset. `;
 
       if (document.getElementById('toggleFever').checked) {
         const fDur = document.getElementById('fevDuration').value.trim();
         const fTemp = document.getElementById('fevTemp').value.trim();
         const fGrade = document.getElementById('fevGrade').value;
         const fPat = document.getElementById('fevPattern').value;
-        const fDiurnal = document.getElementById('fevDiurnal').value.trim();
-        const fChills = document.getElementById('fevChills').value.trim();
         const fInter = document.getElementById('fevInterfebrile').value;
-        const fAnti = document.getElementById('fevAntipyretic').value.trim();
-        const fRash = document.getElementById('fevRashEpi').value.trim();
-
-        para2 += `Fever inquiry reveals a ${fGrade} fever${fDur ? ` (${fDur})` : ''}${fTemp ? `, documented at ${fTemp}` : ''}, following an ${fPat} pattern. `;
-        if (fDiurnal) para2 += `Diurnal variation: ${fDiurnal}. `;
-        if (fChills) para2 += `${fChills}. `;
-        para2 += `During the inter-febrile period, the child is ${fInter}. `;
-        if (fAnti) para2 += `Antipyretic response: ${fAnti}. `;
-        if (fRash) para2 += `Exanthem and epidemiological exposure screen: ${fRash}. `;
+        para2 += `Fever is ${fGrade}${fDur ? ` (${fDur})` : ''}${fTemp ? `, documented at ${fTemp}` : ''}, with an ${fPat} pattern; between spikes the child is ${fInter}. `;
       }
-
       if (document.getElementById('toggleCough').checked) {
         const cDur = document.getElementById('coughDuration').value;
         const cQual = document.getElementById('coughQuality').value;
-        const cTim = document.getElementById('coughTiming').value.trim();
-        const cPost = document.getElementById('coughPostTussive').value.trim();
-        const cNoisy = document.getElementById('coughNoisy').value.trim();
-        const cAtopy = document.getElementById('coughAtopy').value.trim();
-
-        para2 += `Respiratory inquiry shows an ${cDur} cough that is ${cQual} in character. `;
-        if (cTim) para2 += `Circadian timing and triggers: ${cTim}. `;
-        if (cPost) para2 += `Post-tussive and sputum features: ${cPost}. `;
-        if (cNoisy) para2 += `Associated airway sounds: ${cNoisy}. `;
-        if (cAtopy) para2 += `Atopy, aspiration, and bronchodilator response: ${cAtopy}. `;
+        para2 += `Cough is ${cDur} and ${cQual} in character. `;
       }
-
       if (document.getElementById('toggleDehydration').checked) {
         const dLoss = document.getElementById('dehydLosses').value.trim();
         const dThirst = document.getElementById('dehydThirst').value;
-        const dSigns = document.getElementById('dehydSigns').value.trim();
-        const fluidCalc = document.getElementById('fluidOutput').value.trim();
-
-        para2 += `Fluid loss and hydration assessment reveals ${dLoss || 'ongoing gastrointestinal fluid losses'}, with ${dThirst}. `;
-        if (dSigns) para2 += `Clinical hydration signs: ${dSigns}. `;
-        if (fluidCalc) para2 += `Calculated 24-hour maintenance fluid requirement is ${fluidCalc}. `;
+        para2 += `Fluid losses include ${dLoss || 'gastrointestinal losses'} with ${dThirst}. `;
       }
-
       if (narrative) para2 += `${narrative}. `;
+      if (pcmCheck) para2 += `Prior antipyretic dose check: ${pcmCheck}. `;
 
       const checkedDangers = Array.from(document.querySelectorAll('.danger-sign:checked')).map(cb => cb.value);
-      if (checkedDangers.length > 0) {
-        para2 += `On emergency red-flag triage, positive danger signs include: ${checkedDangers.join(', ')}. `;
-      } else {
-        para2 += `On emergency red-flag triage, no general danger signs are present. `;
-      }
+      para2 += checkedDangers.length > 0
+        ? `Emergency triage positive for: ${checkedDangers.join(', ')}. `
+        : `No emergency red-flag danger signs are present. `;
 
-      const sysCns = document.getElementById('sysCnsEnt').value.trim();
-      const sysGi = document.getElementById('sysGi').value.trim();
-      const sysRenal = document.getElementById('sysRenal').value.trim();
-      const sysCard = document.getElementById('sysCardiac').value.trim();
-      para2 += `Systemic review of pertinent negatives: ${sysCns} ${sysGi} ${sysRenal} ${sysCard}`;
+      para2 += `Systemic review: ${document.getElementById('sysCnsEnt').value.trim()} ${document.getElementById('sysGi').value.trim()} ${document.getElementById('sysRenal').value.trim()} ${document.getElementById('sysCardiac').value.trim()}`;
 
-      const pastH = document.getElementById('pastHistory').value.trim();
-      const surgH = document.getElementById('surgicalHistory').value.trim();
-      const allerH = document.getElementById('allergenHistory').value.trim();
-      const addicH = document.getElementById('addictionHistory').value.trim();
-      let para3 = `PAST, SURGICAL, ALLERGEN & ADDICTION HISTORY:\nPast medical history: ${pastH} Surgical history: ${surgH} Allergen history: ${allerH} Addiction/Habit history: ${addicH}`;
+      const pastItems = Array.from(document.querySelectorAll('.past-entry')).map(el => {
+        const c = el.querySelector('.past-complaint').value.trim();
+        const e = el.querySelector('.past-explanation').value.trim();
+        return c || e ? `${c || 'Event'}: ${e || 'No additional details.'}` : '';
+      }).filter(Boolean);
+
+      const surgItems = Array.from(document.querySelectorAll('.surgical-entry')).map(el => {
+        const c = el.querySelector('.surg-complaint').value.trim();
+        const e = el.querySelector('.surg-explanation').value.trim();
+        return c || e ? `${c || 'Procedure/Trauma'}: ${e || 'No additional details.'}` : '';
+      }).filter(Boolean);
+
+      let para3 = `PAST & SURGICAL HISTORY:\nPast History: ${pastItems.length ? pastItems.join(' | ') : 'No significant past medical complaints, falls, or hospitalizations.'}\nSurgical History: ${surgItems.length ? surgItems.join(' | ') : 'No significant past trauma or surgical procedures.'}`;
 
       const ancH = document.getElementById('ancHistory').value.trim();
       const natalH = document.getElementById('natalHistory').value.trim();
       const neoH = document.getElementById('neonatalHistory').value.trim();
-      let para4 = `ANTENATAL, BIRTH & NEONATAL HISTORY:\nAntenatal history: ${ancH} Birth/Natal history: ${natalH} Neonatal history: ${neoH}`;
-
+      const gestWks = document.getElementById('gestWeeks').value.trim();
+      const bWt = document.getElementById('birthWt').value.trim();
+      const wt = document.getElementById('ptWeight').value.trim();
+      const ht = document.getElementById('ptHeight').value.trim();
+      const hc = document.getElementById('ptHC').value.trim();
+      const muac = document.getElementById('ptMUAC').value.trim();
       const mphVal = document.getElementById('mphOutput').value.trim();
       const growthNotes = document.getElementById('growthNotes').value.trim();
       const devSum = document.getElementById('devSummary').value.trim();
       const dqVal = document.getElementById('dqResult').value.trim();
+      const behavSum = document.getElementById('behavSummary').value.trim();
       const nutEarly = document.getElementById('nutriEarly').value.trim();
       const defVal = document.getElementById('deficitOutput').value.trim();
       const immStat = document.getElementById('immStatus').value.trim();
 
-      let anthroArr = [];
-      if (wt) anthroArr.push(`weight ${wt} kg`);
-      if (ht) anthroArr.push(`length/height ${ht} cm`);
-      if (hc) anthroArr.push(`head circumference ${hc} cm`);
-      if (muac) anthroArr.push(`MUAC ${muac} cm`);
+      let anthro = [];
+      if (wt) anthro.push(`Weight: ${wt} kg`);
+      if (ht) anthro.push(`Height: ${ht} cm`);
+      if (hc) anthro.push(`Head Circumference: ${hc} cm`);
+      if (muac) anthro.push(`MUAC: ${muac} cm`);
 
-      let para5 = `GROWTH, DEVELOPMENTAL, NUTRITIONAL & IMMUNIZATION HISTORY:\n`;
-      if (anthroArr.length > 0) para5 += `Current recorded anthropometry includes ${anthroArr.join(', ')}. `;
-      if (mphVal) para5 += `Target Mid-Parental Height (MPH) is ${mphVal}. `;
-      para5 += `${growthNotes} Developmentally: ${devSum}${dqVal ? ` Calculated Developmental Quotient (DQ) is ${dqVal}.` : ''} Nutritionally: ${nutEarly}`;
-      if (defVal) {
-        const selText = document.getElementById('icmrAgeGroup').options[document.getElementById('icmrAgeGroup').selectedIndex].text;
-        para5 += ` Dietary intake compared against standards (${selText}): ${defVal}.`;
-      }
-      para5 += ` Immunization status: ${immStat}`;
+      let para4 = `BIRTH, GROWTH, DEVELOPMENTAL, NUTRITIONAL & IMMUNIZATION HISTORY:\nBirth History (${gestWks} wks gestation, Birth Wt: ${bWt} kg): ${ancH} ${natalH} ${neoH}\nGrowth History: ${anthro.length ? anthro.join(', ') + '. ' : ''}${mphVal ? `Target MPH: ${mphVal}. ` : ''}${growthNotes}\nDevelopmental History: ${devSum} ${dqVal ? `(DQ: ${dqVal}). ` : ''}${behavSum}\nNutritional History: ${nutEarly} ${defVal ? `(${defVal}).` : ''}\nImmunization History: ${immStat}`;
 
-      if (document.getElementById('toggleAdolescent').checked) {
-        const adolGen = document.getElementById('adolGeneral').value.trim();
-        const adolConf = document.getElementById('adolConfidential').value.trim();
-        para5 += `\n\nADOLESCENT HEALTH & HEADSS ASSESSMENT:\n${adolGen} ${adolConf}`;
-      }
+      const allergens = Array.from(document.querySelectorAll('.allergen-entry')).map(el => {
+        const n = el.querySelector('.allergen-name').value.trim();
+        const r = el.querySelector('.allergen-reaction').value.trim();
+        return n || r ? `${n || 'Allergen'} (${r || 'Reaction unspecified'})` : '';
+      }).filter(Boolean);
+
+      const addictions = Array.from(document.querySelectorAll('.addiction-entry')).map(el => {
+        const n = el.querySelector('.addiction-name').value.trim();
+        const d = el.querySelector('.addiction-details').value.trim();
+        return n || d ? `${n || 'Habit'} (${d || 'Details unspecified'})` : '';
+      }).filter(Boolean);
 
       const famH = document.getElementById('famHistory').value.trim();
       const socH = document.getElementById('socioHistory').value.trim();
-      let para6 = `FAMILY & SOCIO-ENVIRONMENTAL HISTORY:\n${famH} ${socH}`;
 
-      document.getElementById('outputParagraphs').value = [para1, para2, para3, para4, para5, para6].join('\n\n');
+      const gpeChecked = Array.from(document.querySelectorAll('.gpe-sign:checked')).map(c => c.value);
+      const vTemp = document.getElementById('vitalTemp').value.trim();
+      const vHR = document.getElementById('vitalHR').value.trim();
+      const vRR = document.getElementById('vitalRR').value.trim();
+      const vSpo2 = document.getElementById('vitalSpo2').value.trim();
+      const tachAlert = document.getElementById('tachypneaAlert').value.trim();
+
+      let vitalsLine = [
+        vTemp ? `Temp: ${vTemp}` : '',
+        vHR ? `HR: ${vHR}/min` : '',
+        vRR ? `RR: ${vRR}/min (${tachAlert})` : '',
+        vSpo2 ? `SpO2: ${vSpo2}` : ''
+      ].filter(Boolean).join(', ');
+
+      let para5 = `ALLERGEN, ADDICTION, FAMILY & GENERAL EXAMINATION:\nAllergen History: ${allergens.length ? allergens.join(', ') : 'No known drug, food, or environmental allergies.'}\nAddiction History: ${addictions.length ? addictions.join(', ') : 'No active substance abuse or passive smoke exposure.'}\nFamily History: ${famH} ${socH}\nGeneral Exam & Vitals: ${vitalsLine || 'Vitals not recorded.'} | Positive GPE signs: ${gpeChecked.length ? gpeChecked.join(', ') : 'No pallor, icterus, cyanosis, clubbing, lymphadenopathy, or edema.'}`;
+
+      document.getElementById('outputParagraphs').value = [para1, para2, para3, para4, para5].join('\n\n');
     }
 
     function copySummary() {
       const out = document.getElementById('outputParagraphs');
+      if (!out.value.trim()) generateHistoryParagraphs();
       out.select();
       navigator.clipboard.writeText(out.value);
       alert('Case presentation copied to clipboard!');
     }
 
+    function shareWhatsApp() {
+      const out = document.getElementById('outputParagraphs');
+      if (!out.value.trim()) generateHistoryParagraphs();
+      const url = 'https://wa.me/?text=' + encodeURIComponent(out.value);
+      window.open(url, '_blank');
+    }
+
+    function copyGeminiOutput() {
+      const out = document.getElementById('geminiModalOutput');
+      out.select();
+      navigator.clipboard.writeText(out.value);
+      alert('Gemini output copied!');
+    }
+
     function resetForm() {
-      if (confirm('Clear all entered patient details?')) window.location.reload();
+      if (confirm('Clear current patient form?')) {
+        localStorage.removeItem('peds_draft_' + currentDraftKey);
+        window.location.reload();
+      }
+    }
+
+    // --- MULTIMODAL FILE UPLOADER (PDF / IMAGE) ---
+    function handleFileAttachment(input) {
+      const file = input.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        const base64String = reader.result.split(',')[1];
+        attachedFileBase64 = base64String;
+        attachedFileMime = file.type || 'application/pdf';
+        document.getElementById('attachedFileName').textContent = `✅ ${file.name}`;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function clearAttachment() {
+      attachedFileBase64 = null;
+      attachedFileMime = null;
+      document.getElementById('geminiFileInput').value = '';
+      document.getElementById('attachedFileName').textContent = '(None attached)';
+    }
+
+    // --- GEMINI API ENGINE (WITH ZERO-KEY FALLBACK & MULTIMODAL PDF SUPPORT) ---
+    async function callGeminiAPI(promptText) {
+      if (!activeSessionKey) {
+        navigator.clipboard.writeText(promptText);
+        const launch = confirm(
+          'No Gemini API key is active in your current session!\n\n' +
+          '✅ Your full clinical prompt & case notes have been COPIED to your clipboard.\n\n' +
+          '• Click OK to open Gemini Web (just press Paste there!), OR\n' +
+          '• Click Cancel to open the Google Login Vault and unlock your key.'
+        );
+        if (launch) {
+          window.open('https://gemini.google.com/app', '_blank');
+        } else {
+          toggleLoginModal();
+        }
+        throw new Error('Prompt copied to clipboard for Zero-Key mode.');
+      }
+
+      const parts = [{ text: promptText }];
+      if (attachedFileBase64 && attachedFileMime) {
+        parts.push({
+          inlineData: {
+            mimeType: attachedFileMime,
+            data: attachedFileBase64
+          }
+        });
+      }
+
+      const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${activeSessionKey}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ contents: [{ parts }] })
+      });
+      const data = await res.json();
+      if (data.error) throw new Error(data.error.message);
+      return data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
     }
 
     async function polishWithGemini() {
-      const key = document.getElementById('geminiKey').value.trim();
-      if (!key) {
-        alert('Please paste your Gemini API Key first.');
-        return;
-      }
-      localStorage.setItem('peds_gemini_key', key);
-
-      if (!document.getElementById('outputParagraphs').value.trim()) {
-        generateHistoryParagraphs();
-      }
-      const rawCase = document.getElementById('outputParagraphs').value;
       const btn = document.getElementById('aiBtn');
-      btn.disabled = true;
-      btn.textContent = 'Polishing with Gemini...';
-
       try {
-        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${key}`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            contents: [{
-              parts: [{
-                text: `You are a Senior Professor of Pediatrics. Rewrite the following raw pediatric history notes into a cohesive, fluent, formal bedside medical case presentation in paragraphs. Preserve all clinical calculations and pertinent negatives. At the end, add a section titled "SYNDROMIC IMPRESSION & TOP 3 DIFFERENTIAL DIAGNOSES".\n\nRAW CASE NOTES:\n${rawCase}`
-              }]
-            }]
-          })
-        });
-        const data = await res.json();
-        const reply = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-        if (reply) {
-          document.getElementById('outputParagraphs').value = reply;
-        } else {
-          alert('Could not generate response. Please verify your API key.');
+        if (!document.getElementById('outputParagraphs').value.trim()) {
+          generateHistoryParagraphs();
         }
+        const rawCase = document.getElementById('outputParagraphs').value;
+        btn.disabled = true;
+        btn.textContent = 'Polishing with Gemini...';
+
+        const reply = await callGeminiAPI(
+          `You are a Senior Professor of Pediatrics. Rewrite the following pediatric history notes into a fluent, formal bedside clinical case presentation. Preserve all clinical calculations and pertinent negatives. At the end, add "SYNDROMIC IMPRESSION & TOP 3 DIFFERENTIAL DIAGNOSES".\n\nRAW CASE NOTES:\n${rawCase}`
+        );
+        if (reply) document.getElementById('outputParagraphs').value = reply;
       } catch (err) {
-        alert('Error: ' + err.message);
+        console.log(err.message);
       } finally {
         btn.disabled = false;
-        btn.textContent = '✨ Polish Prose & Generate Differential Diagnosis with Gemini AI';
+        btn.textContent = '✨ Polish Case & Generate Differential Diagnosis';
+      }
+    }
+
+    async function askGeminiDoubt() {
+      const out = document.getElementById('geminiModalOutput');
+      const userQ = document.getElementById('geminiUserPrompt').value.trim();
+      if (!userQ && !attachedFileBase64) {
+        alert('Please type a question or attach a textbook PDF/chart first.');
+        return;
+      }
+      generateHistoryParagraphs();
+      const currentCase = document.getElementById('outputParagraphs').value;
+      out.value = 'Analyzing case & attached reference document...';
+      try {
+        const reply = await callGeminiAPI(
+          `You are a Pediatric Clinical Mentor. Answer the medico's doubt clearly and reference any attached PDF/image if provided.\n\nCURRENT PATIENT CASE:\n${currentCase}\n\nUSER QUERY:\n${userQ || 'Analyze this case against the attached document.'}`
+        );
+        out.value = reply;
+      } catch (err) {
+        out.value = err.message;
+      }
+    }
+
+    async function geminiVivaMode() {
+      const out = document.getElementById('geminiModalOutput');
+      generateHistoryParagraphs();
+      const currentCase = document.getElementById('outputParagraphs').value;
+      out.value = 'Generating 5 bedside practical viva questions & answers...';
+      try {
+        const reply = await callGeminiAPI(
+          `You are an External Practical Examiner in Pediatrics. Based on the patient case below (and any attached textbook PDF), generate 5 high-yield bedside viva-voce questions that a professor will ask the medical student, followed by concise, high-scoring model answers.\n\nCURRENT PATIENT CASE:\n${currentCase}`
+        );
+        out.value = reply;
+      } catch (err) {
+        out.value = err.message;
+      }
+    }
+
+    async function geminiControlPage() {
+      const out = document.getElementById('geminiModalOutput');
+      const command = document.getElementById('geminiUserPrompt').value.trim();
+      if (!command) {
+        alert('Type a command first (e.g., "Fill a sample case of a 3-year-old boy with fall from bed and fever").');
+        return;
+      }
+      out.value = 'Executing dynamic page control...';
+      try {
+        const schemaPrompt = `You are the dynamic controller for the Pediatric History Performa web app. Based on the user's command, return ONLY a valid raw JSON object (no markdown backticks) with any of these keys:
+{
+  "ptName": "string",
+  "ptAge": "string",
+  "ptAgeMonths": number,
+  "ptSex": "male or female",
+  "chiefComplaints": "string (e.g. Fever for 5 days; Cough for 3 days)",
+  "wellUntil": "string",
+  "hpiNarrative": "string",
+  "toggleFever": boolean,
+  "toggleCough": boolean,
+  "toggleDehydration": boolean,
+  "ptWeight": number,
+  "ptHeight": number,
+  "pastComplaint": "string",
+  "pastExplanation": "string",
+  "surgComplaint": "string",
+  "surgExplanation": "string",
+  "allergenName": "string",
+  "allergenReaction": "string",
+  "addictionName": "string",
+  "addictionDetails": "string",
+  "summaryMessage": "Brief explanation of what you updated on the page"
+}
+USER COMMAND: ${command}`;
+
+        const rawReply = await callGeminiAPI(schemaPrompt);
+        const cleaned = rawReply.replace(/```json|```/g, '').trim();
+        const actions = JSON.parse(cleaned);
+
+        const simpleIds = ['ptName', 'ptAge', 'ptAgeMonths', 'ptSex', 'chiefComplaints', 'wellUntil', 'hpiNarrative', 'ptWeight', 'ptHeight'];
+        simpleIds.forEach(id => {
+          if (actions[id] !== undefined && document.getElementById(id)) {
+            document.getElementById(id).value = actions[id];
+          }
+        });
+
+        ['toggleFever', 'toggleCough', 'toggleDehydration'].forEach(id => {
+          if (typeof actions[id] === 'boolean') {
+            document.getElementById(id).checked = actions[id];
+          }
+        });
+        toggleModules();
+        calcFluids();
+        calcCorrectedAge();
+        renderSymptomTimeline();
+        renderPedigree();
+
+        if (actions.pastComplaint || actions.pastExplanation) {
+          const firstC = document.querySelector('.past-complaint');
+          const firstE = document.querySelector('.past-explanation');
+          if (firstC && !firstC.value) {
+            firstC.value = actions.pastComplaint || '';
+            firstE.value = actions.pastExplanation || '';
+          } else {
+            addPastEntry(actions.pastComplaint || '', actions.pastExplanation || '');
+          }
+        }
+
+        if (actions.surgComplaint || actions.surgExplanation) {
+          const firstSC = document.querySelector('.surg-complaint');
+          const firstSE = document.querySelector('.surg-explanation');
+          if (firstSC && !firstSC.value) {
+            firstSC.value = actions.surgComplaint || '';
+            firstSE.value = actions.surgExplanation || '';
+          } else {
+            addSurgicalEntry(actions.surgComplaint || '', actions.surgExplanation || '');
+          }
+        }
+
+        if (actions.allergenName || actions.allergenReaction) {
+          const firstAN = document.querySelector('.allergen-name');
+          const firstAR = document.querySelector('.allergen-reaction');
+          if (firstAN && !firstAN.value) {
+            firstAN.value = actions.allergenName || '';
+            firstAR.value = actions.allergenReaction || '';
+          } else {
+            addAllergenEntry(actions.allergenName || '', actions.allergenReaction || '');
+          }
+        }
+
+        if (actions.addictionName || actions.addictionDetails) {
+          const firstAdN = document.querySelector('.addiction-name');
+          const firstAdD = document.querySelector('.addiction-details');
+          if (firstAdN && !firstAdN.value) {
+            firstAdN.value = actions.addictionName || '';
+            firstAdD.value = actions.addictionDetails || '';
+          } else {
+            addAddictionEntry(actions.addictionName || '', actions.addictionDetails || '');
+          }
+        }
+
+        savePatientDraft(currentDraftKey);
+        generateHistoryParagraphs();
+        out.value = `✅ Page Updated Dynamically!\n\n${actions.summaryMessage || 'Form fields and clinical summary updated.'}`;
+      } catch (err) {
+        out.value = 'Dynamic control note: ' + err.message;
+      }
+    }
+
+    async function geminiAuditFlaws() {
+      const out = document.getElementById('geminiModalOutput');
+      out.value = 'Scanning DOM structure, form fields, and JavaScript logic for flaws...';
+      try {
+        const htmlSnapshot = document.querySelector('main').innerHTML.slice(0, 12000);
+        const auditPrompt = `You are a Senior Full-Stack Medical Software Architect. Analyze the current HTML/DOM structure of this "Pediatric History Performa" web application (and any attached textbook PDF) and list:
+1. CODING & VALIDATION FLAWS (edge cases in calculators, UI/UX improvements).
+2. CLINICAL PROFORMA GAPS (missing bedside pediatric fields or ordering improvements).
+3. READY-TO-PASTE REFINEMENT PROMPT (a short prompt the developer can copy-paste back into Gemini chat to apply these exact code fixes).
+
+CURRENT MAIN DOM SNAPSHOT:
+${htmlSnapshot}`;
+
+        const report = await callGeminiAPI(auditPrompt);
+        out.value = report;
+      } catch (err) {
+        out.value = err.message;
       }
     }
   </script>
