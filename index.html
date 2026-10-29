@@ -1338,7 +1338,7 @@
     </div>
   </div>
 
-  <!-- FULL-SCREEN PRIVATE ACCESS GATE OVERLAY -->
+ <!-- FULL-SCREEN PRIVATE ACCESS GATE OVERLAY -->
   <div id="privateAccessOverlay" class="hidden fixed inset-0 z-[100] bg-slate-950 text-white flex items-center justify-center p-4">
     <div class="bg-slate-900 border border-slate-700 rounded-3xl shadow-2xl max-w-md w-full p-6 text-center space-y-4">
       <div class="w-14 h-14 rounded-full bg-blue-600/20 border border-blue-500/40 flex items-center justify-center mx-auto text-2xl">
@@ -1352,7 +1352,10 @@
       </div>
       <div id="privateGateError" class="hidden bg-rose-950/80 border border-rose-700 text-rose-200 text-xs p-3 rounded-2xl"></div>
       <button onclick="signInWithGoogle()" class="w-full chrome-pill-btn justify-center bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-4 shadow-lg text-sm">
-        <span>G</span> <span>Sign in with Authorized Google Account</span>
+        <span>G</span> <span>Sign in / Switch Google Account</span>
+      </button>
+      <button onclick="emergencyAdminUnlock()" class="text-[11px] text-slate-400 hover:text-white underline pt-1 block mx-auto">
+        🔓 Admin Emergency: Turn Off Private Lock on This Device
       </button>
     </div>
   </div>
@@ -2778,8 +2781,29 @@ ${htmlSnapshot}`;
         out.value = err.message;
       }
     }
-    // --- TEMPORARY PRIVATE MODE & ALLOWED GMAIL WHITELIST ENGINE ---
-    const ADMIN_OWNER_EMAIL = "satya.srinivash1234@gmail.com";
+   // --- TEMPORARY PRIVATE MODE & ALLOWED GMAIL WHITELIST ENGINE (FIXED) ---
+    const ADMIN_OWNER_EMAILS = [
+      "satya.srinivash1234@gmail.com",
+      "satya.srinivash123@gmail.com"
+    ];
+
+    // Clear the old v1 lock that trapped your browser
+    localStorage.removeItem('peds_privacy_config_v1');
+
+    function normalizeEmail(email) {
+      return (email || '').trim().toLowerCase();
+    }
+
+    function getUserEmailFromFirebase(user) {
+      if (!user) return '';
+      if (user.email) return normalizeEmail(user.email);
+      if (user.providerData && user.providerData.length > 0) {
+        for (const p of user.providerData) {
+          if (p && p.email) return normalizeEmail(p.email);
+        }
+      }
+      return '';
+    }
 
     function injectPrivacySettingsUI() {
       const settingsContainer = document.querySelector('#settingsModal .p-5');
@@ -2792,13 +2816,13 @@ ${htmlSnapshot}`;
         <div class="flex items-center justify-between">
           <div>
             <div class="font-bold text-slate-800 dark:text-slate-100">🔒 Temporary Private Website Mode</div>
-            <div class="text-[11px] text-slate-500">Block public visitors & allow only specific Gmail IDs</div>
+            <div class="text-[11px] text-slate-500">Admin (${ADMIN_OWNER_EMAILS[0]}) is always allowed</div>
           </div>
           <input type="checkbox" id="privateModeToggle" onchange="savePrivacySettings(false)" class="w-5 h-5 accent-blue-600 rounded cursor-pointer" />
         </div>
         <div>
           <label class="block font-semibold mb-1 text-[11px] text-slate-600 dark:text-slate-300">
-            Allowed Gmail IDs (Comma-separated)
+            Additional Allowed Gmail IDs (Comma-separated)
           </label>
           <textarea id="allowedEmailsInput" rows="2" placeholder="e.g., friend1@gmail.com, batchmate2@gmail.com" class="w-full border rounded-xl p-2 text-xs"></textarea>
         </div>
@@ -2812,7 +2836,7 @@ ${htmlSnapshot}`;
 
     function getPrivacyConfig() {
       try {
-        return JSON.parse(localStorage.getItem('peds_privacy_config_v1') || '{"enabled":false,"emails":[]}');
+        return JSON.parse(localStorage.getItem('peds_privacy_config_v2') || '{"enabled":false,"emails":[]}');
       } catch {
         return { enabled: false, emails: [] };
       }
@@ -2831,15 +2855,17 @@ ${htmlSnapshot}`;
       const rawEmails = document.getElementById('allowedEmailsInput')?.value || '';
       const emails = rawEmails
         .split(',')
-        .map(e => e.trim().toLowerCase())
+        .map(e => normalizeEmail(e))
         .filter(Boolean);
 
-      if (!emails.includes(ADMIN_OWNER_EMAIL.toLowerCase())) {
-        emails.push(ADMIN_OWNER_EMAIL.toLowerCase());
-      }
+      ADMIN_OWNER_EMAILS.forEach(adminMail => {
+        if (!emails.includes(normalizeEmail(adminMail))) {
+          emails.push(normalizeEmail(adminMail));
+        }
+      });
 
       const cfg = { enabled, emails };
-      localStorage.setItem('peds_privacy_config_v1', JSON.stringify(cfg));
+      localStorage.setItem('peds_privacy_config_v2', JSON.stringify(cfg));
 
       try {
         await db.collection('site_settings').doc('access_control').set(cfg, { merge: true });
@@ -2855,18 +2881,32 @@ ${htmlSnapshot}`;
       }
     }
 
+    async function emergencyAdminUnlock() {
+      const cfg = { enabled: false, emails: ADMIN_OWNER_EMAILS };
+      localStorage.setItem('peds_privacy_config_v2', JSON.stringify(cfg));
+      localStorage.removeItem('peds_privacy_config_v1');
+      try {
+        await db.collection('site_settings').doc('access_control').set(cfg, { merge: true });
+      } catch (e) {}
+      loadPrivacySettingsIntoUI();
+      document.getElementById('privateAccessOverlay')?.classList.add('hidden');
+      alert('🔓 Private Mode has been turned OFF. You now have full access.');
+    }
+
     async function enforcePrivateAccessGate(user) {
       let cfg = getPrivacyConfig();
       try {
         const snap = await db.collection('site_settings').doc('access_control').get();
         if (snap.exists) {
-          cfg = snap.data();
-          localStorage.setItem('peds_privacy_config_v1', JSON.stringify(cfg));
-          loadPrivacySettingsIntoUI();
+          const cloudCfg = snap.data();
+          // Only use cloud config if it already includes the updated v2 admin email
+          if (Array.isArray(cloudCfg.emails) && cloudCfg.emails.includes("satya.srinivash1234@gmail.com")) {
+            cfg = cloudCfg;
+            localStorage.setItem('peds_privacy_config_v2', JSON.stringify(cfg));
+            loadPrivacySettingsIntoUI();
+          }
         }
-      } catch (e) {
-        // Uses local config if offline
-      }
+      } catch (e) {}
 
       const overlay = document.getElementById('privateAccessOverlay');
       const errBox = document.getElementById('privateGateError');
@@ -2877,24 +2917,26 @@ ${htmlSnapshot}`;
         return;
       }
 
-      const allowedList = (cfg.emails || []).map(e => e.toLowerCase());
-      allowedList.push(ADMIN_OWNER_EMAIL.toLowerCase());
+      const allowedList = new Set([
+        ...(cfg.emails || []).map(e => normalizeEmail(e)),
+        ...ADMIN_OWNER_EMAILS.map(e => normalizeEmail(e))
+      ]);
 
       if (!user) {
-        errBox.classList.add('hidden');
+        errBox.textContent = 'Please sign in with your authorized Google account to continue.';
+        errBox.classList.remove('hidden');
         overlay.classList.remove('hidden');
         return;
       }
 
-      const userEmail = (user.email || '').toLowerCase();
-      if (allowedList.includes(userEmail)) {
+      const userEmail = getUserEmailFromFirebase(user);
+      if (allowedList.has(userEmail)) {
         overlay.classList.add('hidden');
         errBox.classList.add('hidden');
       } else {
         overlay.classList.remove('hidden');
-        errBox.textContent = `⛔ Access Denied: "${user.email}" is not on the approved Gmail list.`;
+        errBox.textContent = `⛔ Access Denied: Signed in as "${userEmail || 'Unknown email'}", which is not on the approved Gmail list.`;
         errBox.classList.remove('hidden');
-        await auth.signOut();
       }
     }
 
