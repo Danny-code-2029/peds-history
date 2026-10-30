@@ -116,6 +116,79 @@
       body { background: white !important; color: black !important; padding: 0 !important; }
       main { max-width: 100% !important; }
     }
+    /* --- COMPREHENSIVE DARK MODE FIX FOR TABLES, GPE PALLOR/ICTERUS & SUB-CARDS --- */
+    html.dark main [class*="bg-white"],
+    html.dark .modal-card [class*="bg-white"] {
+      background-color: #0f172a !important;
+      color: #f1f5f9 !important;
+      border-color: #334155 !important;
+    }
+
+    html.dark main [class*="bg-slate-50"],
+    html.dark main [class*="bg-slate-100"],
+    html.dark main [class*="bg-blue-50"],
+    html.dark main [class*="bg-emerald-50"],
+    html.dark main [class*="bg-purple-50"],
+    html.dark main [class*="bg-amber-50"],
+    html.dark main [class*="bg-rose-50"],
+    html.dark main [class*="bg-cyan-50"],
+    html.dark main [class*="bg-indigo-50"] {
+      background-color: #1e293b !important;
+      color: #e2e8f0 !important;
+      border-color: #334155 !important;
+    }
+
+    html.dark main [class*="bg-blue-100"],
+    html.dark main [class*="bg-emerald-100"],
+    html.dark main [class*="bg-purple-100"],
+    html.dark main [class*="bg-amber-100"],
+    html.dark main [class*="bg-rose-100"],
+    html.dark main [class*="bg-cyan-100"] {
+      background-color: #0f172a !important;
+      color: #93c5fd !important;
+      border-color: #334155 !important;
+    }
+
+    html.dark main table,
+    html.dark main tbody,
+    html.dark main tr,
+    html.dark main td,
+    html.dark main th,
+    html.dark main label {
+      color: #f1f5f9 !important;
+      border-color: #334155 !important;
+    }
+
+    html.dark main thead,
+    html.dark main tfoot {
+      background-color: #0f172a !important;
+      color: #bfdbfe !important;
+      border-color: #334155 !important;
+    }
+
+    html.dark main tbody tr:hover {
+      background-color: #334155 !important;
+    }
+
+    html.dark main [class*="text-blue-9"],
+    html.dark main [class*="text-blue-8"],
+    html.dark main [class*="text-emerald-9"],
+    html.dark main [class*="text-emerald-8"],
+    html.dark main [class*="text-purple-9"],
+    html.dark main [class*="text-purple-8"],
+    html.dark main [class*="text-amber-9"],
+    html.dark main [class*="text-amber-8"],
+    html.dark main [class*="text-rose-9"],
+    html.dark main [class*="text-rose-8"],
+    html.dark main [class*="text-cyan-9"],
+    html.dark main [class*="text-cyan-8"],
+    html.dark main [class*="text-indigo-9"],
+    html.dark main [class*="text-slate-9"],
+    html.dark main [class*="text-slate-8"],
+    html.dark main [class*="text-slate-7"],
+    html.dark main [class*="text-slate-6"] {
+      color: #e2e8f0 !important;
+    }
   </style>
 </head>
 <body class="bg-slate-100 text-slate-800 min-h-screen pb-24 transition-colors duration-200">
@@ -4139,6 +4212,194 @@ ${htmlSnapshot}`;
       if (summaryEl) summaryEl.value = summaryText;
       saveActiveWorkingDraft();
     };
+
+// --- STEP-BY-STEP "NEXT SECTION" & "NEXT TABLE" NAVIGATION ENGINE ---
+    function initStepByStepNavigation() {
+      // A. Convert the 5 Developmental History Tables into Step-by-Step Collapsible Tables
+      setupDevelopmentalTableSteppers();
+
+      // B. Add "Next Exam ➔" buttons inside Section 14 (Systemic Examination sub-tables)
+      setupSystemicExamSteppers();
+
+      // C. Add "← Previous" and "✓ Done — Next Section ➔" to all main clinical sections
+      const mainSections = Array.from(document.querySelectorAll('main > details'));
+      mainSections.forEach((sec, idx) => {
+        // Start with only Section 1 open initially so the page is clean and guided
+        sec.open = (idx === 0);
+
+        const contentDiv = sec.querySelector(':scope > div');
+        if (!contentDiv || contentDiv.querySelector('.section-step-nav')) return;
+
+        const navBar = document.createElement('div');
+        navBar.className = 'section-step-nav flex flex-wrap items-center justify-between gap-2 pt-3 mt-4 border-t border-slate-200 dark:border-slate-700 no-print';
+
+        const prevBtn = idx > 0
+          ? `<button type="button" onclick="navigateMainSection(${idx}, -1)" class="chrome-pill-btn text-xs bg-slate-200 hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 px-3.5 py-2">
+               <span>← Previous Section</span>
+             </button>`
+          : `<span></span>`;
+
+        const isLast = (idx === mainSections.length - 1);
+        const nextBtn = !isLast
+          ? `<button type="button" onclick="navigateMainSection(${idx}, 1)" class="chrome-pill-btn text-xs bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 shadow">
+               <span>✓ Done — Next Section ➔</span>
+             </button>`
+          : `<button type="button" onclick="finishAllSectionsAndGenerate(${idx})" class="chrome-pill-btn text-xs bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 shadow">
+               <span>⚡ Finish & Generate Case Presentation ➔</span>
+             </button>`;
+
+        navBar.innerHTML = prevBtn + nextBtn;
+        contentDiv.appendChild(navBar);
+      });
+    }
+
+    function navigateMainSection(currentIndex, direction) {
+      const mainSections = Array.from(document.querySelectorAll('main > details'));
+      const currentSec = mainSections[currentIndex];
+      if (!currentSec) return;
+
+      // Find the next/previous visible section (skipping hidden optional modules)
+      let targetIdx = currentIndex + direction;
+      while (targetIdx >= 0 && targetIdx < mainSections.length) {
+        if (!mainSections[targetIdx].classList.contains('hidden')) {
+          break;
+        }
+        targetIdx += direction;
+      }
+
+      const targetSec = mainSections[targetIdx];
+      if (targetSec) {
+        currentSec.open = false;
+        targetSec.open = true;
+        saveActiveWorkingDraft();
+        setTimeout(() => {
+          targetSec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 60);
+      }
+    }
+
+    function finishAllSectionsAndGenerate(currentIndex) {
+      const mainSections = Array.from(document.querySelectorAll('main > details'));
+      if (mainSections[currentIndex]) mainSections[currentIndex].open = false;
+      scrollToSummary();
+    }
+
+    // Converts the 5 Developmental History tables into collapsible step-by-step cards with "Next Table ➔"
+    function setupDevelopmentalTableSteppers() {
+      const gmCheck = document.querySelector('.ms-gm-check');
+      if (!gmCheck) return;
+
+      const devDetails = gmCheck.closest('details');
+      if (!devDetails || devDetails.dataset.stepperInitialized === 'true') return;
+      devDetails.dataset.stepperInitialized = 'true';
+
+      // Collect the 4 domain table cards + the WHO Red Flag table card
+      const gridContainer = gmCheck.closest('.grid');
+      if (!gridContainer) return;
+
+      const domainCards = Array.from(gridContainer.children);
+      const redFlagCard = devDetails.querySelector('.dev-redflag')?.closest('.border-rose-300');
+      const allDevCards = redFlagCard ? [...domainCards, redFlagCard] : domainCards;
+
+      // Change the 2-column grid to a 1-column vertical accordion so tables open one after another cleanly
+      gridContainer.classList.remove('lg:grid-cols-2');
+      gridContainer.classList.add('grid-cols-1');
+
+      const devWrappers = [];
+
+      allDevCards.forEach((card, idx) => {
+        const headerBar = card.querySelector(':scope > div > div:first-child') || card.querySelector(':scope > div:first-child');
+        const titleText = headerBar ? headerBar.innerText.split('\n')[0].trim() : `Developmental Table ${idx + 1}`;
+
+        const det = document.createElement('details');
+        det.className = 'dev-step-table border border-slate-300 dark:border-slate-700 rounded-xl overflow-hidden bg-white dark:bg-slate-900 shadow-xs';
+        det.open = (idx === 0); // Only Table 1 (Gross Motor) starts open
+
+        const sum = document.createElement('summary');
+        sum.className = 'bg-slate-100 dark:bg-slate-800 px-3.5 py-2.5 font-bold text-xs cursor-pointer flex justify-between items-center border-b border-slate-200 dark:border-slate-700';
+        sum.innerHTML = `
+          <span>${titleText}</span>
+          <span class="text-[11px] text-blue-600 dark:text-blue-400 font-normal">Tap to open/close</span>
+        `;
+
+        const bodyWrap = document.createElement('div');
+        bodyWrap.className = 'p-2.5 space-y-2';
+
+        card.parentNode.insertBefore(det, card);
+        bodyWrap.appendChild(card);
+
+        // Add Prev / Next Table navigation bar at the bottom of each developmental table
+        const stepBar = document.createElement('div');
+        stepBar.className = 'flex items-center justify-between pt-2 border-t border-slate-200 dark:border-slate-700';
+        stepBar.innerHTML = `
+          ${idx > 0
+            ? `<button type="button" onclick="stepDevTable(${idx}, -1)" class="chrome-pill-btn text-[11px] bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-200 px-3 py-1">← Previous Table</button>`
+            : `<span></span>`}
+          ${idx < allDevCards.length - 1
+            ? `<button type="button" onclick="stepDevTable(${idx}, 1)" class="chrome-pill-btn text-[11px] bg-blue-600 hover:bg-blue-700 text-white px-3.5 py-1 shadow">✓ Next Developmental Table ➔</button>`
+            : `<span class="text-[11px] text-emerald-600 dark:text-emerald-400 font-semibold">✓ All Developmental Tables Reviewed</span>`}
+        `;
+        bodyWrap.appendChild(stepBar);
+
+        det.appendChild(sum);
+        det.appendChild(bodyWrap);
+        devWrappers.push(det);
+      });
+
+      window.stepDevTable = function(currIdx, dir) {
+        const list = Array.from(devDetails.querySelectorAll('details.dev-step-table'));
+        if (list[currIdx]) list[currIdx].open = false;
+        if (list[currIdx + dir]) {
+          list[currIdx + dir].open = true;
+          setTimeout(() => {
+            list[currIdx + dir].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          }, 50);
+        }
+      };
+    }
+
+    // Adds "Next Systemic Exam ➔" buttons to the 4 Systemic Examination sub-sections (Abdomen, CNS, Resp, CVS)
+    function setupSystemicExamSteppers() {
+      const abdEl = document.getElementById('abdOral');
+      if (!abdEl) return;
+      const sysParent = abdEl.closest('main > details');
+      if (!sysParent) return;
+
+      const subExams = Array.from(sysParent.querySelectorAll(':scope > div > details'));
+      subExams.forEach((sub, idx) => {
+        sub.open = (idx === 0); // Open Abdominal Exam first
+        const innerDiv = sub.querySelector(':scope > div');
+        if (!innerDiv || innerDiv.querySelector('.sys-step-nav')) return;
+
+        const bar = document.createElement('div');
+        bar.className = 'sys-step-nav flex justify-between items-center pt-2.5 mt-2 border-t border-slate-200 dark:border-slate-700';
+        bar.innerHTML = `
+          ${idx > 0
+            ? `<button type="button" onclick="stepSystemicExam(${idx}, -1)" class="chrome-pill-btn text-[11px] bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-200 px-3 py-1">← Previous System</button>`
+            : `<span></span>`}
+          ${idx < subExams.length - 1
+            ? `<button type="button" onclick="stepSystemicExam(${idx}, 1)" class="chrome-pill-btn text-[11px] bg-indigo-600 hover:bg-indigo-700 text-white px-3.5 py-1 shadow">✓ Next Systemic Exam ➔</button>`
+            : `<span class="text-[11px] text-emerald-600 dark:text-emerald-400 font-semibold">✓ All 4 Systems Reviewed</span>`}
+        `;
+        innerDiv.appendChild(bar);
+      });
+
+      window.stepSystemicExam = function(currIdx, dir) {
+        if (subExams[currIdx]) subExams[currIdx].open = false;
+        if (subExams[currIdx + dir]) {
+          subExams[currIdx + dir].open = true;
+          setTimeout(() => {
+            subExams[currIdx + dir].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          }, 50);
+        }
+      };
+    }
+
+    if (document.readyState === 'loading') {
+      window.addEventListener('DOMContentLoaded', initStepByStepNavigation);
+    } else {
+      initStepByStepNavigation();
+    }
     
   </script>
 </body>
