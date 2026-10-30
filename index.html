@@ -715,15 +715,16 @@
       </div>
     </details>
 
-   <!-- 7. DEVELOPMENTAL HISTORY (TABLES 3.1, 3.2, 3.4 & 3.5) -->
-    <details class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+  <!-- 7. DEVELOPMENTAL HISTORY (TICKABLE TABLES 3.1, 3.2, 3.3, 3.4 & 3.5 + IRREGULARITY NOTES) -->
+    <details class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden" open>
       <summary class="bg-slate-50 px-4 py-3 font-bold text-slate-800 cursor-pointer flex justify-between items-center border-b">
-        <span>7. Developmental History</span>
-        <span class="text-xs text-blue-600 font-normal">Gross Motor, Fine Motor, Language, DQ & WHO Red Flags</span>
+        <span>7. Developmental History (Tickable Milestone Tables & Irregularities)</span>
+        <span class="text-xs text-blue-600 font-normal">Gross Motor, Fine Motor, Social, Language, DQ & WHO Red Flags</span>
       </summary>
       <div class="p-4 space-y-4">
-        <!-- DQ Calculator -->
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 bg-slate-50 p-3 rounded-lg border">
+
+        <!-- DQ Calculator & Quick Auto-Tick Bar -->
+        <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 bg-slate-50 p-3 rounded-lg border items-end">
           <div>
             <label class="block text-xs font-semibold mb-1">Effective/Corrected Age (mo)</label>
             <input id="dqChrono" type="number" step="0.5" placeholder="e.g., 24" oninput="calcDQ()" class="w-full border rounded p-1.5 text-sm bg-white" />
@@ -736,122 +737,213 @@
             <label class="block text-xs font-semibold mb-1">Developmental Quotient (DQ)</label>
             <input id="dqResult" type="text" readonly placeholder="Auto-calculated" class="w-full border rounded p-1.5 text-sm bg-slate-100 font-bold text-blue-900" />
           </div>
-        </div>
-
-        <!-- Textbook Milestone Selector (Tables 3.1, 3.2, 3.4) -->
-        <div class="bg-blue-50/50 p-3 rounded-lg border border-blue-200 space-y-2.5">
-          <div class="text-xs font-bold text-blue-950 uppercase tracking-wide">
-            📋 Key Developmental Milestones Reference Selector (Tables 3.1, 3.2 & 3.4)
-          </div>
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 text-xs">
-            <div>
-              <label class="block font-semibold mb-1">Gross Motor (Table 3.1)</label>
-              <select id="msGrossSelect" onchange="syncMilestoneSummary()" class="w-full border rounded p-1.5 bg-white">
-                <option value="">-- Select Attained Gross Motor --</option>
-                <option value="3 mo: Neck holding">3 months — Neck holding</option>
-                <option value="5 mo: Rolls over">5 months — Rolls over</option>
-                <option value="6 mo: Sits in tripod fashion (sitting with own support)">6 months — Sits in tripod fashion</option>
-                <option value="8 mo: Sitting without support">8 months — Sitting without support</option>
-                <option value="9 mo: Stands holding on (with support)">9 months — Stands holding on (with support)</option>
-                <option value="12 mo: Creeps well; walks but falls; stands without support">12 months — Creeps well; stands without support</option>
-                <option value="15 mo: Walks alone; creeps upstairs">15 months — Walks alone; creeps upstairs</option>
-                <option value="18 mo: Runs; explores drawers">18 months — Runs; explores drawers</option>
-                <option value="2 yr: Walks up and downstairs (2 feet/step); jumps">2 years — Walks up/downstairs (2 feet/step); jumps</option>
-                <option value="3 yr: Rides tricycle; alternate feet going upstairs">3 years — Rides tricycle; alternate feet upstairs</option>
-                <option value="4 yr: Hops on one foot; alternate feet going downstairs">4 years — Hops on one foot; alternate feet downstairs</option>
-                <option value="5 yr: Skips">5 years — Skips</option>
-              </select>
-            </div>
-            <div>
-              <label class="block font-semibold mb-1">Fine Motor (Table 3.2)</label>
-              <select id="msFineSelect" onchange="syncMilestoneSummary()" class="w-full border rounded p-1.5 bg-white">
-                <option value="">-- Select Attained Fine Motor --</option>
-                <option value="4 mo: Bidextrous reach (reaching out with both hands)">4 months — Bidextrous reach (both hands)</option>
-                <option value="6 mo: Unidextrous reach (one hand); transfers objects">6 months — Unidextrous reach; transfers objects</option>
-                <option value="9 mo: Immature pincer grasp; probes with forefinger">9 months — Immature pincer grasp; probes with forefinger</option>
-                <option value="12 mo: Pincer grasp mature">12 months — Pincer grasp mature</option>
-                <option value="15 mo: Imitates scribbling; tower of 2 blocks">15 months — Imitates scribbling; tower of 2 blocks</option>
-                <option value="18 mo: Scribbles; tower of 3 blocks (unscrews lid)">18 months — Scribbles; tower of 3 blocks; unscrews lid</option>
-                <option value="2 yr: Tower of 6 blocks; vertical and circular stroke">2 years — Tower of 6 blocks; vertical & circular stroke</option>
-                <option value="3 yr: Tower of 9 blocks; copies circle">3 years — Tower of 9 blocks; copies circle</option>
-                <option value="4 yr: Copies cross; bridge with blocks">4 years — Copies cross; bridge with blocks</option>
-                <option value="5 yr: Copies triangle; gate with blocks">5 years — Copies triangle; gate with blocks</option>
-              </select>
-            </div>
-            <div>
-              <label class="block font-semibold mb-1">Language (Table 3.4)</label>
-              <select id="msLangSelect" onchange="syncMilestoneSummary()" class="w-full border rounded p-1.5 bg-white">
-                <option value="">-- Select Attained Language --</option>
-                <option value="1 mo: Alerts to sound">1 month — Alerts to sound</option>
-                <option value="3 mo: Coos (musical vowel sounds)">3 months — Coos (musical vowel sounds)</option>
-                <option value="4 mo: Laugh loud">4 months — Laugh loud</option>
-                <option value="6 mo: Monosyllables (ba, da, pa), ah-goo sounds">6 months — Monosyllables (ba, da, pa), ah-goo</option>
-                <option value="9 mo: Bisyllables (mama, baba, dada)">9 months — Bisyllables (mama, baba, dada)</option>
-                <option value="12 mo: 1–2 words with meaning">12 months — 1–2 words with meaning</option>
-                <option value="18 mo: 8–10 word vocabulary">18 months — 8–10 word vocabulary</option>
-                <option value="2 yr: 2–3 word sentences, uses pronouns 'I', 'me', 'you'">2 years — 2–3 word sentences, pronouns "I", "me", "you"</option>
-                <option value="3 yr: Asks questions; knows full name and gender">3 years — Asks questions; knows full name & gender</option>
-                <option value="4 yr: Says song or poem; tells stories">4 years — Says song or poem; tells stories</option>
-                <option value="5 yr: Asks meaning of words">5 years — Asks meaning of words</option>
-              </select>
-            </div>
-
-<!-- 4th Dropdown: Social & Adaptive Milestones (Table 3.3) -->
-            <div>
-              <label class="block font-semibold mb-1">Social & Adaptive (Table 3.3)</label>
-              <select id="msSocialSelect" onchange="syncMilestoneSummary()" class="w-full border rounded p-1.5 bg-white">
-                <option value="">-- Select Social & Adaptive --</option>
-                <option value="Birth: Fixates on mother's face (45° range at 8–10 in)">Birth — Fixates on mother's face (45° range)</option>
-                <option value="4 wks: Visual tracking up to 90°">4 weeks — Visual tracking up to 90°</option>
-                <option value="2 mo: Social smile (smile after being talked to)">2 months — Social smile (after being talked to)</option>
-                <option value="3 mo: Recognizes mother; anticipates feeds; 180° visual tracking">3 months — Recognizes mother; anticipates feeds (180° tracking)</option>
-                <option value="6 mo: Recognizes strangers, stranger anxiety">6 months — Recognizes strangers; stranger anxiety</option>
-                <option value="9 mo: Waves 'bye bye'">9 months — Waves "bye bye"</option>
-                <option value="12 mo: Comes when called; plays simple ball game">12 months — Comes when called; plays simple ball game</option>
-                <option value="15 mo: Jargon">15 months — Jargon</option>
-                <option value="18 mo: Copies parents in task (domestic mimicry, e.g., sweeping)">18 months — Copies parents in tasks (domestic mimicry)</option>
-                <option value="2 yr: Asks for food, drink, toilet; pulls people to show toys">2 years — Asks for food, drink, toilet; pulls to show toys</option>
-                <option value="3 yr: Shares toys; knows full name and gender">3 years — Shares toys; knows full name & gender</option>
-                <option value="4 yr: Plays cooperatively in a group; goes to toilet alone; gives coherent account of events">4 years — Plays cooperatively; goes to toilet alone</option>
-                <option value="5 yr: Helps in household tasks, dresses and undresses">5 years — Helps in household tasks; dresses & undresses</option>
-              </select>
-            </div>        
+          <div class="flex gap-1.5">
+            <button type="button" onclick="autoTickMilestonesByAge()" class="flex-1 chrome-pill-btn justify-center bg-blue-600 hover:bg-blue-700 text-white text-[11px] py-2 px-2.5 shadow" title="Automatically ticks milestones up to the entered Age in Months">
+              ⚡ Auto-Tick by Age
+            </button>
+            <button type="button" onclick="clearAllMilestoneTicks()" class="chrome-pill-btn justify-center bg-slate-200 hover:bg-slate-300 text-slate-700 text-[11px] py-2 px-2.5">
+              Clear
+            </button>
           </div>
         </div>
 
-        <!-- WHO Upper-Limit Developmental Red Flags (Table 3.5) -->
-        <div class="bg-rose-50/70 p-3 rounded-lg border border-rose-200 space-y-2">
-          <div class="text-xs font-bold text-rose-900 uppercase tracking-wide">
-            🚩 Upper Limit of Age for Attainment of Milestones — Red Flags (Table 3.5, WHO MGRS)
+        <!-- 4 TICKABLE MILESTONE TABLES (2x2 GRID ON DESKTOP) -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 text-xs">
+
+          <!-- TABLE 3.1: GROSS MOTOR MILESTONES -->
+          <div class="border border-blue-200 rounded-xl overflow-hidden bg-blue-50/20 flex flex-col justify-between">
+            <div>
+              <div class="bg-blue-100/80 px-3 py-2 font-bold text-blue-950 border-b border-blue-200 flex justify-between items-center">
+                <span>1. Gross Motor Milestones (Table 3.1)</span>
+                <span class="text-[11px] font-normal text-blue-800">Tick if Present ✓</span>
+              </div>
+              <div class="max-h-64 overflow-y-auto divide-y divide-slate-200 bg-white">
+                <table class="w-full text-left border-collapse">
+                  <thead class="bg-slate-50 text-[11px] text-slate-600 sticky top-0">
+                    <tr>
+                      <th class="py-1.5 px-2.5 w-12 text-center">Present</th>
+                      <th class="py-1.5 px-2 w-24">Age</th>
+                      <th class="py-1.5 px-2.5">Milestone</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y text-xs">
+                    <tr class="hover:bg-blue-50/50"><td class="py-1.5 px-2.5 text-center"><input type="checkbox" id="gm_3m" data-age="3" onchange="syncMilestoneSummary()" class="ms-gm-check w-4 h-4 accent-blue-600 rounded cursor-pointer" value="Neck holding (3m)" /></td><td class="py-1.5 px-2 font-semibold">3 months</td><td class="py-1.5 px-2.5">Neck holding</td></tr>
+                    <tr class="hover:bg-blue-50/50"><td class="py-1.5 px-2.5 text-center"><input type="checkbox" id="gm_5m" data-age="5" onchange="syncMilestoneSummary()" class="ms-gm-check w-4 h-4 accent-blue-600 rounded cursor-pointer" value="Rolls over (5m)" /></td><td class="py-1.5 px-2 font-semibold">5 months</td><td class="py-1.5 px-2.5">Rolls over</td></tr>
+                    <tr class="hover:bg-blue-50/50"><td class="py-1.5 px-2.5 text-center"><input type="checkbox" id="gm_6m" data-age="6" onchange="syncMilestoneSummary()" class="ms-gm-check w-4 h-4 accent-blue-600 rounded cursor-pointer" value="Sits in tripod fashion (6m)" /></td><td class="py-1.5 px-2 font-semibold">6 months</td><td class="py-1.5 px-2.5">Sits in tripod fashion (sitting with own support)</td></tr>
+                    <tr class="hover:bg-blue-50/50"><td class="py-1.5 px-2.5 text-center"><input type="checkbox" id="gm_8m" data-age="8" onchange="syncMilestoneSummary()" class="ms-gm-check w-4 h-4 accent-blue-600 rounded cursor-pointer" value="Sitting without support (8m)" /></td><td class="py-1.5 px-2 font-semibold">8 months</td><td class="py-1.5 px-2.5">Sitting without support</td></tr>
+                    <tr class="hover:bg-blue-50/50"><td class="py-1.5 px-2.5 text-center"><input type="checkbox" id="gm_9m" data-age="9" onchange="syncMilestoneSummary()" class="ms-gm-check w-4 h-4 accent-blue-600 rounded cursor-pointer" value="Stands holding on with support (9m)" /></td><td class="py-1.5 px-2 font-semibold">9 months</td><td class="py-1.5 px-2.5">Stands holding on (with support)</td></tr>
+                    <tr class="hover:bg-blue-50/50"><td class="py-1.5 px-2.5 text-center"><input type="checkbox" id="gm_12m" data-age="12" onchange="syncMilestoneSummary()" class="ms-gm-check w-4 h-4 accent-blue-600 rounded cursor-pointer" value="Creeps well, stands without support (12m)" /></td><td class="py-1.5 px-2 font-semibold">12 months</td><td class="py-1.5 px-2.5">Creeps well; walks but falls; stands without support</td></tr>
+                    <tr class="hover:bg-blue-50/50"><td class="py-1.5 px-2.5 text-center"><input type="checkbox" id="gm_15m" data-age="15" onchange="syncMilestoneSummary()" class="ms-gm-check w-4 h-4 accent-blue-600 rounded cursor-pointer" value="Walks alone, creeps upstairs (15m)" /></td><td class="py-1.5 px-2 font-semibold">15 months</td><td class="py-1.5 px-2.5">Walks alone; creeps upstairs</td></tr>
+                    <tr class="hover:bg-blue-50/50"><td class="py-1.5 px-2.5 text-center"><input type="checkbox" id="gm_18m" data-age="18" onchange="syncMilestoneSummary()" class="ms-gm-check w-4 h-4 accent-blue-600 rounded cursor-pointer" value="Runs, explores drawers (18m)" /></td><td class="py-1.5 px-2 font-semibold">18 months</td><td class="py-1.5 px-2.5">Runs; explores drawers</td></tr>
+                    <tr class="hover:bg-blue-50/50"><td class="py-1.5 px-2.5 text-center"><input type="checkbox" id="gm_24m" data-age="24" onchange="syncMilestoneSummary()" class="ms-gm-check w-4 h-4 accent-blue-600 rounded cursor-pointer" value="Walks up/downstairs 2 feet/step, jumps (2y)" /></td><td class="py-1.5 px-2 font-semibold">2 years</td><td class="py-1.5 px-2.5">Walks up and downstairs (2 feet/step); jumps</td></tr>
+                    <tr class="hover:bg-blue-50/50"><td class="py-1.5 px-2.5 text-center"><input type="checkbox" id="gm_36m" data-age="36" onchange="syncMilestoneSummary()" class="ms-gm-check w-4 h-4 accent-blue-600 rounded cursor-pointer" value="Rides tricycle, alternate feet upstairs (3y)" /></td><td class="py-1.5 px-2 font-semibold">3 years</td><td class="py-1.5 px-2.5">Rides tricycle; alternate feet going upstairs</td></tr>
+                    <tr class="hover:bg-blue-50/50"><td class="py-1.5 px-2.5 text-center"><input type="checkbox" id="gm_48m" data-age="48" onchange="syncMilestoneSummary()" class="ms-gm-check w-4 h-4 accent-blue-600 rounded cursor-pointer" value="Hops on one foot, alternate feet downstairs (4y)" /></td><td class="py-1.5 px-2 font-semibold">4 years</td><td class="py-1.5 px-2.5">Hops on one foot; alternate feet going downstairs</td></tr>
+                    <tr class="hover:bg-blue-50/50"><td class="py-1.5 px-2.5 text-center"><input type="checkbox" id="gm_60m" data-age="60" onchange="syncMilestoneSummary()" class="ms-gm-check w-4 h-4 accent-blue-600 rounded cursor-pointer" value="Skips (5y)" /></td><td class="py-1.5 px-2 font-semibold">5 years</td><td class="py-1.5 px-2.5">Skips</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="p-2.5 bg-blue-50/60 border-t border-blue-200">
+              <label class="block text-[11px] font-bold text-blue-950 mb-1">Gross Motor Irregularities / Delays (if any):</label>
+              <input id="grossIrregularity" type="text" oninput="syncMilestoneSummary()" placeholder="e.g., Delayed sitting without support / None" class="w-full border rounded p-1.5 text-xs bg-white" />
+            </div>
           </div>
-          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-1.5 text-xs">
-            <label class="flex items-center gap-1.5"><input type="checkbox" onchange="syncMilestoneSummary()" class="dev-redflag" value="No visual fixation/following by 2 months" /> No visual fixation (&gt;2 mo)</label>
-            <label class="flex items-center gap-1.5"><input type="checkbox" onchange="syncMilestoneSummary()" class="dev-redflag" value="No vocalization by 6 months" /> No vocalization (&gt;6 mo)</label>
-            <label class="flex items-center gap-1.5"><input type="checkbox" onchange="syncMilestoneSummary()" class="dev-redflag" value="Not sitting without support by 10 months" /> No sitting w/o support (&gt;10 mo)</label>
-            <label class="flex items-center gap-1.5"><input type="checkbox" onchange="syncMilestoneSummary()" class="dev-redflag" value="Not standing with assistance by 12 months" /> No standing w/ assistance (&gt;12 mo)</label>
-            <label class="flex items-center gap-1.5"><input type="checkbox" onchange="syncMilestoneSummary()" class="dev-redflag" value="No hands and knees crawling by 14 months" /> No crawling (&gt;14 mo)</label>
-            <label class="flex items-center gap-1.5"><input type="checkbox" onchange="syncMilestoneSummary()" class="dev-redflag" value="Not standing alone by 17 months" /> Not standing alone (&gt;17 mo)</label>
-            <label class="flex items-center gap-1.5"><input type="checkbox" onchange="syncMilestoneSummary()" class="dev-redflag" value="Not walking alone by 18 months" /> Not walking alone (&gt;18 mo)</label>
-            <label class="flex items-center gap-1.5"><input type="checkbox" onchange="syncMilestoneSummary()" class="dev-redflag" value="No single words by 18 months" /> No single words (&gt;18 mo)</label>
-            <label class="flex items-center gap-1.5"><input type="checkbox" onchange="syncMilestoneSummary()" class="dev-redflag" value="No imaginative play by 3 years" /> No imaginative play (&gt;3 yr)</label>
-            <label class="flex items-center gap-1.5 sm:col-span-2"><input type="checkbox" onchange="syncMilestoneSummary()" class="dev-redflag" value="Loss of comprehension, single words or phrases at any age" /> Loss of comprehension/words at any age</label>
-            <label class="flex items-center gap-1.5"><input type="checkbox" onchange="syncMilestoneSummary()" class="dev-redflag" value="Persistence of hand regard beyond 20 weeks" /> Hand regard &gt;20 weeks</label>
+
+          <!-- TABLE 3.2: FINE MOTOR MILESTONES -->
+          <div class="border border-emerald-200 rounded-xl overflow-hidden bg-emerald-50/20 flex flex-col justify-between">
+            <div>
+              <div class="bg-emerald-100/80 px-3 py-2 font-bold text-emerald-950 border-b border-emerald-200 flex justify-between items-center">
+                <span>2. Fine Motor Milestones (Table 3.2)</span>
+                <span class="text-[11px] font-normal text-emerald-800">Tick if Present ✓</span>
+              </div>
+              <div class="max-h-64 overflow-y-auto divide-y divide-slate-200 bg-white">
+                <table class="w-full text-left border-collapse">
+                  <thead class="bg-slate-50 text-[11px] text-slate-600 sticky top-0">
+                    <tr>
+                      <th class="py-1.5 px-2.5 w-12 text-center">Present</th>
+                      <th class="py-1.5 px-2 w-24">Age</th>
+                      <th class="py-1.5 px-2.5">Milestone</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y text-xs">
+                    <tr class="hover:bg-emerald-50/50"><td class="py-1.5 px-2.5 text-center"><input type="checkbox" id="fm_3m" data-age="3" onchange="syncMilestoneSummary()" class="ms-fm-check w-4 h-4 accent-emerald-600 rounded cursor-pointer" value="Hands together in midline, no hand regard >20w (3m)" /></td><td class="py-1.5 px-2 font-semibold">3–4 months</td><td class="py-1.5 px-2.5">Hands come together in midline (hand regard disappears by 20 wks)</td></tr>
+                    <tr class="hover:bg-emerald-50/50"><td class="py-1.5 px-2.5 text-center"><input type="checkbox" id="fm_4m" data-age="4" onchange="syncMilestoneSummary()" class="ms-fm-check w-4 h-4 accent-emerald-600 rounded cursor-pointer" value="Bidextrous reach (4m)" /></td><td class="py-1.5 px-2 font-semibold">4 months</td><td class="py-1.5 px-2.5">Bidextrous reach (reaching out for objects with both hands)</td></tr>
+                    <tr class="hover:bg-emerald-50/50"><td class="py-1.5 px-2.5 text-center"><input type="checkbox" id="fm_6m" data-age="6" onchange="syncMilestoneSummary()" class="ms-fm-check w-4 h-4 accent-emerald-600 rounded cursor-pointer" value="Unidextrous reach, transfers objects (6m)" /></td><td class="py-1.5 px-2 font-semibold">6 months</td><td class="py-1.5 px-2.5">Unidextrous reach (one hand); transfers objects</td></tr>
+                    <tr class="hover:bg-emerald-50/50"><td class="py-1.5 px-2.5 text-center"><input type="checkbox" id="fm_9m" data-age="9" onchange="syncMilestoneSummary()" class="ms-fm-check w-4 h-4 accent-emerald-600 rounded cursor-pointer" value="Immature pincer grasp, probes with forefinger (9m)" /></td><td class="py-1.5 px-2 font-semibold">9 months</td><td class="py-1.5 px-2.5">Immature pincer grasp; probes with forefinger</td></tr>
+                    <tr class="hover:bg-emerald-50/50"><td class="py-1.5 px-2.5 text-center"><input type="checkbox" id="fm_12m" data-age="12" onchange="syncMilestoneSummary()" class="ms-fm-check w-4 h-4 accent-emerald-600 rounded cursor-pointer" value="Mature pincer grasp (12m)" /></td><td class="py-1.5 px-2 font-semibold">12 months</td><td class="py-1.5 px-2.5">Pincer grasp mature</td></tr>
+                    <tr class="hover:bg-emerald-50/50"><td class="py-1.5 px-2.5 text-center"><input type="checkbox" id="fm_15m" data-age="15" onchange="syncMilestoneSummary()" class="ms-fm-check w-4 h-4 accent-emerald-600 rounded cursor-pointer" value="Imitates scribbling, tower of 2 blocks (15m)" /></td><td class="py-1.5 px-2 font-semibold">15 months</td><td class="py-1.5 px-2.5">Imitates scribbling; tower of 2 blocks</td></tr>
+                    <tr class="hover:bg-emerald-50/50"><td class="py-1.5 px-2.5 text-center"><input type="checkbox" id="fm_18m" data-age="18" onchange="syncMilestoneSummary()" class="ms-fm-check w-4 h-4 accent-emerald-600 rounded cursor-pointer" value="Scribbles, tower of 3 blocks, unscrews lid (18m)" /></td><td class="py-1.5 px-2 font-semibold">18 months</td><td class="py-1.5 px-2.5">Scribbles; tower of 3 blocks; unscrews lid</td></tr>
+                    <tr class="hover:bg-emerald-50/50"><td class="py-1.5 px-2.5 text-center"><input type="checkbox" id="fm_24m" data-age="24" onchange="syncMilestoneSummary()" class="ms-fm-check w-4 h-4 accent-emerald-600 rounded cursor-pointer" value="Tower of 6 blocks, vertical & circular stroke (2y)" /></td><td class="py-1.5 px-2 font-semibold">2 years</td><td class="py-1.5 px-2.5">Tower of 6 blocks; vertical and circular stroke</td></tr>
+                    <tr class="hover:bg-emerald-50/50"><td class="py-1.5 px-2.5 text-center"><input type="checkbox" id="fm_36m" data-age="36" onchange="syncMilestoneSummary()" class="ms-fm-check w-4 h-4 accent-emerald-600 rounded cursor-pointer" value="Tower of 9 blocks, copies circle (3y)" /></td><td class="py-1.5 px-2 font-semibold">3 years</td><td class="py-1.5 px-2.5">Tower of 9 blocks; copies circle</td></tr>
+                    <tr class="hover:bg-emerald-50/50"><td class="py-1.5 px-2.5 text-center"><input type="checkbox" id="fm_48m" data-age="48" onchange="syncMilestoneSummary()" class="ms-fm-check w-4 h-4 accent-emerald-600 rounded cursor-pointer" value="Copies cross, bridge with blocks (4y)" /></td><td class="py-1.5 px-2 font-semibold">4 years</td><td class="py-1.5 px-2.5">Copies cross; bridge with blocks</td></tr>
+                    <tr class="hover:bg-emerald-50/50"><td class="py-1.5 px-2.5 text-center"><input type="checkbox" id="fm_60m" data-age="60" onchange="syncMilestoneSummary()" class="ms-fm-check w-4 h-4 accent-emerald-600 rounded cursor-pointer" value="Copies triangle, gate with blocks (5y)" /></td><td class="py-1.5 px-2 font-semibold">5 years</td><td class="py-1.5 px-2.5">Copies triangle; gate with blocks</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="p-2.5 bg-emerald-50/60 border-t border-emerald-200">
+              <label class="block text-[11px] font-bold text-emerald-950 mb-1">Fine Motor Irregularities / Delays (if any):</label>
+              <input id="fineIrregularity" type="text" oninput="syncMilestoneSummary()" placeholder="e.g., Persistent hand regard >20 wks / Absence of pincer grasp / None" class="w-full border rounded p-1.5 text-xs bg-white" />
+            </div>
+          </div>
+
+          <!-- TABLE 3.3: SOCIAL AND ADAPTIVE MILESTONES -->
+          <div class="border border-purple-200 rounded-xl overflow-hidden bg-purple-50/20 flex flex-col justify-between">
+            <div>
+              <div class="bg-purple-100/80 px-3 py-2 font-bold text-purple-950 border-b border-purple-200 flex justify-between items-center">
+                <span>3. Social & Adaptive Milestones (Table 3.3)</span>
+                <span class="text-[11px] font-normal text-purple-800">Tick if Present ✓</span>
+              </div>
+              <div class="max-h-64 overflow-y-auto divide-y divide-slate-200 bg-white">
+                <table class="w-full text-left border-collapse">
+                  <thead class="bg-slate-50 text-[11px] text-slate-600 sticky top-0">
+                    <tr>
+                      <th class="py-1.5 px-2.5 w-12 text-center">Present</th>
+                      <th class="py-1.5 px-2 w-24">Age</th>
+                      <th class="py-1.5 px-2.5">Milestone</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y text-xs">
+                    <tr class="hover:bg-purple-50/50"><td class="py-1.5 px-2.5 text-center"><input type="checkbox" id="sa_1m" data-age="1" onchange="syncMilestoneSummary()" class="ms-sa-check w-4 h-4 accent-purple-600 rounded cursor-pointer" value="Fixates on mother's face, 90° tracking by 4w (1m)" /></td><td class="py-1.5 px-2 font-semibold">Birth–1 mo</td><td class="py-1.5 px-2.5">Fixates on caretaker's face (45° at birth, 90° by 4 wks, 180° by 12 wks)</td></tr>
+                    <tr class="hover:bg-purple-50/50"><td class="py-1.5 px-2.5 text-center"><input type="checkbox" id="sa_2m" data-age="2" onchange="syncMilestoneSummary()" class="ms-sa-check w-4 h-4 accent-purple-600 rounded cursor-pointer" value="Social smile (2m)" /></td><td class="py-1.5 px-2 font-semibold">2 months</td><td class="py-1.5 px-2.5">Social smile (smile after being talked to)</td></tr>
+                    <tr class="hover:bg-purple-50/50"><td class="py-1.5 px-2.5 text-center"><input type="checkbox" id="sa_3m" data-age="3" onchange="syncMilestoneSummary()" class="ms-sa-check w-4 h-4 accent-purple-600 rounded cursor-pointer" value="Recognizes mother, anticipates feeds (3m)" /></td><td class="py-1.5 px-2 font-semibold">3 months</td><td class="py-1.5 px-2.5">Recognizes mother; anticipates feeds</td></tr>
+                    <tr class="hover:bg-purple-50/50"><td class="py-1.5 px-2.5 text-center"><input type="checkbox" id="sa_6m" data-age="6" onchange="syncMilestoneSummary()" class="ms-sa-check w-4 h-4 accent-purple-600 rounded cursor-pointer" value="Recognizes strangers, stranger anxiety (6m)" /></td><td class="py-1.5 px-2 font-semibold">6 months</td><td class="py-1.5 px-2.5">Recognizes strangers, stranger anxiety</td></tr>
+                    <tr class="hover:bg-purple-50/50"><td class="py-1.5 px-2.5 text-center"><input type="checkbox" id="sa_9m" data-age="9" onchange="syncMilestoneSummary()" class="ms-sa-check w-4 h-4 accent-purple-600 rounded cursor-pointer" value="Waves 'bye bye' (9m)" /></td><td class="py-1.5 px-2 font-semibold">9 months</td><td class="py-1.5 px-2.5">Waves "bye bye"</td></tr>
+                    <tr class="hover:bg-purple-50/50"><td class="py-1.5 px-2.5 text-center"><input type="checkbox" id="sa_12m" data-age="12" onchange="syncMilestoneSummary()" class="ms-sa-check w-4 h-4 accent-purple-600 rounded cursor-pointer" value="Comes when called, plays simple ball game (12m)" /></td><td class="py-1.5 px-2 font-semibold">12 months</td><td class="py-1.5 px-2.5">Comes when called; plays simple ball game</td></tr>
+                    <tr class="hover:bg-purple-50/50"><td class="py-1.5 px-2.5 text-center"><input type="checkbox" id="sa_15m" data-age="15" onchange="syncMilestoneSummary()" class="ms-sa-check w-4 h-4 accent-purple-600 rounded cursor-pointer" value="Jargon (15m)" /></td><td class="py-1.5 px-2 font-semibold">15 months</td><td class="py-1.5 px-2.5">Jargon</td></tr>
+                    <tr class="hover:bg-purple-50/50"><td class="py-1.5 px-2.5 text-center"><input type="checkbox" id="sa_18m" data-age="18" onchange="syncMilestoneSummary()" class="ms-sa-check w-4 h-4 accent-purple-600 rounded cursor-pointer" value="Copies parents in task / domestic mimicry (18m)" /></td><td class="py-1.5 px-2 font-semibold">18 months</td><td class="py-1.5 px-2.5">Copies parents in task (domestic mimicry, e.g. sweeping)</td></tr>
+                    <tr class="hover:bg-purple-50/50"><td class="py-1.5 px-2.5 text-center"><input type="checkbox" id="sa_24m" data-age="24" onchange="syncMilestoneSummary()" class="ms-sa-check w-4 h-4 accent-purple-600 rounded cursor-pointer" value="Asks for food/drink/toilet, pulls people to show toys (2y)" /></td><td class="py-1.5 px-2 font-semibold">2 years</td><td class="py-1.5 px-2.5">Asks for food, drink, toilet; pulls people to show toys</td></tr>
+                    <tr class="hover:bg-purple-50/50"><td class="py-1.5 px-2.5 text-center"><input type="checkbox" id="sa_36m" data-age="36" onchange="syncMilestoneSummary()" class="ms-sa-check w-4 h-4 accent-purple-600 rounded cursor-pointer" value="Shares toys, knows full name & gender (3y)" /></td><td class="py-1.5 px-2 font-semibold">3 years</td><td class="py-1.5 px-2.5">Shares toys; knows full name and gender</td></tr>
+                    <tr class="hover:bg-purple-50/50"><td class="py-1.5 px-2.5 text-center"><input type="checkbox" id="sa_48m" data-age="48" onchange="syncMilestoneSummary()" class="ms-sa-check w-4 h-4 accent-purple-600 rounded cursor-pointer" value="Plays cooperatively in group, goes to toilet alone (4y)" /></td><td class="py-1.5 px-2 font-semibold">4 years</td><td class="py-1.5 px-2.5">Plays cooperatively in a group; goes to toilet alone</td></tr>
+                    <tr class="hover:bg-purple-50/50"><td class="py-1.5 px-2.5 text-center"><input type="checkbox" id="sa_60m" data-age="60" onchange="syncMilestoneSummary()" class="ms-sa-check w-4 h-4 accent-purple-600 rounded cursor-pointer" value="Helps in household tasks, dresses & undresses (5y)" /></td><td class="py-1.5 px-2 font-semibold">5 years</td><td class="py-1.5 px-2.5">Helps in household tasks, dresses and undresses</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="p-2.5 bg-purple-50/60 border-t border-purple-200">
+              <label class="block text-[11px] font-bold text-purple-950 mb-1">Social & Adaptive Irregularities / Delays (if any):</label>
+              <input id="socialIrregularity" type="text" oninput="syncMilestoneSummary()" placeholder="e.g., Poor eye contact / Lack of joint attention / None" class="w-full border rounded p-1.5 text-xs bg-white" />
+            </div>
+          </div>
+
+          <!-- TABLE 3.4: LANGUAGE MILESTONES -->
+          <div class="border border-amber-200 rounded-xl overflow-hidden bg-amber-50/20 flex flex-col justify-between">
+            <div>
+              <div class="bg-amber-100/80 px-3 py-2 font-bold text-amber-950 border-b border-amber-200 flex justify-between items-center">
+                <span>4. Language Milestones (Table 3.4)</span>
+                <span class="text-[11px] font-normal text-amber-800">Tick if Present ✓</span>
+              </div>
+              <div class="max-h-64 overflow-y-auto divide-y divide-slate-200 bg-white">
+                <table class="w-full text-left border-collapse">
+                  <thead class="bg-slate-50 text-[11px] text-slate-600 sticky top-0">
+                    <tr>
+                      <th class="py-1.5 px-2.5 w-12 text-center">Present</th>
+                      <th class="py-1.5 px-2 w-24">Age</th>
+                      <th class="py-1.5 px-2.5">Milestone</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y text-xs">
+                    <tr class="hover:bg-amber-50/50"><td class="py-1.5 px-2.5 text-center"><input type="checkbox" id="lg_1m" data-age="1" onchange="syncMilestoneSummary()" class="ms-lg-check w-4 h-4 accent-amber-600 rounded cursor-pointer" value="Alerts to sound (1m)" /></td><td class="py-1.5 px-2 font-semibold">1 month</td><td class="py-1.5 px-2.5">Alerts to sound</td></tr>
+                    <tr class="hover:bg-amber-50/50"><td class="py-1.5 px-2.5 text-center"><input type="checkbox" id="lg_3m" data-age="3" onchange="syncMilestoneSummary()" class="ms-lg-check w-4 h-4 accent-amber-600 rounded cursor-pointer" value="Coos musical vowel sounds (3m)" /></td><td class="py-1.5 px-2 font-semibold">3 months</td><td class="py-1.5 px-2.5">Coos (musical vowel sounds)</td></tr>
+                    <tr class="hover:bg-amber-50/50"><td class="py-1.5 px-2.5 text-center"><input type="checkbox" id="lg_4m" data-age="4" onchange="syncMilestoneSummary()" class="ms-lg-check w-4 h-4 accent-amber-600 rounded cursor-pointer" value="Laugh loud (4m)" /></td><td class="py-1.5 px-2 font-semibold">4 months</td><td class="py-1.5 px-2.5">Laugh loud</td></tr>
+                    <tr class="hover:bg-amber-50/50"><td class="py-1.5 px-2.5 text-center"><input type="checkbox" id="lg_6m" data-age="6" onchange="syncMilestoneSummary()" class="ms-lg-check w-4 h-4 accent-amber-600 rounded cursor-pointer" value="Monosyllables ba/da/pa, ah-goo sounds (6m)" /></td><td class="py-1.5 px-2 font-semibold">6 months</td><td class="py-1.5 px-2.5">Monosyllables (ba, da, pa), ah-goo sounds</td></tr>
+                    <tr class="hover:bg-amber-50/50"><td class="py-1.5 px-2.5 text-center"><input type="checkbox" id="lg_9m" data-age="9" onchange="syncMilestoneSummary()" class="ms-lg-check w-4 h-4 accent-amber-600 rounded cursor-pointer" value="Bisyllables mama/baba/dada (9m)" /></td><td class="py-1.5 px-2 font-semibold">9 months</td><td class="py-1.5 px-2.5">Bisyllables (mama, baba, dada)</td></tr>
+                    <tr class="hover:bg-amber-50/50"><td class="py-1.5 px-2.5 text-center"><input type="checkbox" id="lg_12m" data-age="12" onchange="syncMilestoneSummary()" class="ms-lg-check w-4 h-4 accent-amber-600 rounded cursor-pointer" value="1–2 words with meaning (12m)" /></td><td class="py-1.5 px-2 font-semibold">12 months</td><td class="py-1.5 px-2.5">1–2 words with meaning</td></tr>
+                    <tr class="hover:bg-amber-50/50"><td class="py-1.5 px-2.5 text-center"><input type="checkbox" id="lg_18m" data-age="18" onchange="syncMilestoneSummary()" class="ms-lg-check w-4 h-4 accent-amber-600 rounded cursor-pointer" value="8–10 word vocabulary (18m)" /></td><td class="py-1.5 px-2 font-semibold">18 months</td><td class="py-1.5 px-2.5">8–10 word vocabulary</td></tr>
+                    <tr class="hover:bg-amber-50/50"><td class="py-1.5 px-2.5 text-center"><input type="checkbox" id="lg_24m" data-age="24" onchange="syncMilestoneSummary()" class="ms-lg-check w-4 h-4 accent-amber-600 rounded cursor-pointer" value="2–3 word sentences, pronouns I/me/you (2y)" /></td><td class="py-1.5 px-2 font-semibold">2 years</td><td class="py-1.5 px-2.5">2–3 word sentences, uses pronouns "I", "me", "you"</td></tr>
+                    <tr class="hover:bg-amber-50/50"><td class="py-1.5 px-2.5 text-center"><input type="checkbox" id="lg_36m" data-age="36" onchange="syncMilestoneSummary()" class="ms-lg-check w-4 h-4 accent-amber-600 rounded cursor-pointer" value="Asks questions, knows full name & gender (3y)" /></td><td class="py-1.5 px-2 font-semibold">3 years</td><td class="py-1.5 px-2.5">Asks questions; knows full name and gender</td></tr>
+                    <tr class="hover:bg-amber-50/50"><td class="py-1.5 px-2.5 text-center"><input type="checkbox" id="lg_48m" data-age="48" onchange="syncMilestoneSummary()" class="ms-lg-check w-4 h-4 accent-amber-600 rounded cursor-pointer" value="Says song or poem, tells stories, coherent account (4y)" /></td><td class="py-1.5 px-2 font-semibold">4 years</td><td class="py-1.5 px-2.5">Says song or poem; tells stories (coherent account of events)</td></tr>
+                    <tr class="hover:bg-amber-50/50"><td class="py-1.5 px-2.5 text-center"><input type="checkbox" id="lg_60m" data-age="60" onchange="syncMilestoneSummary()" class="ms-lg-check w-4 h-4 accent-amber-600 rounded cursor-pointer" value="Asks meaning of words (5y)" /></td><td class="py-1.5 px-2 font-semibold">5 years</td><td class="py-1.5 px-2.5">Asks meaning of words</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="p-2.5 bg-amber-50/60 border-t border-amber-200">
+              <label class="block text-[11px] font-bold text-amber-950 mb-1">Language Irregularities / Delays (if any):</label>
+              <input id="langIrregularity" type="text" oninput="syncMilestoneSummary()" placeholder="e.g., Speech delay / Echolalia / Dysarthria / None" class="w-full border rounded p-1.5 text-xs bg-white" />
+            </div>
+          </div>
+
+        </div>
+
+        <!-- TABLE 3.5: WHO UPPER-LIMIT DEVELOPMENTAL RED FLAGS (TICKABLE TABLE) -->
+        <div class="border border-rose-300 rounded-xl overflow-hidden bg-rose-50/30">
+          <div class="bg-rose-100 px-3 py-2 font-bold text-rose-950 border-b border-rose-200 flex justify-between items-center text-xs">
+            <span>🚩 Table 3.5: Upper Limit of Age for Attainment of Milestones — Red Flags (WHO MGRS)</span>
+            <span class="text-[11px] font-normal text-rose-800">Tick if Red Flag / Delay is PRESENT</span>
+          </div>
+          <div class="p-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 text-xs bg-white">
+            <label class="flex items-center gap-2 border p-2 rounded hover:bg-rose-50 cursor-pointer"><input type="checkbox" id="rf_vis2m" onchange="syncMilestoneSummary()" class="dev-redflag w-4 h-4 accent-rose-600" value="No visual fixation or following by 2 months" /> <span><strong>2 months:</strong> No visual fixation/following</span></label>
+            <label class="flex items-center gap-2 border p-2 rounded hover:bg-rose-50 cursor-pointer"><input type="checkbox" id="rf_voc6m" onchange="syncMilestoneSummary()" class="dev-redflag w-4 h-4 accent-rose-600" value="No vocalization by 6 months" /> <span><strong>6 months:</strong> No vocalization</span></label>
+            <label class="flex items-center gap-2 border p-2 rounded hover:bg-rose-50 cursor-pointer"><input type="checkbox" id="rf_sit10m" onchange="syncMilestoneSummary()" class="dev-redflag w-4 h-4 accent-rose-600" value="Not sitting without support by 10 months" /> <span><strong>10 months:</strong> Not sitting w/o support</span></label>
+            <label class="flex items-center gap-2 border p-2 rounded hover:bg-rose-50 cursor-pointer"><input type="checkbox" id="rf_std12m" onchange="syncMilestoneSummary()" class="dev-redflag w-4 h-4 accent-rose-600" value="Not standing with assistance by 12 months" /> <span><strong>12 months:</strong> No standing w/ assistance</span></label>
+            <label class="flex items-center gap-2 border p-2 rounded hover:bg-rose-50 cursor-pointer"><input type="checkbox" id="rf_crw14m" onchange="syncMilestoneSummary()" class="dev-redflag w-4 h-4 accent-rose-600" value="No hands and knees crawling by 14 months" /> <span><strong>14 months:</strong> No hands &amp; knees crawling</span></label>
+            <label class="flex items-center gap-2 border p-2 rounded hover:bg-rose-50 cursor-pointer"><input type="checkbox" id="rf_sta17m" onchange="syncMilestoneSummary()" class="dev-redflag w-4 h-4 accent-rose-600" value="Not standing alone by 17 months" /> <span><strong>17 months:</strong> Not standing alone</span></label>
+            <label class="flex items-center gap-2 border p-2 rounded hover:bg-rose-50 cursor-pointer"><input type="checkbox" id="rf_wlk18m" onchange="syncMilestoneSummary()" class="dev-redflag w-4 h-4 accent-rose-600" value="Not walking alone by 18 months" /> <span><strong>18 months:</strong> Not walking alone</span></label>
+            <label class="flex items-center gap-2 border p-2 rounded hover:bg-rose-50 cursor-pointer"><input type="checkbox" id="rf_wrd18m" onchange="syncMilestoneSummary()" class="dev-redflag w-4 h-4 accent-rose-600" value="No single words by 18 months" /> <span><strong>18 months:</strong> No single words</span></label>
+            <label class="flex items-center gap-2 border p-2 rounded hover:bg-rose-50 cursor-pointer"><input type="checkbox" id="rf_img3y" onchange="syncMilestoneSummary()" class="dev-redflag w-4 h-4 accent-rose-600" value="No imaginative play by 3 years" /> <span><strong>3 years:</strong> No imaginative play</span></label>
+            <label class="flex items-center gap-2 border p-2 rounded hover:bg-rose-50 cursor-pointer sm:col-span-2"><input type="checkbox" id="rf_loss" onchange="syncMilestoneSummary()" class="dev-redflag w-4 h-4 accent-rose-600" value="Loss of comprehension, single words or phrases at any age" /> <span><strong>Any Age:</strong> Loss of comprehension, single words or phrases</span></label>
+            <label class="flex items-center gap-2 border p-2 rounded hover:bg-rose-50 cursor-pointer"><input type="checkbox" id="rf_hand20w" onchange="syncMilestoneSummary()" class="dev-redflag w-4 h-4 accent-rose-600" value="Persistence of hand regard beyond 20 weeks" /> <span><strong>&gt;20 weeks:</strong> Persistent hand regard</span></label>
+          </div>
+          <div class="p-2.5 bg-rose-50/70 border-t border-rose-200">
+            <label class="block text-[11px] font-bold text-rose-950 mb-1">Red Flag / Regression / Vision &amp; Hearing Notes:</label>
+            <input id="redFlagIrregularity" type="text" oninput="syncMilestoneSummary()" placeholder="e.g., Normal vision and hearing; no loss of attained milestones" class="w-full border rounded p-1.5 text-xs bg-white" />
           </div>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
-            <label class="block text-xs font-semibold mb-1">Milestones Summary (Auto-populated or editable)</label>
+            <label class="block text-xs font-semibold mb-1">Compiled Developmental Milestones Summary (Auto-generated from ticks &amp; notes)</label>
             <input id="devSummary" type="text" value="Age-appropriate milestones attained across all domains with no developmental regression." class="w-full border rounded p-2 text-sm" />
           </div>
           <div>
-            <label class="block text-xs font-semibold mb-1">Behavioral & Screen Time Notes</label>
+            <label class="block text-xs font-semibold mb-1">Behavioral &amp; Screen Time Notes</label>
             <input id="behavSummary" type="text" value="Screen viewing is <1 hour/day; no pica, breath-holding spells, or behavioral concerns." class="w-full border rounded p-2 text-sm" />
           </div>
         </div>
       </div>
     </details>
-
+    
   <!-- 8. NUTRITIONAL HISTORY (ICMR-NIN 2020 & TABLE 7.6 SEARCHABLE FOOD CALCULATOR) -->
     <details class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden" open>
       <summary class="bg-slate-50 px-4 py-3 font-bold text-slate-800 cursor-pointer flex justify-between items-center border-b">
@@ -3979,6 +4071,73 @@ ${htmlSnapshot}`;
       if (autoArchive && document.getElementById('ptName')?.value.trim()) {
         saveCurrentCaseToStorage(false);
       }
+    };
+
+// --- TICKABLE DEVELOPMENTAL TABLES & IRREGULARITIES SYNCHRONIZER ---
+    function autoTickMilestonesByAge() {
+      const ageMo = parseFloat(document.getElementById('dqChrono')?.value || document.getElementById('ptAgeMonths')?.value || '0');
+      if (!ageMo || ageMo <= 0) {
+        alert('Please enter the child\'s Age in Months (in Section 1 or Section 7 Effective Age) first.');
+        return;
+      }
+      document.querySelectorAll('.ms-gm-check, .ms-fm-check, .ms-sa-check, .ms-lg-check').forEach(cb => {
+        const reqAge = parseFloat(cb.getAttribute('data-age') || '0');
+        cb.checked = reqAge <= ageMo;
+      });
+      syncMilestoneSummary();
+    }
+
+    function clearAllMilestoneTicks() {
+      document.querySelectorAll('.ms-gm-check, .ms-fm-check, .ms-sa-check, .ms-lg-check, .dev-redflag').forEach(cb => {
+        cb.checked = false;
+      });
+      ['grossIrregularity', 'fineIrregularity', 'socialIrregularity', 'langIrregularity', 'redFlagIrregularity'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = '';
+      });
+      syncMilestoneSummary();
+    }
+
+    syncMilestoneSummary = function() {
+      const gmChecked = Array.from(document.querySelectorAll('.ms-gm-check:checked')).map(c => c.value);
+      const fmChecked = Array.from(document.querySelectorAll('.ms-fm-check:checked')).map(c => c.value);
+      const saChecked = Array.from(document.querySelectorAll('.ms-sa-check:checked')).map(c => c.value);
+      const lgChecked = Array.from(document.querySelectorAll('.ms-lg-check:checked')).map(c => c.value);
+      const rfChecked = Array.from(document.querySelectorAll('.dev-redflag:checked')).map(c => c.value);
+
+      const gmIrr = document.getElementById('grossIrregularity')?.value.trim() || '';
+      const fmIrr = document.getElementById('fineIrregularity')?.value.trim() || '';
+      const saIrr = document.getElementById('socialIrregularity')?.value.trim() || '';
+      const lgIrr = document.getElementById('langIrregularity')?.value.trim() || '';
+      const rfIrr = document.getElementById('redFlagIrregularity')?.value.trim() || '';
+
+      let domainSegments = [];
+      if (gmChecked.length || gmIrr) {
+        domainSegments.push(`Gross Motor: ${gmChecked.length ? gmChecked.join(', ') : 'None ticked'}${gmIrr ? ` [Irregularity: ${gmIrr}]` : ''}`);
+      }
+      if (fmChecked.length || fmIrr) {
+        domainSegments.push(`Fine Motor: ${fmChecked.length ? fmChecked.join(', ') : 'None ticked'}${fmIrr ? ` [Irregularity: ${fmIrr}]` : ''}`);
+      }
+      if (saChecked.length || saIrr) {
+        domainSegments.push(`Social & Adaptive: ${saChecked.length ? saChecked.join(', ') : 'None ticked'}${saIrr ? ` [Irregularity: ${saIrr}]` : ''}`);
+      }
+      if (lgChecked.length || lgIrr) {
+        domainSegments.push(`Language: ${lgChecked.length ? lgChecked.join(', ') : 'None ticked'}${lgIrr ? ` [Irregularity: ${lgIrr}]` : ''}`);
+      }
+
+      let summaryText = domainSegments.length > 0
+        ? `Attained Milestones — ${domainSegments.join(' | ')}.`
+        : `Age-appropriate milestones attained across Gross Motor, Fine Motor, Social/Adaptive, and Language domains.`;
+
+      if (rfChecked.length > 0 || rfIrr) {
+        summaryText += ` ⚠️ Developmental Red Flags / Notes: ${rfChecked.length ? rfChecked.join(', ') : ''}${rfIrr ? (rfChecked.length ? ` (${rfIrr})` : rfIrr) : ''}.`;
+      } else {
+        summaryText += ` Vision and hearing intact; no developmental regression or WHO upper-limit red flags.`;
+      }
+
+      const summaryEl = document.getElementById('devSummary');
+      if (summaryEl) summaryEl.value = summaryText;
+      saveActiveWorkingDraft();
     };
     
   </script>
