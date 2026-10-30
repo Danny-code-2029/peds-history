@@ -715,14 +715,15 @@
       </div>
     </details>
 
-    <!-- 7. DEVELOPMENTAL HISTORY -->
+   <!-- 7. DEVELOPMENTAL HISTORY (TABLES 3.1, 3.2, 3.4 & 3.5) -->
     <details class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
       <summary class="bg-slate-50 px-4 py-3 font-bold text-slate-800 cursor-pointer flex justify-between items-center border-b">
         <span>7. Developmental History</span>
-        <span class="text-xs text-blue-600 font-normal">Milestones, DQ & Behavior</span>
+        <span class="text-xs text-blue-600 font-normal">Gross Motor, Fine Motor, Language, DQ & WHO Red Flags</span>
       </summary>
-      <div class="p-4 space-y-3">
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 bg-slate-50 p-3 rounded border">
+      <div class="p-4 space-y-4">
+        <!-- DQ Calculator -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 bg-slate-50 p-3 rounded-lg border">
           <div>
             <label class="block text-xs font-semibold mb-1">Effective/Corrected Age (mo)</label>
             <input id="dqChrono" type="number" step="0.5" placeholder="e.g., 24" oninput="calcDQ()" class="w-full border rounded p-1.5 text-sm bg-white" />
@@ -736,9 +737,90 @@
             <input id="dqResult" type="text" readonly placeholder="Auto-calculated" class="w-full border rounded p-1.5 text-sm bg-slate-100 font-bold text-blue-900" />
           </div>
         </div>
+
+        <!-- Textbook Milestone Selector (Tables 3.1, 3.2, 3.4) -->
+        <div class="bg-blue-50/50 p-3 rounded-lg border border-blue-200 space-y-2.5">
+          <div class="text-xs font-bold text-blue-950 uppercase tracking-wide">
+            📋 Key Developmental Milestones Reference Selector (Tables 3.1, 3.2 & 3.4)
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs">
+            <div>
+              <label class="block font-semibold mb-1">Gross Motor (Table 3.1)</label>
+              <select id="msGrossSelect" onchange="syncMilestoneSummary()" class="w-full border rounded p-1.5 bg-white">
+                <option value="">-- Select Attained Gross Motor --</option>
+                <option value="3 mo: Neck holding">3 months — Neck holding</option>
+                <option value="5 mo: Rolls over">5 months — Rolls over</option>
+                <option value="6 mo: Sits in tripod fashion (sitting with own support)">6 months — Sits in tripod fashion</option>
+                <option value="8 mo: Sitting without support">8 months — Sitting without support</option>
+                <option value="9 mo: Stands holding on (with support)">9 months — Stands holding on (with support)</option>
+                <option value="12 mo: Creeps well; walks but falls; stands without support">12 months — Creeps well; stands without support</option>
+                <option value="15 mo: Walks alone; creeps upstairs">15 months — Walks alone; creeps upstairs</option>
+                <option value="18 mo: Runs; explores drawers">18 months — Runs; explores drawers</option>
+                <option value="2 yr: Walks up and downstairs (2 feet/step); jumps">2 years — Walks up/downstairs (2 feet/step); jumps</option>
+                <option value="3 yr: Rides tricycle; alternate feet going upstairs">3 years — Rides tricycle; alternate feet upstairs</option>
+                <option value="4 yr: Hops on one foot; alternate feet going downstairs">4 years — Hops on one foot; alternate feet downstairs</option>
+                <option value="5 yr: Skips">5 years — Skips</option>
+              </select>
+            </div>
+            <div>
+              <label class="block font-semibold mb-1">Fine Motor (Table 3.2)</label>
+              <select id="msFineSelect" onchange="syncMilestoneSummary()" class="w-full border rounded p-1.5 bg-white">
+                <option value="">-- Select Attained Fine Motor --</option>
+                <option value="4 mo: Bidextrous reach (reaching out with both hands)">4 months — Bidextrous reach (both hands)</option>
+                <option value="6 mo: Unidextrous reach (one hand); transfers objects">6 months — Unidextrous reach; transfers objects</option>
+                <option value="9 mo: Immature pincer grasp; probes with forefinger">9 months — Immature pincer grasp; probes with forefinger</option>
+                <option value="12 mo: Pincer grasp mature">12 months — Pincer grasp mature</option>
+                <option value="15 mo: Imitates scribbling; tower of 2 blocks">15 months — Imitates scribbling; tower of 2 blocks</option>
+                <option value="18 mo: Scribbles; tower of 3 blocks (unscrews lid)">18 months — Scribbles; tower of 3 blocks; unscrews lid</option>
+                <option value="2 yr: Tower of 6 blocks; vertical and circular stroke">2 years — Tower of 6 blocks; vertical & circular stroke</option>
+                <option value="3 yr: Tower of 9 blocks; copies circle">3 years — Tower of 9 blocks; copies circle</option>
+                <option value="4 yr: Copies cross; bridge with blocks">4 years — Copies cross; bridge with blocks</option>
+                <option value="5 yr: Copies triangle; gate with blocks">5 years — Copies triangle; gate with blocks</option>
+              </select>
+            </div>
+            <div>
+              <label class="block font-semibold mb-1">Language (Table 3.4)</label>
+              <select id="msLangSelect" onchange="syncMilestoneSummary()" class="w-full border rounded p-1.5 bg-white">
+                <option value="">-- Select Attained Language --</option>
+                <option value="1 mo: Alerts to sound">1 month — Alerts to sound</option>
+                <option value="3 mo: Coos (musical vowel sounds)">3 months — Coos (musical vowel sounds)</option>
+                <option value="4 mo: Laugh loud">4 months — Laugh loud</option>
+                <option value="6 mo: Monosyllables (ba, da, pa), ah-goo sounds">6 months — Monosyllables (ba, da, pa), ah-goo</option>
+                <option value="9 mo: Bisyllables (mama, baba, dada)">9 months — Bisyllables (mama, baba, dada)</option>
+                <option value="12 mo: 1–2 words with meaning">12 months — 1–2 words with meaning</option>
+                <option value="18 mo: 8–10 word vocabulary">18 months — 8–10 word vocabulary</option>
+                <option value="2 yr: 2–3 word sentences, uses pronouns 'I', 'me', 'you'">2 years — 2–3 word sentences, pronouns "I", "me", "you"</option>
+                <option value="3 yr: Asks questions; knows full name and gender">3 years — Asks questions; knows full name & gender</option>
+                <option value="4 yr: Says song or poem; tells stories">4 years — Says song or poem; tells stories</option>
+                <option value="5 yr: Asks meaning of words">5 years — Asks meaning of words</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- WHO Upper-Limit Developmental Red Flags (Table 3.5) -->
+        <div class="bg-rose-50/70 p-3 rounded-lg border border-rose-200 space-y-2">
+          <div class="text-xs font-bold text-rose-900 uppercase tracking-wide">
+            🚩 Upper Limit of Age for Attainment of Milestones — Red Flags (Table 3.5, WHO MGRS)
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-1.5 text-xs">
+            <label class="flex items-center gap-1.5"><input type="checkbox" onchange="syncMilestoneSummary()" class="dev-redflag" value="No visual fixation/following by 2 months" /> No visual fixation (&gt;2 mo)</label>
+            <label class="flex items-center gap-1.5"><input type="checkbox" onchange="syncMilestoneSummary()" class="dev-redflag" value="No vocalization by 6 months" /> No vocalization (&gt;6 mo)</label>
+            <label class="flex items-center gap-1.5"><input type="checkbox" onchange="syncMilestoneSummary()" class="dev-redflag" value="Not sitting without support by 10 months" /> No sitting w/o support (&gt;10 mo)</label>
+            <label class="flex items-center gap-1.5"><input type="checkbox" onchange="syncMilestoneSummary()" class="dev-redflag" value="Not standing with assistance by 12 months" /> No standing w/ assistance (&gt;12 mo)</label>
+            <label class="flex items-center gap-1.5"><input type="checkbox" onchange="syncMilestoneSummary()" class="dev-redflag" value="No hands and knees crawling by 14 months" /> No crawling (&gt;14 mo)</label>
+            <label class="flex items-center gap-1.5"><input type="checkbox" onchange="syncMilestoneSummary()" class="dev-redflag" value="Not standing alone by 17 months" /> Not standing alone (&gt;17 mo)</label>
+            <label class="flex items-center gap-1.5"><input type="checkbox" onchange="syncMilestoneSummary()" class="dev-redflag" value="Not walking alone by 18 months" /> Not walking alone (&gt;18 mo)</label>
+            <label class="flex items-center gap-1.5"><input type="checkbox" onchange="syncMilestoneSummary()" class="dev-redflag" value="No single words by 18 months" /> No single words (&gt;18 mo)</label>
+            <label class="flex items-center gap-1.5"><input type="checkbox" onchange="syncMilestoneSummary()" class="dev-redflag" value="No imaginative play by 3 years" /> No imaginative play (&gt;3 yr)</label>
+            <label class="flex items-center gap-1.5 sm:col-span-2"><input type="checkbox" onchange="syncMilestoneSummary()" class="dev-redflag" value="Loss of comprehension, single words or phrases at any age" /> Loss of comprehension/words at any age</label>
+            <label class="flex items-center gap-1.5"><input type="checkbox" onchange="syncMilestoneSummary()" class="dev-redflag" value="Persistence of hand regard beyond 20 weeks" /> Hand regard &gt;20 weeks</label>
+          </div>
+        </div>
+
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
-            <label class="block text-xs font-semibold mb-1">Milestones (Gross, Fine, Social, Language, Vision/Hearing)</label>
+            <label class="block text-xs font-semibold mb-1">Milestones Summary (Auto-populated or editable)</label>
             <input id="devSummary" type="text" value="Age-appropriate milestones attained across all domains with no developmental regression." class="w-full border rounded p-2 text-sm" />
           </div>
           <div>
@@ -749,48 +831,169 @@
       </div>
     </details>
 
-    <!-- 8. NUTRITIONAL HISTORY -->
-    <details class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+  <!-- 8. NUTRITIONAL HISTORY (ICMR-NIN 2020 & TABLE 7.6 SEARCHABLE FOOD CALCULATOR) -->
+    <details class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden" open>
       <summary class="bg-slate-50 px-4 py-3 font-bold text-slate-800 cursor-pointer flex justify-between items-center border-b">
         <span>8. Nutritional History</span>
-        <span class="text-xs text-blue-600 font-normal">Breastfeeding, Weaning & 24h Recall</span>
+        <span class="text-xs text-blue-600 font-normal">Searchable Food Log (Table 7.6), ICMR-NIN 2020 RDA & Deficit</span>
       </summary>
-      <div class="p-4 space-y-3">
+      <div class="p-4 space-y-4">
+
+        <!-- A. ICMR-NIN 2020 Daily Requirement & Weight-Based Energy Selector (Tables 7.2, 7.3 & 7.5) -->
         <div class="grid grid-cols-1 sm:grid-cols-5 gap-2.5 bg-emerald-50/60 p-3 rounded-lg border border-emerald-200">
           <div class="sm:col-span-2">
-            <label class="block text-xs font-semibold mb-1">Select Age Group (Daily Requirement)</label>
+            <label class="block text-xs font-semibold mb-1">Age/Gender Group (ICMR-NIN 2020 Tables 7.3 & 7.5)</label>
             <select id="rdaAgeGroup" onchange="updateRDA()" class="w-full border rounded p-1.5 text-xs bg-white">
-              <option value="1060|16.7">1–3 years (1060 kcal, 16.7 g protein)</option>
-              <option value="1350|20.1">4–6 years (1350 kcal, 20.1 g protein)</option>
-              <option value="1690|29.5">7–9 years (1690 kcal, 29.5 g protein)</option>
-              <option value="2190|39.9">Boys 10–12 yr (2190 kcal, 39.9 g protein)</option>
-              <option value="2010|40.4">Girls 10–12 yr (2010 kcal, 40.4 g protein)</option>
-              <option value="2750|54.3">Boys 13–15 yr (2750 kcal, 54.3 g protein)</option>
-              <option value="2330|51.9">Girls 13–15 yr (2330 kcal, 51.9 g protein)</option>
-              <option value="3020|61.5">Boys 16–17 yr (3020 kcal, 61.5 g protein)</option>
-              <option value="2440|55.5">Girls 16–17 yr (2440 kcal, 55.5 g protein)</option>
+              <optgroup label="ICMR-NIN 2020 Summary RDA Groups (Table 7.3)">
+                <option value="550|8.1|Infant 0–6m">Infants 0–6 mo (Wt 5.8 kg | ~550 kcal, 8.1 g Prot, 300 mg Ca, 400 IU Vit D)</option>
+                <option value="670|10.5|Infant 6–12m">Infants 6–12 mo (Wt 8.5 kg | ~670 kcal, 10.5 g Prot, 3 mg Fe, 2.5 mg Zn)</option>
+                <option value="1010|11.3|Child 1–3y" selected>Children 1–3 yr (Wt 11.7 kg | ~1010 kcal, 11.3 g Prot, 8 mg Fe, 500 mg Ca)</option>
+                <option value="1360|15.9|Child 4–6y">Children 4–6 yr (Wt 18.3 kg | ~1360 kcal, 15.9 g Prot, 11 mg Fe, 550 mg Ca)</option>
+                <option value="1700|23.3|Child 7–9y">Children 7–9 yr (Wt 25.3 kg | ~1700 kcal, 23.3 g Prot, 15 mg Fe, 650 mg Ca)</option>
+                <option value="2220|31.8|Boys 10–12y">Boys 10–12 yr (Wt 34.9 kg | ~2220 kcal, 31.8 g Prot, 16 mg Fe, 850 mg Ca)</option>
+                <option value="2060|32.8|Girls 10–12y">Girls 10–12 yr (Wt 36.4 kg | ~2060 kcal, 32.8 g Prot, 28 mg Fe, 850 mg Ca)</option>
+                <option value="2860|44.9|Boys 13–15y">Boys 13–15 yr (Wt 50.5 kg | ~2860 kcal, 44.9 g Prot, 22 mg Fe, 1000 mg Ca)</option>
+                <option value="2400|43.2|Girls 13–15y">Girls 13–15 yr (Wt 49.6 kg | ~2400 kcal, 43.2 g Prot, 30 mg Fe, 1000 mg Ca)</option>
+                <option value="3320|55.4|Boys 16–18y">Boys 16–18 yr (Wt 64.4 kg | ~3320 kcal, 55.4 g Prot, 26 mg Fe, 1050 mg Ca)</option>
+                <option value="2500|46.2|Girls 16–18y">Girls 16–18 yr (Wt 55.7 kg | ~2500 kcal, 46.2 g Prot, 32 mg Fe, 1050 mg Ca)</option>
+              </optgroup>
+              <optgroup label="Year-by-Year Energy Requirement — Boys (Table 7.5)">
+                <option value="857|11.3|Boy 1–2y">Boy 1–2 yr (9.9 kg | 857 kcal/d | 85 kcal/kg/d)</option>
+                <option value="1056|11.3|Boy 2–3y">Boy 2–3 yr (12.2 kg | 1056 kcal/d | 87 kcal/kg/d)</option>
+                <option value="1173|15.9|Boy 3–4y">Boy 3–4 yr (14.3 kg | 1173 kcal/d | 82 kcal/kg/d)</option>
+                <option value="1283|15.9|Boy 4–5y">Boy 4–5 yr (16.3 kg | 1283 kcal/d | 79 kcal/kg/d)</option>
+                <option value="1403|15.9|Boy 5–6y">Boy 5–6 yr (18.5 kg | 1403 kcal/d | 76 kcal/kg/d)</option>
+                <option value="1508|23.3|Boy 6–7y">Boy 6–7 yr (20.5 kg | 1508 kcal/d | 74 kcal/kg/d)</option>
+                <option value="1635|23.3|Boy 7–8y">Boy 7–8 yr (22.9 kg | 1635 kcal/d | 71 kcal/kg/d)</option>
+                <option value="1762|23.3|Boy 8–9y">Boy 8–9 yr (25.4 kg | 1762 kcal/d | 69 kcal/kg/d)</option>
+                <option value="1896|31.8|Boy 9–10y">Boy 9–10 yr (28.1 kg | 1896 kcal/d | 67 kcal/kg/d)</option>
+                <option value="2046|31.8|Boy 10–11y">Boy 10–11 yr (31.2 kg | 2046 kcal/d | 66 kcal/kg/d)</option>
+                <option value="2205|31.8|Boy 11–12y">Boy 11–12 yr (34.6 kg | 2205 kcal/d | 64 kcal/kg/d)</option>
+              </optgroup>
+              <optgroup label="Year-by-Year Energy Requirement — Girls (Table 7.5)">
+                <option value="761|11.3|Girl 1–2y">Girl 1–2 yr (8.9 kg | 761 kcal/d | 85 kcal/kg/d)</option>
+                <option value="969|11.3|Girl 2–3y">Girl 2–3 yr (11.5 kg | 969 kcal/d | 84 kcal/kg/d)</option>
+                <option value="1097|15.9|Girl 3–4y">Girl 3–4 yr (13.9 kg | 1097 kcal/d | 79 kcal/kg/d)</option>
+                <option value="1209|15.9|Girl 4–5y">Girl 4–5 yr (16.1 kg | 1209 kcal/d | 75 kcal/kg/d)</option>
+                <option value="1318|15.9|Girl 5–6y">Girl 5–6 yr (18.3 kg | 1318 kcal/d | 72 kcal/kg/d)</option>
+                <option value="1408|23.3|Girl 6–7y">Girl 6–7 yr (20.2 kg | 1408 kcal/d | 70 kcal/kg/d)</option>
+                <option value="1510|23.3|Girl 7–8y">Girl 7–8 yr (22.4 kg | 1510 kcal/d | 67 kcal/kg/d)</option>
+                <option value="1626|23.3|Girl 8–9y">Girl 8–9 yr (25.0 kg | 1626 kcal/d | 65 kcal/kg/d)</option>
+                <option value="1761|32.8|Girl 9–10y">Girl 9–10 yr (28.2 kg | 1761 kcal/d | 62 kcal/kg/d)</option>
+                <option value="1905|32.8|Girl 10–11y">Girl 10–11 yr (31.9 kg | 1905 kcal/d | 60 kcal/kg/d)</option>
+                <option value="2054|32.8|Girl 11–12y">Girl 11–12 yr (36.2 kg | 2054 kcal/d | 57 kcal/kg/d)</option>
+              </optgroup>
             </select>
           </div>
           <div>
             <label class="block text-xs font-semibold mb-1">Actual Intake (kcal)</label>
-            <input id="actualKcal" type="number" placeholder="e.g., 850" oninput="calcDietDeficit()" class="w-full border rounded p-1.5 text-sm bg-white" />
+            <input id="actualKcal" type="number" step="1" placeholder="Auto or manual" oninput="calcDietDeficit()" class="w-full border rounded p-1.5 text-sm bg-white" />
           </div>
           <div>
             <label class="block text-xs font-semibold mb-1">Actual Protein (g)</label>
-            <input id="actualProt" type="number" step="0.1" placeholder="e.g., 13" oninput="calcDietDeficit()" class="w-full border rounded p-1.5 text-sm bg-white" />
+            <input id="actualProt" type="number" step="0.1" placeholder="Auto or manual" oninput="calcDietDeficit()" class="w-full border rounded p-1.5 text-sm bg-white" />
           </div>
           <div>
             <label class="block text-xs font-semibold mb-1">Calculated Deficit</label>
             <input id="deficitOutput" type="text" readonly placeholder="Auto-calculated" class="w-full border rounded p-1.5 text-xs bg-white font-bold text-emerald-900" />
           </div>
+          <div class="sm:col-span-5 text-[11px] text-emerald-900 flex flex-wrap justify-between gap-2 pt-1 border-t border-emerald-200/70">
+            <span id="rdaMicronutrientBanner">📌 ICMR-NIN 2020 Micronutrient RDA: Ca 500 mg | Fe 8 mg | Zn 3.0 mg | Vit A 390 µg | Vit D 600 IU | Vit C 27 mg</span>
+            <span id="table72WeightEnergyBanner" class="font-semibold">⚡ Table 7.2 Weight-Rule Energy: Enter weight in Sec 6</span>
+          </div>
         </div>
+
+        <!-- B. SEARCHABLE FOOD DROPDOWN & DYNAMIC HOUSEHOLD QUANTITY SELECTOR (TABLE 7.6) -->
+        <div class="bg-amber-50/70 p-3.5 rounded-xl border border-amber-300 space-y-3">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <div class="text-xs font-bold text-amber-950 uppercase tracking-wide">
+                🍲 Interactive 24-Hour Dietary Recall Builder (Table 7.6 Nutritive Value of Common Foods)
+              </div>
+              <p class="text-[11px] text-amber-800">
+                Type a food keyword (e.g., <strong>"rice"</strong>, <strong>"milk"</strong>, <strong>"dal"</strong>, <strong>"roti"</strong>, <strong>"egg"</strong>) to filter the dropdown, select its household quantity, and click <strong>+ Add Food</strong>.
+              </p>
+            </div>
+            <button type="button" onclick="clearFoodRecallLog()" class="text-[11px] text-rose-700 hover:underline font-semibold">Clear Food Log</button>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-12 gap-2.5 items-end">
+            <!-- 1. Search Input to Filter Food Dropdown -->
+            <div class="sm:col-span-4 relative">
+              <label class="block text-xs font-semibold mb-1">1. Search / Filter Food Item</label>
+              <input
+                id="foodSearchInput"
+                type="text"
+                oninput="filterFoodDropdown(this.value)"
+                onfocus="filterFoodDropdown(this.value)"
+                placeholder="Type e.g. 'rice', 'milk', 'dal'..."
+                class="w-full border border-amber-400 rounded-lg p-2 text-xs bg-white focus:ring-2 focus:ring-amber-500 focus:outline-none"
+              />
+            </div>
+
+            <!-- 2. Filtered Food Dropdown Menu -->
+            <div class="sm:col-span-4">
+              <label class="block text-xs font-semibold mb-1">2. Matching Food Items (<span id="foodMatchCount">48</span> found)</label>
+              <select id="foodItemSelect" onchange="populateFoodQuantityDropdown()" class="w-full border border-amber-400 rounded-lg p-2 text-xs bg-white font-medium">
+              </select>
+            </div>
+
+            <!-- 3. Dynamic Quantity Dropdown According to Selected Food -->
+            <div class="sm:col-span-2">
+              <label class="block text-xs font-semibold mb-1">3. Quantity (Measure)</label>
+              <select id="foodQtySelect" onchange="updateSelectedFoodPreview()" class="w-full border border-amber-400 rounded-lg p-2 text-xs bg-white font-semibold">
+              </select>
+            </div>
+
+            <!-- 4. Add Button -->
+            <div class="sm:col-span-2">
+              <button type="button" onclick="addSelectedFoodToRecall()" class="w-full chrome-pill-btn justify-center bg-amber-600 hover:bg-amber-700 text-white text-xs py-2 px-3 shadow">
+                <span>+ Add Food</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Live Single-Food Nutritive Preview -->
+          <div id="selectedFoodPreview" class="text-[11px] bg-white/90 px-3 py-1.5 rounded-lg border border-amber-200 text-slate-700 font-mono">
+            Select a food item and quantity above to preview its Calories, Protein, Carbohydrate & Fat.
+          </div>
+
+          <!-- Added Foods Table -->
+          <div id="foodLogContainer" class="hidden bg-white rounded-lg border border-amber-200 overflow-hidden">
+            <table class="w-full text-left border-collapse text-xs">
+              <thead>
+                <tr class="bg-amber-100/70 text-amber-950 border-b">
+                  <th class="py-1.5 px-2.5">Food Item</th>
+                  <th class="py-1.5 px-2.5">Quantity (Household Measure)</th>
+                  <th class="py-1.5 px-2">Calories</th>
+                  <th class="py-1.5 px-2">Protein</th>
+                  <th class="py-1.5 px-2">Carbs</th>
+                  <th class="py-1.5 px-2">Fat</th>
+                  <th class="py-1.5 px-2 text-right">Action</th>
+                </tr>
+              </thead>
+              <tbody id="foodLogTableBody" class="divide-y"></tbody>
+              <tfoot>
+                <tr class="bg-emerald-50 font-bold text-emerald-950 border-t">
+                  <td colspan="2" class="py-2 px-2.5">Total 24-Hour Intake (Table 7.1 Macro Split)</td>
+                  <td id="totFoodKcal" class="py-2 px-2">0 kcal</td>
+                  <td id="totFoodProt" class="py-2 px-2">0 g</td>
+                  <td id="totFoodCarb" class="py-2 px-2">0 g</td>
+                  <td id="totFoodFat" class="py-2 px-2">0 g</td>
+                  <td></td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+
         <div>
-          <label class="block text-xs font-semibold mb-1">Breastfeeding, Complementary Feeding & 24-Hour Dietary Recall</label>
+          <label class="block text-xs font-semibold mb-1">Breastfeeding, Complementary Feeding & 24-Hour Dietary Recall Summary</label>
           <input id="nutriEarly" type="text" value="Breastfeeding initiated within 1 hour of birth; exclusively breastfed for 6 months with no bottle feeding; complementary feeding started at 6 months." class="w-full border rounded p-2 text-sm" />
         </div>
       </div>
     </details>
-
+    
     <!-- 9. IMMUNIZATION HISTORY (INTERACTIVE NIS VACCINE CHECKLIST) -->
     <details class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
       <summary class="bg-slate-50 px-4 py-3 font-bold text-slate-800 cursor-pointer flex justify-between items-center border-b">
@@ -3006,6 +3209,312 @@ ${htmlSnapshot}`;
       injectPrivacySettingsUI();
       enforcePrivateAccessGate(user);
     });
+
+    // --- TEXTBOOK TABLE 7.6: NUTRITIVE VALUE OF COMMON FOODS DATABASE (48 ITEMS) ---
+    const TABLE_7_6_FOODS = [
+      // Milk and milk products
+      { id: "human_milk", category: "Milk & Dairy", name: "Human milk", unitSing: "100 mL", unitPlur: "× 100 mL", rawAmt: "100 mL", kcal: 65.0, prot: 1.1, cho: 7.4, fat: 3.4 },
+      { id: "cow_milk", category: "Milk & Dairy", name: "Milk (cow)", unitSing: "½ glass (100 mL)", unitPlur: "× ½ glass (100 mL)", rawAmt: "100 mL", kcal: 73.0, prot: 3.2, cho: 4.9, fat: 4.4 },
+      { id: "buffalo_milk", category: "Milk & Dairy", name: "Milk (buffalo)", unitSing: "½ glass (100 mL)", unitPlur: "× ½ glass (100 mL)", rawAmt: "100 mL", kcal: 107.0, prot: 3.6, cho: 8.3, fat: 6.5 },
+      { id: "paneer_cow", category: "Milk & Dairy", name: "Paneer (homemade; cow milk)", unitSing: "small piece (30 g)", unitPlur: "small pieces (30 g each)", rawAmt: "30 g", kcal: 76.5, prot: 5.5, cho: 3.5, fat: 4.5 },
+      { id: "curd_cow", category: "Milk & Dairy", name: "Curd (homemade–cow milk)", unitSing: "small cup (100 mL)", unitPlur: "small cups (100 mL each)", rawAmt: "100 mL", kcal: 62.0, prot: 3.2, cho: 3.2, fat: 4.0 },
+
+      // Processed dairy products (Table 7.6 Contd.)
+      { id: "full_cream_milk", category: "Processed Dairy", name: "Full cream milk", unitSing: "½ glass (100 mL)", unitPlur: "× ½ glass (100 mL)", rawAmt: "100 mL", kcal: 90.0, prot: 3.5, cho: 5.0, fat: 6.2 },
+      { id: "toned_milk", category: "Processed Dairy", name: "Toned milk", unitSing: "½ glass (100 mL)", unitPlur: "× ½ glass (100 mL)", rawAmt: "100 mL", kcal: 58.0, prot: 3.2, cho: 4.5, fat: 3.0 },
+      { id: "double_toned_milk", category: "Processed Dairy", name: "Double toned milk", unitSing: "½ glass (100 mL)", unitPlur: "× ½ glass (100 mL)", rawAmt: "100 mL", kcal: 48.0, prot: 3.0, cho: 5.0, fat: 2.0 },
+      { id: "skimmed_milk", category: "Processed Dairy", name: "Skimmed milk", unitSing: "½ glass (100 mL)", unitPlur: "× ½ glass (100 mL)", rawAmt: "100 mL", kcal: 33.0, prot: 3.0, cho: 5.0, fat: 0.0 },
+      { id: "dahi_plain", category: "Processed Dairy", name: "Dahi (plain)/curd", unitSing: "cup (100 mL)", unitPlur: "cups (100 mL each)", rawAmt: "100 mL", kcal: 62.0, prot: 4.0, cho: 5.0, fat: 3.0 },
+      { id: "buttermilk_plain", category: "Processed Dairy", name: "Buttermilk (lassi–plain)", unitSing: "½ glass (100 mL)", unitPlur: "× ½ glass (100 mL)", rawAmt: "100 mL", kcal: 32.0, prot: 2.0, cho: 2.0, fat: 2.0 },
+      { id: "sweet_lassi", category: "Processed Dairy", name: "Sweet lassi", unitSing: "½ glass (100 mL)", unitPlur: "× ½ glass (100 mL)", rawAmt: "100 mL", kcal: 95.0, prot: 2.5, cho: 15.5, fat: 2.5 },
+      { id: "salted_lassi", category: "Processed Dairy", name: "Salted lassi", unitSing: "½ glass (100 mL)", unitPlur: "× ½ glass (100 mL)", rawAmt: "100 mL", kcal: 32.0, prot: 1.8, cho: 2.0, fat: 1.8 },
+      { id: "cottage_cheese", category: "Processed Dairy", name: "Cottage cheese", unitSing: "small piece (30 g)", unitPlur: "small pieces (30 g each)", rawAmt: "30 g", kcal: 93.0, prot: 5.7, cho: 0.9, fat: 7.5 },
+      { id: "ice_cream", category: "Processed Dairy", name: "Ice-cream", unitSing: "small cup (100 g)", unitPlur: "small cups (100 g each)", rawAmt: "100 g", kcal: 180.0, prot: 4.0, cho: 23.0, fat: 8.0 },
+      { id: "ice_cream_sf", category: "Processed Dairy", name: "Ice-cream (sugar free)", unitSing: "small cup (100 g)", unitPlur: "small cups (100 g each)", rawAmt: "100 g", kcal: 122.0, prot: 5.0, cho: 18.0, fat: 5.0 },
+
+      // Meat and poultry
+      { id: "chicken_thigh", category: "Meat & Poultry", name: "Chicken, thigh, boneless", unitSing: "serving (100 g)", unitPlur: "servings (100 g each)", rawAmt: "100 g", kcal: 200.0, prot: 18.0, cho: 0.0, fat: 14.0 },
+      { id: "egg_whole", category: "Meat & Poultry", name: "Egg whole (hen)", unitSing: "whole egg (45 g)", unitPlur: "whole eggs (45 g each)", rawAmt: "45 g", kcal: 74.0, prot: 5.0, cho: 0.0, fat: 6.0 },
+      { id: "egg_white", category: "Meat & Poultry", name: "Egg white (from 1 egg)", unitSing: "egg white (25 g)", unitPlur: "egg whites (25 g each)", rawAmt: "25 g", kcal: 23.2, prot: 4.0, cho: 0.0, fat: 0.8 },
+      { id: "egg_yolk", category: "Meat & Poultry", name: "Egg yolk (from 1 egg)", unitSing: "egg yolk (20 g)", unitPlur: "egg yolks (20 g each)", rawAmt: "20 g", kcal: 51.6, prot: 1.2, cho: 0.0, fat: 5.2 },
+
+      // Cereals and millets
+      { id: "wheat_daliya", category: "Cereals & Millets", name: "Wheat daliya / suji / sevian", unitSing: "katori boiled (25 g raw)", unitPlur: "katoris boiled (25 g raw each)", rawAmt: "25 g raw", kcal: 80.0, prot: 2.5, cho: 16.0, fat: 0.3 },
+      { id: "wheat_roti", category: "Cereals & Millets", name: "Wheat flour with choker (Roti/Chapati)", unitSing: "medium roti (25 g atta)", unitPlur: "medium rotis (25 g atta each)", rawAmt: "25 g atta", kcal: 80.0, prot: 2.5, cho: 16.0, fat: 0.3 },
+      { id: "maida_puri", category: "Cereals & Millets", name: "Wheat flour refined / maida (Puris)", unitSing: "serving of 2 small puris (25 g)", unitPlur: "× 2 small puris (25 g)", rawAmt: "25 g", kcal: 90.0, prot: 2.5, cho: 18.5, fat: 0.2 },
+      { id: "rice_cooked", category: "Cereals & Millets", name: "Rice (cooked)", unitSing: "katori cooked (25 g raw)", unitPlur: "katoris cooked (25 g raw each)", rawAmt: "25 g raw", kcal: 90.0, prot: 2.0, cho: 19.5, fat: 0.1 },
+      { id: "bread_white", category: "Cereals & Millets", name: "Bread (white)", unitSing: "big slice (30 g)", unitPlur: "big slices (30 g each)", rawAmt: "30 g", kcal: 73.0, prot: 2.5, cho: 15.5, fat: 0.1 },
+      { id: "biscuits", category: "Cereals & Millets", name: "Biscuits", unitSing: "pack of 2 biscuits (10 g)", unitPlur: "× 2 biscuits (10 g)", rawAmt: "10 g", kcal: 50.0, prot: 1.0, cho: 7.0, fat: 2.0 },
+      { id: "cake", category: "Cereals & Millets", name: "Cake", unitSing: "small piece (30 g)", unitPlur: "small pieces (30 g each)", rawAmt: "30 g", kcal: 129.0, prot: 1.8, cho: 18.0, fat: 5.5 },
+      { id: "sago_arrowroot", category: "Cereals & Millets", name: "Sago / arrowroot / corn flour", unitSing: "serving of 5 tsp (25 g)", unitPlur: "× 5 tsp (25 g)", rawAmt: "25 g", kcal: 88.0, prot: 0.0, cho: 22.0, fat: 0.0 },
+      { id: "millet_grains", category: "Cereals & Millets", name: "Millet grains (bajra, jowar, jau, oats, kottu)", unitSing: "serving (25 g raw)", unitPlur: "servings (25 g raw each)", rawAmt: "25 g", kcal: 94.0, prot: 3.0, cho: 16.0, fat: 2.0 },
+      { id: "khichri_rice_dal", category: "Cereals & Millets", name: "Khichri - Raw rice 20 g + Raw dal 5 g (4:1)", unitSing: "katori cooked (100 g / 25 g raw)", unitPlur: "katoris cooked (100 g each)", rawAmt: "25 g raw", kcal: 85.0, prot: 3.0, cho: 18.0, fat: 0.1 },
+
+      // Pulses
+      { id: "dhooli_dal", category: "Pulses", name: "Dhooli dals (moong/arhar, etc.)", unitSing: "katori cooked (100–125 g)", unitPlur: "katoris cooked (100–125 g each)", rawAmt: "25 g raw", kcal: 83.0, prot: 6.0, cho: 14.0, fat: 0.3 },
+      { id: "sabut_dal", category: "Pulses", name: "Sabut dals (rajma/chana, etc.)", unitSing: "katori cooked (100–125 g)", unitPlur: "katoris cooked (100–125 g each)", rawAmt: "25 g raw", kcal: 70.0, prot: 5.0, cho: 10.0, fat: 1.0 },
+      { id: "soyabean_white", category: "Pulses", name: "Soyabean (white)", unitSing: "katori cooked (25 g raw)", unitPlur: "katoris cooked (25 g raw each)", rawAmt: "25 g raw", kcal: 95.0, prot: 10.0, cho: 2.5, fat: 5.0 },
+
+      // Vegetables
+      { id: "green_leafy_veg", category: "Vegetables", name: "Green leafy & seasonal veg (spinach, bathua, bhindi, cauliflower, beans)", unitSing: "½ katori cooked (100–125 g)", unitPlur: "× ½ katori cooked", rawAmt: "100–125 g", kcal: 24.0, prot: 2.0, cho: 2.5, fat: 0.6 },
+      { id: "root_veg", category: "Vegetables", name: "Root vegetables (arbi, potato, zimikand)", unitSing: "small size (100 g)", unitPlur: "small pieces (100 g each)", rawAmt: "100 g", kcal: 60.0, prot: 1.5, cho: 13.0, fat: 0.2 },
+      { id: "peas_fresh", category: "Vegetables", name: "Peas, fresh", unitSing: "katori (100 g)", unitPlur: "katoris (100 g each)", rawAmt: "100 g", kcal: 80.0, prot: 7.0, cho: 13.0, fat: 0.1 },
+      { id: "low_carb_veg", category: "Vegetables", name: "Low carb vegetables (lauki, tori, tinda, kaddu, cucumber)", unitSing: "½ katori (100 g)", unitPlur: "× ½ katori (100 g)", rawAmt: "100 g", kcal: 11.0, prot: 0.53, cho: 1.68, fat: 0.13 },
+
+      // Dried nuts
+      { id: "groundnuts", category: "Dried Nuts", name: "Groundnuts", unitSing: "handful (25 g)", unitPlur: "handfuls (25 g each)", rawAmt: "25 g", kcal: 130.0, prot: 6.0, cho: 4.0, fat: 10.0 },
+      { id: "almond_walnuts", category: "Dried Nuts", name: "Almond / walnuts", unitSing: "handful (25 g)", unitPlur: "handfuls (25 g each)", rawAmt: "25 g", kcal: 152.0, prot: 4.5, cho: 1.0, fat: 14.5 },
+      { id: "cashewnuts", category: "Dried Nuts", name: "Cashewnuts", unitSing: "handful (25 g)", unitPlur: "handfuls (25 g each)", rawAmt: "25 g", kcal: 143.0, prot: 4.5, cho: 6.5, fat: 11.0 },
+
+      // Fats and oils
+      { id: "refined_oil_ghee", category: "Fats & Oils", name: "Refined oil / ghee", unitSing: "tsp (5 mL/g)", unitPlur: "tsp (5 mL/g each)", rawAmt: "5 mL/g", kcal: 45.0, prot: 0.0, cho: 0.0, fat: 5.0 },
+      { id: "butter", category: "Fats & Oils", name: "Butter", unitSing: "tsp (5 g)", unitPlur: "tsp (5 g each)", rawAmt: "5 g", kcal: 36.4, prot: 0.0, cho: 0.0, fat: 4.1 },
+      { id: "coconut_oil", category: "Fats & Oils", name: "Coconut oil", unitSing: "tsp (5 mL)", unitPlur: "tsp (5 mL each)", rawAmt: "5 mL", kcal: 42.0, prot: 0.0, cho: 0.0, fat: 5.0 },
+
+      // Sugars
+      { id: "table_sugar", category: "Sugars", name: "Table sugar / cornstarch", unitSing: "levelled tsp (5 g)", unitPlur: "levelled tsp (5 g each)", rawAmt: "5 g", kcal: 20.0, prot: 0.0, cho: 5.0, fat: 0.0 },
+      { id: "honey_jam", category: "Sugars", name: "Honey / jam", unitSing: "levelled tsp (5 g)", unitPlur: "levelled tsp (5 g each)", rawAmt: "5 g", kcal: 16.0, prot: 0.0, cho: 4.0, fat: 0.0 },
+      { id: "jaggery", category: "Sugars", name: "Jaggery (Gud)", unitSing: "tsp (5 g)", unitPlur: "tsp (5 g each)", rawAmt: "5 g", kcal: 17.5, prot: 0.0, cho: 4.4, fat: 0.0 },
+
+      // Drinks
+      { id: "sugarcane_juice", category: "Drinks", name: "Sugarcane juice", unitSing: "½ glass (100 mL)", unitPlur: "× ½ glass (100 mL)", rawAmt: "100 mL", kcal: 60.0, prot: 0.0, cho: 15.0, fat: 0.0 },
+      { id: "coconut_water", category: "Drinks", name: "Coconut water", unitSing: "½ glass (100 mL)", unitPlur: "× ½ glass (100 mL)", rawAmt: "100 mL", kcal: 14.0, prot: 0.2, cho: 3.0, fat: 0.1 },
+      { id: "soft_drinks", category: "Drinks", name: "Soft drinks", unitSing: "½ glass (100 mL)", unitPlur: "× ½ glass (100 mL)", rawAmt: "100 mL", kcal: 37.0, prot: 0.0, cho: 9.2, fat: 0.0 }
+    ];
+
+    // Table 7.3 Micronutrient Reference Map
+    const TABLE_7_3_MICRONUTRIENTS = {
+      "Infant 0–6m": "Wt 5.8 kg | Prot 8.1 g | CHO 55 g | Ca 300 mg | Mg 30 mg | I 100 µg | Vit A 350 µg | Vit D 400 IU | Vit C 20 mg",
+      "Infant 6–12m": "Wt 8.5 kg | Prot 10.5 g | CHO 95 g | Visible Fat 25 g | Ca 300 mg | Fe 3.0 mg | Zn 2.5 mg | Vit A 350 µg | Vit D 400 IU",
+      "Child 1–3y": "Wt 11.7 kg | Prot 11.3 g | Visible Fat 25 g | Ca 500 mg | Fe 8.0 mg | Zn 3.0 mg | Folate 110 µg | Vit A 390 µg | Vit D 600 IU",
+      "Child 4–6y": "Wt 18.3 kg | Prot 15.9 g | CHO 130 g | Visible Fat 25 g | Ca 550 mg | Fe 11.0 mg | Zn 4.5 mg | Vit A 510 µg | Vit D 600 IU",
+      "Child 7–9y": "Wt 25.3 kg | Prot 23.3 g | Visible Fat 30 g | Ca 650 mg | Fe 15.0 mg | Zn 5.9 mg | Folate 170 µg | Vit A 630 µg | Vit D 600 IU",
+      "Boys 10–12y": "Wt 34.9 kg | Prot 31.8 g | Visible Fat 35 g | Ca 850 mg | Fe 16.0 mg | Zn 8.5 mg | Folate 220 µg | Vit A 770 µg | Vit D 600 IU",
+      "Girls 10–12y": "Wt 36.4 kg | Prot 32.8 g | Visible Fat 35 g | Ca 850 mg | Fe 28.0 mg | Zn 8.5 mg | Folate 225 µg | Vit A 790 µg | Vit D 600 IU",
+      "Boys 13–15y": "Wt 50.5 kg | Prot 44.9 g | Visible Fat 45 g | Ca 1000 mg | Fe 22.0 mg | Zn 14.3 mg | Folate 285 µg | Vit A 930 µg | Vit D 600 IU",
+      "Girls 13–15y": "Wt 49.6 kg | Prot 43.2 g | Visible Fat 40 g | Ca 1000 mg | Fe 30.0 mg | Zn 12.8 mg | Folate 245 µg | Vit A 890 µg | Vit D 600 IU",
+      "Boys 16–18y": "Wt 64.4 kg | Prot 55.4 g | Visible Fat 50 g | Ca 1050 mg | Fe 26.0 mg | Zn 17.6 mg | Folate 340 µg | Vit A 1000 µg | Vit D 600 IU",
+      "Girls 16–18y": "Wt 55.7 kg | Prot 46.2 g | Visible Fat 35 g | Ca 1050 mg | Fe 32.0 mg | Zn 14.2 mg | Folate 270 µg | Vit A 860 µg | Vit D 600 IU"
+    };
+
+    let foodRecallLog = [];
+
+    // 1. Filter the Food Dropdown when user types e.g. "rice"
+    function filterFoodDropdown(searchQuery = '') {
+      const select = document.getElementById('foodItemSelect');
+      const countSpan = document.getElementById('foodMatchCount');
+      if (!select) return;
+
+      const q = (searchQuery || '').trim().toLowerCase();
+      const matched = TABLE_7_6_FOODS.filter(item =>
+        item.name.toLowerCase().includes(q) ||
+        item.category.toLowerCase().includes(q) ||
+        item.unitSing.toLowerCase().includes(q)
+      );
+
+      if (countSpan) countSpan.textContent = matched.length;
+
+      if (matched.length === 0) {
+        select.innerHTML = `<option value="">No food matching "${searchQuery}"</option>`;
+        document.getElementById('foodQtySelect').innerHTML = `<option value="1">-</option>`;
+        document.getElementById('selectedFoodPreview').textContent = 'No matching food item found.';
+        return;
+      }
+
+      select.innerHTML = matched.map(item =>
+        `<option value="${item.id}">${item.name} — [${item.unitSing} = ${item.kcal} kcal, ${item.prot}g Prot]</option>`
+      ).join('');
+
+      populateFoodQuantityDropdown();
+    }
+
+    // 2. Populate the Quantity Dropdown dynamically based on the selected food's household measure
+    function populateFoodQuantityDropdown() {
+      const foodId = document.getElementById('foodItemSelect')?.value;
+      const qtySelect = document.getElementById('foodQtySelect');
+      if (!qtySelect) return;
+
+      const food = TABLE_7_6_FOODS.find(f => f.id === foodId);
+      if (!food) return;
+
+      const multipliers = [0.25, 0.5, 1, 1.5, 2, 2.5, 3, 4, 5, 6];
+      qtySelect.innerHTML = multipliers.map(m => {
+        const label = m === 1
+          ? `1 ${food.unitSing}`
+          : `${m} ${food.unitPlur}`;
+        return `<option value="${m}" ${m === 1 ? 'selected' : ''}>${label}</option>`;
+      }).join('');
+
+      updateSelectedFoodPreview();
+    }
+
+    // 3. Show live preview of Calories, Protein, Carbs & Fat for the chosen food + quantity
+    function updateSelectedFoodPreview() {
+      const foodId = document.getElementById('foodItemSelect')?.value;
+      const mult = parseFloat(document.getElementById('foodQtySelect')?.value || '1');
+      const preview = document.getElementById('selectedFoodPreview');
+      const food = TABLE_7_6_FOODS.find(f => f.id === foodId);
+      if (!food || !preview) return;
+
+      const kcal = (food.kcal * mult).toFixed(1);
+      const prot = (food.prot * mult).toFixed(1);
+      const cho = (food.cho * mult).toFixed(1);
+      const fat = (food.fat * mult).toFixed(1);
+      const measureText = mult === 1 ? `1 ${food.unitSing}` : `${mult} ${food.unitPlur}`;
+
+      preview.innerHTML = `📊 <strong>${food.name}</strong> (${measureText}): <strong>${kcal} kcal</strong> | Protein: <strong>${prot} g</strong> | Carbs: <strong>${cho} g</strong> | Fat: <strong>${fat} g</strong>`;
+    }
+
+    // 4. Add selected food + quantity to 24-Hour Dietary Recall Log
+    function addSelectedFoodToRecall() {
+      const foodId = document.getElementById('foodItemSelect')?.value;
+      const mult = parseFloat(document.getElementById('foodQtySelect')?.value || '1');
+      const food = TABLE_7_6_FOODS.find(f => f.id === foodId);
+      if (!food) return;
+
+      const measureText = mult === 1 ? `1 ${food.unitSing}` : `${mult} ${food.unitPlur}`;
+      foodRecallLog.push({
+        uid: Date.now() + Math.random(),
+        name: food.name,
+        measureText,
+        kcal: food.kcal * mult,
+        prot: food.prot * mult,
+        cho: food.cho * mult,
+        fat: food.fat * mult
+      });
+
+      renderFoodRecallLog();
+    }
+
+    function removeFoodFromRecall(uid) {
+      foodRecallLog = foodRecallLog.filter(item => item.uid !== uid);
+      renderFoodRecallLog();
+    }
+
+    function clearFoodRecallLog() {
+      foodRecallLog = [];
+      renderFoodRecallLog();
+    }
+
+    function renderFoodRecallLog() {
+      const container = document.getElementById('foodLogContainer');
+      const tbody = document.getElementById('foodLogTableBody');
+      if (!container || !tbody) return;
+
+      if (foodRecallLog.length === 0) {
+        container.classList.add('hidden');
+        return;
+      }
+      container.classList.remove('hidden');
+
+      let sumKcal = 0, sumProt = 0, sumCho = 0, sumFat = 0;
+      tbody.innerHTML = foodRecallLog.map(item => {
+        sumKcal += item.kcal;
+        sumProt += item.prot;
+        sumCho += item.cho;
+        sumFat += item.fat;
+        return `
+          <tr class="hover:bg-amber-50/40">
+            <td class="py-1.5 px-2.5 font-semibold">${item.name}</td>
+            <td class="py-1.5 px-2.5 text-slate-600">${item.measureText}</td>
+            <td class="py-1.5 px-2">${item.kcal.toFixed(0)} kcal</td>
+            <td class="py-1.5 px-2">${item.prot.toFixed(1)} g</td>
+            <td class="py-1.5 px-2">${item.cho.toFixed(1)} g</td>
+            <td class="py-1.5 px-2">${item.fat.toFixed(1)} g</td>
+            <td class="py-1.5 px-2 text-right">
+              <button type="button" onclick="removeFoodFromRecall(${item.uid})" class="text-rose-600 hover:underline">✕</button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+      document.getElementById('totFoodKcal').textContent = `${sumKcal.toFixed(0)} kcal`;
+      document.getElementById('totFoodProt').textContent = `${sumProt.toFixed(1)} g`;
+      document.getElementById('totFoodCarb').textContent = `${sumCho.toFixed(1)} g`;
+      document.getElementById('totFoodFat').textContent = `${sumFat.toFixed(1)} g`;
+
+      // Auto-populate Actual Intake fields & compute deficit
+      document.getElementById('actualKcal').value = sumKcal.toFixed(0);
+      document.getElementById('actualProt').value = sumProt.toFixed(1);
+      calcDietDeficit();
+
+      // Calculate macronutrient energy distribution (Table 7.1: CHO 4 kcal/g, Prot 4 kcal/g, Fat 9 kcal/g)
+      const macroEnergy = (sumCho * 4) + (sumProt * 4) + (sumFat * 9) || 1;
+      const choPct = Math.round(((sumCho * 4) / macroEnergy) * 100);
+      const protPct = Math.round(((sumProt * 4) / macroEnergy) * 100);
+      const fatPct = Math.round(((sumFat * 9) / macroEnergy) * 100);
+
+      const itemsSummary = foodRecallLog.map(i => `${i.name} (${i.measureText})`).join(', ');
+      document.getElementById('nutriEarly').value =
+        `24-hour dietary recall includes: ${itemsSummary} — providing ${sumKcal.toFixed(0)} kcal, ${sumProt.toFixed(1)} g protein, ${sumCho.toFixed(1)} g carbohydrate, and ${sumFat.toFixed(1)} g fat (Macronutrient energy split: CHO ${choPct}%, Protein ${protPct}%, Fat ${fatPct}% vs balanced target 55–60% CHO, 10–12% Protein, 25–30% Fat).`;
+
+      saveActiveWorkingDraft();
+    }
+
+    // 5. Override updateRDA & calcFluids to also show Table 7.3 Micronutrients & Table 7.2 Weight-Rule Energy
+    const _origUpdateRDA = updateRDA;
+    updateRDA = function() {
+      const val = document.getElementById('rdaAgeGroup')?.value || '';
+      const parts = val.split('|');
+      const groupKey = parts[2] || '';
+      const banner = document.getElementById('rdaMicronutrientBanner');
+      if (banner && TABLE_7_3_MICRONUTRIENTS[groupKey]) {
+        banner.textContent = `📌 ICMR-NIN 2020 RDA (${groupKey}): ${TABLE_7_3_MICRONUTRIENTS[groupKey]}`;
+      }
+      calcDietDeficit();
+    };
+
+    const _origCalcFluids = calcFluids;
+    calcFluids = function() {
+      _origCalcFluids();
+      const wt = parseFloat(document.getElementById('ptWeight')?.value || '0');
+      const energyBanner = document.getElementById('table72WeightEnergyBanner');
+      if (!energyBanner) return;
+      if (wt > 0) {
+        // Table 7.2 Simple calculation of daily energy requirements for children
+        let kcalReq = 0;
+        if (wt <= 10) kcalReq = wt * 100;
+        else if (wt <= 20) kcalReq = 1000 + (wt - 10) * 50;
+        else kcalReq = 1500 + (wt - 20) * 20;
+        energyBanner.textContent = `⚡ Table 7.2 Weight-Based Energy (${wt} kg): ${kcalReq.toFixed(0)} kcal/day`;
+      } else {
+        energyBanner.textContent = `⚡ Table 7.2 Weight-Rule Energy: Enter weight in Sec 6`;
+      }
+    };
+
+    // 6. Sync Developmental Milestones & WHO Red Flags (Tables 3.1, 3.2, 3.4, 3.5)
+    function syncMilestoneSummary() {
+      const gross = document.getElementById('msGrossSelect')?.value;
+      const fine = document.getElementById('msFineSelect')?.value;
+      const lang = document.getElementById('msLangSelect')?.value;
+      const redFlags = Array.from(document.querySelectorAll('.dev-redflag:checked')).map(cb => cb.value);
+
+      let parts = [];
+      if (gross) parts.push(`Gross motor (${gross})`);
+      if (fine) parts.push(`Fine motor (${fine})`);
+      if (lang) parts.push(`Language (${lang})`);
+
+      let text = parts.length > 0
+        ? `Attained milestones: ${parts.join('; ')}.`
+        : `Age-appropriate milestones attained across all domains.`;
+
+      if (redFlags.length > 0) {
+        text += ` ⚠️ Developmental Red Flags (WHO Table 3.5): ${redFlags.join(', ')}.`;
+      } else {
+        text += ` No developmental regression or WHO upper-limit red flags.`;
+      }
+
+      document.getElementById('devSummary').value = text;
+      saveActiveWorkingDraft();
+    }
+
+    // Initialize the food dropdown on load
+    if (document.readyState === 'loading') {
+      window.addEventListener('DOMContentLoaded', () => filterFoodDropdown(''));
+    } else {
+      filterFoodDropdown('');
+    }
+    
   </script>
 </body>
 </html>
