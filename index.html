@@ -2781,11 +2781,26 @@ ${htmlSnapshot}`;
         out.value = err.message;
       }
     }
-  // --- TEMPORARY PRIVATE MODE & ALLOWED GMAIL WHITELIST ENGINE (CLEANED) ---
-    const ADMIN_OWNER_EMAIL = "satya.srinivash1234@gmail.com";
-    constBANNED_RESIDUE_EMAIL = "satya.srinivash123@gmail.com";
+// --- TEMPORARY PRIVATE MODE & ALLOWED GMAIL WHITELIST ENGINE (FINAL) ---
+    window.ADMIN_OWNER_EMAIL = "satya.srinivash1234@gmail.com";
+    window.BANNED_RESIDUE_EMAIL = "satya.srinivash123@gmail.com";
 
-    // 1. Immediately purge old localStorage keys on load
+    // Force Google Sign-In to always prompt which Gmail account to use
+    signInWithGoogle = async function() {
+      const provider = new firebase.auth.GoogleAuthProvider();
+      provider.setCustomParameters({ prompt: 'select_account' });
+      try {
+        await auth.signInWithPopup(provider);
+      } catch (err) {
+        if (err.code === 'auth/popup-blocked' || err.code === 'auth/cancelled-popup-request') {
+          await auth.signInWithRedirect(provider);
+        } else {
+          alert('Google Sign-In Error: ' + err.message);
+        }
+      }
+    };
+
+    // Purge any old cached localStorage locks
     localStorage.removeItem('peds_privacy_config_v1');
     localStorage.removeItem('peds_privacy_config_v2');
 
@@ -2796,7 +2811,7 @@ ${htmlSnapshot}`;
     function cleanEmailList(list) {
       return (list || [])
         .map(e => normalizeEmail(e))
-        .filter(e => e && e !== BANNED_RESIDUE_EMAIL && e !== ADMIN_OWNER_EMAIL);
+        .filter(e => e && e !== window.BANNED_RESIDUE_EMAIL && e !== window.ADMIN_OWNER_EMAIL);
     }
 
     function getUserEmailFromFirebase(user) {
@@ -2812,7 +2827,10 @@ ${htmlSnapshot}`;
 
     function injectPrivacySettingsUI() {
       const settingsContainer = document.querySelector('#settingsModal .p-5');
-      if (!settingsContainer || document.getElementById('privacyControlSection')) return;
+      if (!settingsContainer) return;
+
+      const existing = document.getElementById('privacyControlSection');
+      if (existing) existing.remove();
 
       const div = document.createElement('div');
       div.id = 'privacyControlSection';
@@ -2821,18 +2839,19 @@ ${htmlSnapshot}`;
         <div class="flex items-center justify-between">
           <div>
             <div class="font-bold text-slate-800 dark:text-slate-100">🔒 Temporary Private Website Mode</div>
-            <div class="text-[11px] text-slate-500">Admin (${ADMIN_OWNER_EMAIL}) is always allowed</div>
+            <div class="text-[11px] text-slate-500">Admin (${window.ADMIN_OWNER_EMAIL}) is always allowed</div>
           </div>
-          <input type="checkbox" id="privateModeToggle" onchange="savePrivacySettings(false)" class="w-5 h-5 accent-blue-600 rounded cursor-pointer" />
+          <input type="checkbox" id="privateModeToggle" onchange="savePrivacySettings(true)" class="w-5 h-5 accent-blue-600 rounded cursor-pointer" />
         </div>
         <div>
           <label class="block font-semibold mb-1 text-[11px] text-slate-600 dark:text-slate-300">
             Additional Allowed Guest Gmail IDs (Comma-separated)
           </label>
-          <textarea id="allowedEmailsInput" rows="2" placeholder="Leave blank if only you (Admin) should have access, or add guest@gmail.com" class="w-full border rounded-xl p-2 text-xs"></textarea>
+          <textarea id="allowedEmailsInput" rows="2" placeholder="e.g., friend1@gmail.com, batchmate2@gmail.com" class="w-full border rounded-xl p-2 text-xs"></textarea>
         </div>
-        <button onclick="savePrivacySettings(true)" class="w-full chrome-pill-btn justify-center bg-blue-600 hover:bg-blue-700 text-white py-2 text-xs shadow">
-          <span>✓ Save Privacy & Allowed Emails</span>
+        <div id="liveAllowedEmailsPreview" class="text-[11px] bg-slate-100 dark:bg-slate-800 p-2 rounded-lg text-slate-700 dark:text-slate-300 font-mono"></div>
+        <button type="button" onclick="savePrivacySettings(true)" class="w-full chrome-pill-btn justify-center bg-blue-600 hover:bg-blue-700 text-white py-2 text-xs shadow">
+          <span>✓ Save Privacy & Prompt Allowed Emails</span>
         </button>
       `;
       settingsContainer.appendChild(div);
@@ -2853,12 +2872,18 @@ ${htmlSnapshot}`;
       const cfg = getPrivacyConfig();
       const toggle = document.getElementById('privateModeToggle');
       const input = document.getElementById('allowedEmailsInput');
+      const preview = document.getElementById('liveAllowedEmailsPreview');
+      const guests = cleanEmailList(cfg.emails);
+
       if (toggle) toggle.checked = Boolean(cfg.enabled);
-      // Only show extra guest emails in the box (Admin is handled automatically)
-      if (input) input.value = cleanEmailList(cfg.emails).join(', ');
+      if (input) input.value = guests.join(', ');
+      if (preview) {
+        const allAllowed = [window.ADMIN_OWNER_EMAIL, ...guests];
+        preview.innerHTML = `<strong>Status:</strong> ${cfg.enabled ? '🔒 Private' : '🌐 Public'}<br/><strong>Allowed IDs:</strong> ${allAllowed.join(', ')}`;
+      }
     }
 
-    async function savePrivacySettings(showToast = false) {
+    async function savePrivacySettings(showToast = true) {
       const enabled = document.getElementById('privateModeToggle')?.checked || false;
       const rawEmails = document.getElementById('allowedEmailsInput')?.value || '';
       const guestEmails = cleanEmailList(rawEmails.split(','));
@@ -2867,6 +2892,14 @@ ${htmlSnapshot}`;
       localStorage.setItem('peds_privacy_config_v3', JSON.stringify(cfg));
       loadPrivacySettingsIntoUI();
 
+      // Show the Chrome prompt immediately BEFORE waiting for Firestore network sync
+      if (showToast) {
+        const allAllowed = [window.ADMIN_OWNER_EMAIL, ...guestEmails];
+        alert(enabled
+          ? `🔒 Private Mode is ON!\n\nAllowed Gmail IDs:\n• ${allAllowed.join('\n• ')}`
+          : '🌐 Private Mode is OFF (Website is public to everyone).');
+      }
+
       try {
         await db.collection('site_settings').doc('access_control').set(cfg, { merge: false });
       } catch (e) {
@@ -2874,12 +2907,6 @@ ${htmlSnapshot}`;
       }
 
       enforcePrivateAccessGate(currentGoogleUser);
-      if (showToast) {
-        const allAllowed = [ADMIN_OWNER_EMAIL, ...guestEmails];
-        alert(enabled
-          ? `🔒 Private Mode is ON!\nAllowed Gmail IDs:\n• ${allAllowed.join('\n• ')}`
-          : '🌐 Private Mode is OFF (Website is public).');
-      }
     }
 
     async function emergencyAdminUnlock() {
@@ -2918,7 +2945,7 @@ ${htmlSnapshot}`;
       }
 
       const allowedList = new Set([
-        ADMIN_OWNER_EMAIL,
+        window.ADMIN_OWNER_EMAIL,
         ...cleanEmailList(cfg.emails)
       ]);
 
@@ -2940,12 +2967,15 @@ ${htmlSnapshot}`;
       }
     }
 
-    window.addEventListener('DOMContentLoaded', () => {
+    // Run immediately even if DOMContentLoaded has already fired
+    if (document.readyState === 'loading') {
+      window.addEventListener('DOMContentLoaded', injectPrivacySettingsUI);
+    } else {
       injectPrivacySettingsUI();
-    });
+    }
     auth.onAuthStateChanged((user) => {
       enforcePrivateAccessGate(user);
     });
-  </script>
+  </script>  </script>
 </body>
 </html>
