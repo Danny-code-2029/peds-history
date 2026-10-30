@@ -2781,11 +2781,11 @@ ${htmlSnapshot}`;
         out.value = err.message;
       }
     }
-// --- TEMPORARY PRIVATE MODE & ALLOWED GMAIL WHITELIST ENGINE (FINAL) ---
+// --- TEMPORARY PRIVATE MODE & ALLOWED GMAIL WHITELIST ENGINE (ADMIN-ONLY LOCKED) ---
     window.ADMIN_OWNER_EMAIL = "satya.srinivash1234@gmail.com";
     window.BANNED_RESIDUE_EMAIL = "satya.srinivash123@gmail.com";
 
-    // Force Google Sign-In to always prompt which Gmail account to use
+    // Force Google Sign-In to always show the account chooser
     signInWithGoogle = async function() {
       const provider = new firebase.auth.GoogleAuthProvider();
       provider.setCustomParameters({ prompt: 'select_account' });
@@ -2800,18 +2800,12 @@ ${htmlSnapshot}`;
       }
     };
 
-    // Purge any old cached localStorage locks
+    // Purge old cached keys
     localStorage.removeItem('peds_privacy_config_v1');
     localStorage.removeItem('peds_privacy_config_v2');
 
     function normalizeEmail(email) {
       return (email || '').trim().toLowerCase();
-    }
-
-    function cleanEmailList(list) {
-      return (list || [])
-        .map(e => normalizeEmail(e))
-        .filter(e => e && e !== window.BANNED_RESIDUE_EMAIL && e !== window.ADMIN_OWNER_EMAIL);
     }
 
     function getUserEmailFromFirebase(user) {
@@ -2825,12 +2819,36 @@ ${htmlSnapshot}`;
       return '';
     }
 
+    // Strict check: returns true ONLY when satya.srinivash1234@gmail.com is signed in
+    function isCurrentUserAdmin(user = currentGoogleUser) {
+      const activeEmail = getUserEmailFromFirebase(user);
+      return activeEmail === normalizeEmail(window.ADMIN_OWNER_EMAIL);
+    }
+
+    function cleanEmailList(list) {
+      return (list || [])
+        .map(e => normalizeEmail(e))
+        .filter(e => e && e !== window.BANNED_RESIDUE_EMAIL && e !== window.ADMIN_OWNER_EMAIL);
+    }
+
     function injectPrivacySettingsUI() {
       const settingsContainer = document.querySelector('#settingsModal .p-5');
       if (!settingsContainer) return;
 
+      // Remove existing section first so it updates cleanly when switching accounts
       const existing = document.getElementById('privacyControlSection');
       if (existing) existing.remove();
+
+      // Hide emergency button on lock screen for non-admins
+      const emergencyBtn = document.querySelector('button[onclick="emergencyAdminUnlock()"]');
+      if (emergencyBtn) {
+        emergencyBtn.classList.toggle('hidden', !isCurrentUserAdmin());
+      }
+
+      // STRICT ADMIN GATE: If not signed in as satya.srinivash1234@gmail.com, do NOT show the controls at all
+      if (!isCurrentUserAdmin()) {
+        return;
+      }
 
       const div = document.createElement('div');
       div.id = 'privacyControlSection';
@@ -2838,20 +2856,20 @@ ${htmlSnapshot}`;
       div.innerHTML = `
         <div class="flex items-center justify-between">
           <div>
-            <div class="font-bold text-slate-800 dark:text-slate-100">🔒 Temporary Private Website Mode</div>
-            <div class="text-[11px] text-slate-500">Admin (${window.ADMIN_OWNER_EMAIL}) is always allowed</div>
+            <div class="font-bold text-slate-800 dark:text-slate-100">🔒 Admin-Only: Private Website Mode</div>
+            <div class="text-[11px] text-emerald-600 font-semibold">Verified Admin (${window.ADMIN_OWNER_EMAIL})</div>
           </div>
           <input type="checkbox" id="privateModeToggle" onchange="savePrivacySettings(true)" class="w-5 h-5 accent-blue-600 rounded cursor-pointer" />
         </div>
         <div>
           <label class="block font-semibold mb-1 text-[11px] text-slate-600 dark:text-slate-300">
-            Additional Allowed Guest Gmail IDs (Comma-separated)
+            Allowed Guest Gmail IDs (Comma-separated)
           </label>
           <textarea id="allowedEmailsInput" rows="2" placeholder="e.g., friend1@gmail.com, batchmate2@gmail.com" class="w-full border rounded-xl p-2 text-xs"></textarea>
         </div>
         <div id="liveAllowedEmailsPreview" class="text-[11px] bg-slate-100 dark:bg-slate-800 p-2 rounded-lg text-slate-700 dark:text-slate-300 font-mono"></div>
         <button type="button" onclick="savePrivacySettings(true)" class="w-full chrome-pill-btn justify-center bg-blue-600 hover:bg-blue-700 text-white py-2 text-xs shadow">
-          <span>✓ Save Privacy & Prompt Allowed Emails</span>
+          <span>✓ Save Privacy & Allowed Emails</span>
         </button>
       `;
       settingsContainer.appendChild(div);
@@ -2869,6 +2887,7 @@ ${htmlSnapshot}`;
     }
 
     function loadPrivacySettingsIntoUI() {
+      if (!isCurrentUserAdmin()) return;
       const cfg = getPrivacyConfig();
       const toggle = document.getElementById('privateModeToggle');
       const input = document.getElementById('allowedEmailsInput');
@@ -2884,6 +2903,12 @@ ${htmlSnapshot}`;
     }
 
     async function savePrivacySettings(showToast = true) {
+      // Hard security block in case a non-admin tries calling this from the console
+      if (!isCurrentUserAdmin()) {
+        alert('⛔ Access Denied: Only the administrator (' + window.ADMIN_OWNER_EMAIL + ') can modify privacy settings.');
+        return;
+      }
+
       const enabled = document.getElementById('privateModeToggle')?.checked || false;
       const rawEmails = document.getElementById('allowedEmailsInput')?.value || '';
       const guestEmails = cleanEmailList(rawEmails.split(','));
@@ -2892,7 +2917,6 @@ ${htmlSnapshot}`;
       localStorage.setItem('peds_privacy_config_v3', JSON.stringify(cfg));
       loadPrivacySettingsIntoUI();
 
-      // Show the Chrome prompt immediately BEFORE waiting for Firestore network sync
       if (showToast) {
         const allAllowed = [window.ADMIN_OWNER_EMAIL, ...guestEmails];
         alert(enabled
@@ -2910,6 +2934,10 @@ ${htmlSnapshot}`;
     }
 
     async function emergencyAdminUnlock() {
+      if (!isCurrentUserAdmin()) {
+        alert('⛔ Admin Only: Please sign in as ' + window.ADMIN_OWNER_EMAIL + ' first.');
+        return;
+      }
       const cfg = { enabled: false, emails: [] };
       localStorage.setItem('peds_privacy_config_v3', JSON.stringify(cfg));
       try {
@@ -2917,7 +2945,7 @@ ${htmlSnapshot}`;
       } catch (e) {}
       loadPrivacySettingsIntoUI();
       document.getElementById('privateAccessOverlay')?.classList.add('hidden');
-      alert('🔓 Private Mode has been turned OFF.');
+      alert('🔓 Private Mode has been turned OFF by Admin.');
     }
 
     async function enforcePrivateAccessGate(user) {
@@ -2945,7 +2973,7 @@ ${htmlSnapshot}`;
       }
 
       const allowedList = new Set([
-        window.ADMIN_OWNER_EMAIL,
+        normalizeEmail(window.ADMIN_OWNER_EMAIL),
         ...cleanEmailList(cfg.emails)
       ]);
 
@@ -2967,15 +2995,17 @@ ${htmlSnapshot}`;
       }
     }
 
-    // Run immediately even if DOMContentLoaded has already fired
     if (document.readyState === 'loading') {
       window.addEventListener('DOMContentLoaded', injectPrivacySettingsUI);
     } else {
       injectPrivacySettingsUI();
     }
+
+    // Re-evaluate admin UI and access gate every time a user logs in, switches accounts, or logs out
     auth.onAuthStateChanged((user) => {
+      injectPrivacySettingsUI();
       enforcePrivateAccessGate(user);
     });
-  </script>  </script>
+  </script>
 </body>
 </html>
