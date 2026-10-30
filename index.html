@@ -743,7 +743,7 @@
           <div class="text-xs font-bold text-blue-950 uppercase tracking-wide">
             📋 Key Developmental Milestones Reference Selector (Tables 3.1, 3.2 & 3.4)
           </div>
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs">
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 text-xs">
             <div>
               <label class="block font-semibold mb-1">Gross Motor (Table 3.1)</label>
               <select id="msGrossSelect" onchange="syncMilestoneSummary()" class="w-full border rounded p-1.5 bg-white">
@@ -795,6 +795,27 @@
                 <option value="5 yr: Asks meaning of words">5 years — Asks meaning of words</option>
               </select>
             </div>
+
+<!-- 4th Dropdown: Social & Adaptive Milestones (Table 3.3) -->
+            <div>
+              <label class="block font-semibold mb-1">Social & Adaptive (Table 3.3)</label>
+              <select id="msSocialSelect" onchange="syncMilestoneSummary()" class="w-full border rounded p-1.5 bg-white">
+                <option value="">-- Select Social & Adaptive --</option>
+                <option value="Birth: Fixates on mother's face (45° range at 8–10 in)">Birth — Fixates on mother's face (45° range)</option>
+                <option value="4 wks: Visual tracking up to 90°">4 weeks — Visual tracking up to 90°</option>
+                <option value="2 mo: Social smile (smile after being talked to)">2 months — Social smile (after being talked to)</option>
+                <option value="3 mo: Recognizes mother; anticipates feeds; 180° visual tracking">3 months — Recognizes mother; anticipates feeds (180° tracking)</option>
+                <option value="6 mo: Recognizes strangers, stranger anxiety">6 months — Recognizes strangers; stranger anxiety</option>
+                <option value="9 mo: Waves 'bye bye'">9 months — Waves "bye bye"</option>
+                <option value="12 mo: Comes when called; plays simple ball game">12 months — Comes when called; plays simple ball game</option>
+                <option value="15 mo: Jargon">15 months — Jargon</option>
+                <option value="18 mo: Copies parents in task (domestic mimicry, e.g., sweeping)">18 months — Copies parents in tasks (domestic mimicry)</option>
+                <option value="2 yr: Asks for food, drink, toilet; pulls people to show toys">2 years — Asks for food, drink, toilet; pulls to show toys</option>
+                <option value="3 yr: Shares toys; knows full name and gender">3 years — Shares toys; knows full name & gender</option>
+                <option value="4 yr: Plays cooperatively in a group; goes to toilet alone; gives coherent account of events">4 years — Plays cooperatively; goes to toilet alone</option>
+                <option value="5 yr: Helps in household tasks, dresses and undresses">5 years — Helps in household tasks; dresses & undresses</option>
+              </select>
+            </div>        
           </div>
         </div>
 
@@ -994,29 +1015,78 @@
       </div>
     </details>
     
-    <!-- 9. IMMUNIZATION HISTORY (INTERACTIVE NIS VACCINE CHECKLIST) -->
+   <!-- 9. IMMUNIZATION HISTORY (TABLE 10.3: NIS VS IAP SCHEDULE COMPARISON) -->
     <details class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
       <summary class="bg-slate-50 px-4 py-3 font-bold text-slate-800 cursor-pointer flex justify-between items-center border-b">
-        <span>9. Immunization History</span>
-        <span class="text-xs text-blue-600 font-normal">Interactive NIS Vaccine Checklist & BCG Scar</span>
+        <span>9. Immunization History (Table 10.3: NIS vs. IAP Schedule)</span>
+        <span class="text-xs text-blue-600 font-normal">Birth to 16 Years Interactive Checklist & BCG Scar</span>
       </summary>
       <div class="p-4 space-y-3">
-        <div class="text-xs text-slate-500">Uncheck any vaccine dose that the child has <strong>missed</strong> to auto-update the immunization summary:</div>
-        <div id="vaccineChecklist" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2 text-xs">
-          <label class="flex items-center gap-1.5 bg-emerald-50 border border-emerald-200 p-2 rounded cursor-pointer"><input type="checkbox" checked onchange="updateVaccineSummary()" class="vax-chip" value="Birth (BCG, OPV-0, HepB)" /> Birth (BCG/OPV0)</label>
-          <label class="flex items-center gap-1.5 bg-emerald-50 border border-emerald-200 p-2 rounded cursor-pointer"><input type="checkbox" checked onchange="updateVaccineSummary()" class="vax-chip" value="6 Weeks (Penta-1, Rota-1, PCV-1, fIPV-1)" /> 6 Wks (Penta-1)</label>
-          <label class="flex items-center gap-1.5 bg-emerald-50 border border-emerald-200 p-2 rounded cursor-pointer"><input type="checkbox" checked onchange="updateVaccineSummary()" class="vax-chip" value="10 Weeks (Penta-2, Rota-2)" /> 10 Wks (Penta-2)</label>
-          <label class="flex items-center gap-1.5 bg-emerald-50 border border-emerald-200 p-2 rounded cursor-pointer"><input type="checkbox" checked onchange="updateVaccineSummary()" class="vax-chip" value="14 Weeks (Penta-3, Rota-3, PCV-2, fIPV-2)" /> 14 Wks (Penta-3)</label>
-          <label class="flex items-center gap-1.5 bg-emerald-50 border border-emerald-200 p-2 rounded cursor-pointer"><input type="checkbox" checked onchange="updateVaccineSummary()" class="vax-chip" value="9 Months (MR-1, PCV-Booster, Vit-A, fIPV-3)" /> 9 Mo (MR-1/PCV-B)</label>
-          <label class="flex items-center gap-1.5 bg-emerald-50 border border-emerald-200 p-2 rounded cursor-pointer"><input type="checkbox" checked onchange="updateVaccineSummary()" class="vax-chip" value="16–24 Months (MR-2, DPT-B1, OPV-B)" /> 16–24 Mo (MR-2/DPT)</label>
+        <div class="flex flex-wrap items-center justify-between gap-2 bg-emerald-50/70 p-2.5 rounded-lg border border-emerald-200 text-xs">
+          <div class="font-bold text-emerald-950">
+            💉 Select Schedule Mode (Uncheck any missed age milestone to auto-list missed vaccines):
+          </div>
+          <select id="vaxScheduleMode" onchange="updateVaccineSummary()" class="border rounded px-2.5 py-1 bg-white font-semibold text-emerald-900">
+            <option value="NIS">National Immunization Schedule (NIS)</option>
+            <option value="IAP">Indian Academy of Pediatrics (IAP) Schedule</option>
+            <option value="BOTH">Both NIS + Optional IAP Vaccines</option>
+          </select>
         </div>
+
+        <div id="vaccineChecklist" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 text-xs">
+          <label class="flex items-start gap-2 bg-emerald-50/60 border border-emerald-200 p-2 rounded cursor-pointer">
+            <input type="checkbox" checked onchange="updateVaccineSummary()" class="vax-chip mt-0.5" data-nis="Birth (BCG, bOPV-0, HBV-0)" data-iap="Birth (BCG, bOPV-0, HBV-1)" value="Birth (BCG, bOPV-0, HBV)" />
+            <span><strong>At Birth:</strong><br/>NIS: BCG, bOPV-0, HBV-0<br/>IAP: BCG, bOPV-0, HBV-1</span>
+          </label>
+          <label class="flex items-start gap-2 bg-emerald-50/60 border border-emerald-200 p-2 rounded cursor-pointer">
+            <input type="checkbox" checked onchange="updateVaccineSummary()" class="vax-chip mt-0.5" data-nis="6 Wks (bOPV-1, Pentavalent-1, Rota-1, fIPV-1, PCV-1)" data-iap="6 Wks (DTP-1, Hib-1, HBV-2, IPV-1, Rota-1, PCV-1)" value="6 Weeks Primary Series-1" />
+            <span><strong>6 Weeks:</strong><br/>NIS: bOPV-1, Penta-1, Rota-1, fIPV-1, PCV-1<br/>IAP: DTP-1, Hib-1, HBV-2, IPV-1, Rota-1, PCV-1</span>
+          </label>
+          <label class="flex items-start gap-2 bg-emerald-50/60 border border-emerald-200 p-2 rounded cursor-pointer">
+            <input type="checkbox" checked onchange="updateVaccineSummary()" class="vax-chip mt-0.5" data-nis="10 Wks (bOPV-2, Pentavalent-2, Rota-2)" data-iap="10 Wks (DTP-2, Hib-2, HBV-3, IPV-2, Rota-2, PCV-2)" value="10 Weeks Primary Series-2" />
+            <span><strong>10 Weeks:</strong><br/>NIS: bOPV-2, Penta-2, Rota-2<br/>IAP: DTP-2, Hib-2, HBV-3, IPV-2, Rota-2, PCV-2</span>
+          </label>
+          <label class="flex items-start gap-2 bg-emerald-50/60 border border-emerald-200 p-2 rounded cursor-pointer">
+            <input type="checkbox" checked onchange="updateVaccineSummary()" class="vax-chip mt-0.5" data-nis="14 Wks (bOPV-3, Pentavalent-3, Rota-3, fIPV-2, PCV-2)" data-iap="14 Wks (DTP-3, Hib-3, HBV-4, IPV-3, Rota-3, PCV-3)" value="14 Weeks Primary Series-3" />
+            <span><strong>14 Weeks:</strong><br/>NIS: bOPV-3, Penta-3, Rota-3, fIPV-2, PCV-2<br/>IAP: DTP-3, Hib-3, HBV-4, IPV-3, Rota-3, PCV-3</span>
+          </label>
+          <label class="flex items-start gap-2 bg-blue-50/60 border border-blue-200 p-2 rounded cursor-pointer">
+            <input type="checkbox" checked onchange="updateVaccineSummary()" class="vax-chip mt-0.5" data-nis="" data-iap="6–9 Mo (Inactivated Influenza-1 & 2, Typhoid Conjugate Vaccine)" value="6–9 Months (Influenza & TCV)" />
+            <span><strong>6–9 Months (IAP):</strong><br/>Inactivated Influenza-1 & 2 (1 mo apart); Typhoid Conjugate Vaccine (TCV)</span>
+          </label>
+          <label class="flex items-start gap-2 bg-emerald-50/60 border border-emerald-200 p-2 rounded cursor-pointer">
+            <input type="checkbox" checked onchange="updateVaccineSummary()" class="vax-chip mt-0.5" data-nis="9 Mo (MR-1, JE-1, PCV-3/B, fIPV-3)" data-iap="9 Mo (MMR-1)" value="9 Months (MR-1 / MMR-1)" />
+            <span><strong>9 Months:</strong><br/>NIS: MR-1, JE-1, PCV-3, fIPV-3<br/>IAP: MMR-1</span>
+          </label>
+          <label class="flex items-start gap-2 bg-blue-50/60 border border-blue-200 p-2 rounded cursor-pointer">
+            <input type="checkbox" checked onchange="updateVaccineSummary()" class="vax-chip mt-0.5" data-nis="" data-iap="12–15 Mo (HAV-1, MMR-2, Varicella-1, PCV-B1, JE-1)" value="12–15 Months (HAV-1, MMR-2, Varicella-1, PCV-B1)" />
+            <span><strong>12–15 Months (IAP):</strong><br/>HAV-1, MMR-2, Varicella-1, PCV-B1, JE-1</span>
+          </label>
+          <label class="flex items-start gap-2 bg-emerald-50/60 border border-emerald-200 p-2 rounded cursor-pointer">
+            <input type="checkbox" checked onchange="updateVaccineSummary()" class="vax-chip mt-0.5" data-nis="16–18 Mo (DTwP-B1, bOPV-B, JE-2, MR-2)" data-iap="16–18 Mo (DTP-B1, Hib-B1, IPV-B1, JE-2)" value="16–18 Months Booster-1" />
+            <span><strong>16–18 Months:</strong><br/>NIS: DTwP-B1, bOPV-B, JE-2, MR-2<br/>IAP: DTP-B1, Hib-B1, IPV-B1, JE-2</span>
+          </label>
+          <label class="flex items-start gap-2 bg-blue-50/60 border border-blue-200 p-2 rounded cursor-pointer">
+            <input type="checkbox" checked onchange="updateVaccineSummary()" class="vax-chip mt-0.5" data-nis="" data-iap="18–24 Mo (HAV-2, Varicella-2)" value="18–24 Months (HAV-2, Varicella-2)" />
+            <span><strong>18–24 Months (IAP):</strong><br/>HAV-2, Varicella-2</span>
+          </label>
+          <label class="flex items-start gap-2 bg-emerald-50/60 border border-emerald-200 p-2 rounded cursor-pointer">
+            <input type="checkbox" checked onchange="updateVaccineSummary()" class="vax-chip mt-0.5" data-nis="5–6 Yrs (DTwP-B2)" data-iap="5–6 Yrs (DTP-B2, MMR-3, IPV-B2)" value="5–6 Years Booster-2" />
+            <span><strong>5–6 Years:</strong><br/>NIS: DTwP-B2<br/>IAP: DTP-B2, MMR-3, IPV-B2</span>
+          </label>
+          <label class="flex items-start gap-2 bg-emerald-50/60 border border-emerald-200 p-2 rounded cursor-pointer">
+            <input type="checkbox" checked onchange="updateVaccineSummary()" class="vax-chip mt-0.5" data-nis="9–14 Yrs (HPV-1, HPV-2) & 10–16 Yrs (Td)" data-iap="9–14 Yrs (HPV 1 & 2, 6m apart) & 10–12 Yrs (Tdap)" value="Adolescent (Td / Tdap & HPV)" />
+            <span><strong>9–16 Years (Adolescent):</strong><br/>9–14y: HPV-1 & 2 (3 doses at 0,1,6m if &gt;15y)<br/>10–12y: Td (NIS) / Tdap (IAP) • 16y: Td</span>
+          </label>
+        </div>
+
         <div>
           <label class="block text-xs font-semibold mb-1">Immunization Summary & BCG Scar Status</label>
-          <input id="immStatus" type="text" value="Completely immunized for age as per National Immunization Schedule; BCG scar present on left deltoid." class="w-full border rounded p-2 text-sm" />
+          <input id="immStatus" type="text" value="Completely immunized for age as per National Immunization Schedule (NIS); BCG scar present on left deltoid." class="w-full border rounded p-2 text-sm" />
         </div>
       </div>
     </details>
-
+    
     <!-- 10. ALLERGEN HISTORY -->
     <details open class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
       <summary class="bg-slate-50 px-4 py-3 font-bold text-slate-800 cursor-pointer flex justify-between items-center border-b">
@@ -1136,50 +1206,326 @@
       </div>
     </details>
 
-    <!-- 13. GENERAL PHYSICAL EXAM (GPE) & VITALS CHECKER -->
-    <details class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+    <!-- 13. GENERAL PHYSICAL EXAM (GPE) & VITALS (SSIMS V2.0 PROTOCOL) -->
+    <details class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden" open>
       <summary class="bg-slate-50 px-4 py-3 font-bold text-slate-800 cursor-pointer flex justify-between items-center border-b">
-        <span>13. General Physical Exam & Vitals</span>
-        <span class="text-xs text-blue-600 font-normal">Vitals, Age-Specific Tachypnea & PICCLE</span>
+        <span>13. General Physical Exam (GPE) & Vitals (SSIMS Protocol)</span>
+        <span class="text-xs text-blue-600 font-normal">Vitals, Pulse Types, Korotkoff BP & Graded PICCLE</span>
       </summary>
-      <div class="p-4 space-y-3">
-        <div class="grid grid-cols-2 sm:grid-cols-5 gap-2.5 bg-slate-50 p-3 rounded-lg border">
-          <div>
-            <label class="block text-xs font-semibold mb-1">Temp (°F)</label>
-            <input id="vitalTemp" type="text" placeholder="e.g., 98.6°F" class="w-full border rounded p-1.5 text-sm bg-white" />
+      <div class="p-4 space-y-4">
+        <!-- Sensorium, Orientation & Built -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div class="sm:col-span-2">
+            <label class="block text-xs font-semibold mb-1">General Appearance, Sensorium & Orientation</label>
+            <input id="gpeSensorium" type="text" value="Patient is conscious, cooperative, and well-oriented to time, place, and person." class="w-full border rounded p-2 text-sm" />
           </div>
           <div>
-            <label class="block text-xs font-semibold mb-1">Heart Rate (/min)</label>
-            <input id="vitalHR" type="number" placeholder="e.g., 110" class="w-full border rounded p-1.5 text-sm bg-white" />
-          </div>
-          <div>
-            <label class="block text-xs font-semibold mb-1">Resp. Rate (/min)</label>
-            <input id="vitalRR" type="number" placeholder="e.g., 32" oninput="checkVitals()" class="w-full border rounded p-1.5 text-sm bg-white" />
-          </div>
-          <div>
-            <label class="block text-xs font-semibold mb-1">SpO2 (%)</label>
-            <input id="vitalSpo2" type="text" placeholder="e.g., 99% RA" class="w-full border rounded p-1.5 text-sm bg-white" />
-          </div>
-          <div class="col-span-2 sm:col-span-1">
-            <label class="block text-xs font-semibold mb-1">Tachypnea Check</label>
-            <input id="tachypneaAlert" type="text" readonly placeholder="Enter RR & Age(mo)" class="w-full border rounded p-1.5 text-xs bg-slate-100 font-bold" />
+            <label class="block text-xs font-semibold mb-1">Built & Nutrition</label>
+            <select id="gpeBuilt" class="w-full border rounded p-2 text-sm">
+              <option value="Average built and well-nourished">Average built & well-nourished</option>
+              <option value="Thin built / undernourished">Thin built / Undernourished</option>
+              <option value="Cachectic / severely wasted">Cachectic / Severely wasted</option>
+              <option value="Overweight / obese">Overweight / Obese</option>
+            </select>
           </div>
         </div>
 
-        <div>
-          <label class="block text-xs font-semibold mb-1.5">General Examination Signs (Check if PRESENT)</label>
-          <div class="grid grid-cols-2 sm:grid-cols-6 gap-2 text-xs">
-            <label class="flex items-center gap-1.5 border p-2 rounded cursor-pointer"><input type="checkbox" class="gpe-sign" value="Pallor" /> Pallor</label>
-            <label class="flex items-center gap-1.5 border p-2 rounded cursor-pointer"><input type="checkbox" class="gpe-sign" value="Icterus" /> Icterus</label>
-            <label class="flex items-center gap-1.5 border p-2 rounded cursor-pointer"><input type="checkbox" class="gpe-sign" value="Cyanosis" /> Cyanosis</label>
-            <label class="flex items-center gap-1.5 border p-2 rounded cursor-pointer"><input type="checkbox" class="gpe-sign" value="Clubbing" /> Clubbing</label>
-            <label class="flex items-center gap-1.5 border p-2 rounded cursor-pointer"><input type="checkbox" class="gpe-sign" value="Lymphadenopathy" /> Lymphadenopathy</label>
-            <label class="flex items-center gap-1.5 border p-2 rounded cursor-pointer"><input type="checkbox" class="gpe-sign" value="Pedal Edema" /> Edema</label>
+        <!-- Vitals & Pulse/BP Details -->
+        <div class="grid grid-cols-2 sm:grid-cols-6 gap-2.5 bg-slate-50 p-3 rounded-lg border">
+          <div>
+            <label class="block text-xs font-semibold mb-1">Temp (°F / °C)</label>
+            <input id="vitalTemp" type="text" placeholder="e.g., 98.6°F (37°C)" oninput="checkVitals()" class="w-full border rounded p-1.5 text-sm bg-white" />
+          </div>
+          <div>
+            <label class="block text-xs font-semibold mb-1">Pulse / HR (/min)</label>
+            <input id="vitalHR" type="number" placeholder="e.g., 100" oninput="checkVitals()" class="w-full border rounded p-1.5 text-sm bg-white" />
+          </div>
+          <div>
+            <label class="block text-xs font-semibold mb-1">Resp. Rate (/min)</label>
+            <input id="vitalRR" type="number" placeholder="e.g., 28" oninput="checkVitals()" class="w-full border rounded p-1.5 text-sm bg-white" />
+          </div>
+          <div>
+            <label class="block text-xs font-semibold mb-1">BP (mmHg, Korotkoff I/V)</label>
+            <input id="vitalBP" type="text" placeholder="e.g., 100/66 mmHg" class="w-full border rounded p-1.5 text-sm bg-white" />
+          </div>
+          <div>
+            <label class="block text-xs font-semibold mb-1">SpO2 (%)</label>
+            <input id="vitalSpo2" type="text" placeholder="e.g., 99% on RA" class="w-full border rounded p-1.5 text-sm bg-white" />
+          </div>
+          <div>
+            <label class="block text-xs font-semibold mb-1">Tachypnea Check</label>
+            <input id="tachypneaAlert" type="text" readonly placeholder="Enter RR & Age" class="w-full border rounded p-1.5 text-xs bg-slate-100 font-bold" />
+          </div>
+
+          <div class="col-span-2 sm:col-span-3">
+            <label class="block text-xs font-semibold mb-1">Pulse Character, Rhythm, Volume & Delay (Radial groove, semiprone)</label>
+            <input id="pulseCharacter" type="text" value="Regular rhythm, normal volume and character, normal vessel wall, all peripheral pulses palpable, no radio-radial or radio-femoral delay." class="w-full border rounded p-1.5 text-xs bg-white" />
+          </div>
+          <div class="col-span-2 sm:col-span-3">
+            <label class="block text-xs font-semibold mb-1">Special Pulse Type (If Present)</label>
+            <select id="pulseSpecialType" onchange="if(this.value) document.getElementById('pulseCharacter').value = this.value" class="w-full border rounded p-1.5 text-xs bg-white">
+              <option value="">-- Normal Pulse Wave (Select if abnormal) --</option>
+              <option value="Bounding / Hyperkinetic high-volume pulse (Fever, anemia, sepsis, PDA, AR)">Bounding / Hyperkinetic (Fever, anemia, sepsis, AR)</option>
+              <option value="Thready / Hypokinetic low-volume pulse (Shock, severe hypovolemia)">Thready / Hypokinetic (Shock, severe hypovolemia)</option>
+              <option value="Water-hammer / Corrigan's collapsing pulse (Aortic regurgitation, PDA, thyrotoxicosis)">Water-hammer / Collapsing (AR, PDA)</option>
+              <option value="Pulsus paradoxus (>10 mmHg systolic BP drop on inspiration — Severe asthma, cardiac tamponade)">Pulsus paradoxus (&gt;10 mmHg drop — Tamponade, severe asthma)</option>
+              <option value="Pulsus alternans (Alternating strong and weak beats — Left ventricular failure)">Pulsus alternans (LV failure)</option>
+              <option value="Pulsus bisferiens (Double systolic peak — AS + AR, HOCM)">Pulsus bisferiens (AS + AR, HOCM)</option>
+              <option value="Pulsus parvus et tardus (Slow-rising, low-volume — Severe aortic stenosis)">Pulsus parvus et tardus (Aortic stenosis)</option>
+              <option value="Dicrotic pulse (Two peaks in systole & diastole — Septicemia, low cardiac output)">Dicrotic pulse (Septicemia)</option>
+              <option value="Irregularly irregular pulse (Atrial fibrillation)">Irregularly irregular (Atrial fibrillation)</option>
+            </select>
+          </div>
+          <div class="col-span-2 sm:col-span-6 text-[11px] text-slate-600">
+            💡 <strong>SSIMS Physiological Vitals Rule:</strong> Each <strong>1°C (1.8°F) rise in fever</strong> increases Heart Rate by <strong>~10 bpm</strong> and Respiratory Rate by <strong>~5 breaths/min</strong>.Pattern: Abdomino-thoracic in males.
+          </div>
+        </div>
+
+        <!-- Graded PICCLE Examination -->
+        <div class="space-y-3 bg-blue-50/40 p-3.5 rounded-xl border border-blue-200 text-xs">
+          <div class="font-bold text-blue-950 uppercase tracking-wide">🔍 Graded PICCLE & Head-to-Toe General Examination</div>
+
+          <!-- Quick Checkboxes (Preserved for compatibility) -->
+          <div class="grid grid-cols-2 sm:grid-cols-6 gap-2">
+            <label class="flex items-center gap-1.5 bg-white border p-2 rounded cursor-pointer"><input type="checkbox" class="gpe-sign" value="Pallor" /> Pallor</label>
+            <label class="flex items-center gap-1.5 bg-white border p-2 rounded cursor-pointer"><input type="checkbox" class="gpe-sign" value="Icterus" /> Icterus</label>
+            <label class="flex items-center gap-1.5 bg-white border p-2 rounded cursor-pointer"><input type="checkbox" class="gpe-sign" value="Cyanosis" /> Cyanosis</label>
+            <label class="flex items-center gap-1.5 bg-white border p-2 rounded cursor-pointer"><input type="checkbox" class="gpe-sign" value="Clubbing" /> Clubbing</label>
+            <label class="flex items-center gap-1.5 bg-white border p-2 rounded cursor-pointer"><input type="checkbox" class="gpe-sign" value="Lymphadenopathy" /> Lymphadenopathy</label>
+            <label class="flex items-center gap-1.5 bg-white border p-2 rounded cursor-pointer"><input type="checkbox" class="gpe-sign" value="Pedal Edema" /> Pedal Edema</label>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
+            <div>
+              <label class="block font-semibold mb-1">4. Pallor Grading & Sites</label>
+              <select id="gpePallorDetail" class="w-full border rounded p-1.5 bg-white">
+                <option value="Absent (No pallor in lower palpebral conjunctiva, tongue, palmar creases, or nail beds)">Absent (Normal mucosa & conjunctiva)</option>
+                <option value="Mild Pallor (+) — Seen only in lower palpebral conjunctiva (Estimated Hb ~9–11 g/dL)">Mild (+) — Lower palpebral conjunctiva (Hb ~9–11 g/dL)</option>
+                <option value="Moderate Pallor (++) — Seen in conjunctiva, tongue & nail beds (Estimated Hb ~7–9 g/dL)">Moderate (++) — Conjunctiva + tongue + nails (Hb ~7–9 g/dL)</option>
+                <option value="Severe Pallor (+++) — Marked & generalized including palmar creases (Estimated Hb <7 g/dL)">Severe (+++) — Generalized + palmar creases (Hb &lt;7 g/dL)</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block font-semibold mb-1">5. Icterus Grading & Sites (Sclera, Sublingual)</label>
+              <select id="gpeIcterusDetail" class="w-full border rounded p-1.5 bg-white">
+                <option value="Absent (No scleral or sublingual icterus)">Absent</option>
+                <option value="Mild Icterus — Seen only in sclera (Serum bilirubin ~2–4 mg/dL)">Mild — Sclera only (Bilirubin ~2–4 mg/dL)</option>
+                <option value="Moderate Icterus — Seen in sclera, oral mucosa & skin (Serum bilirubin ~4–15 mg/dL)">Moderate — Sclera + oral mucosa + skin (4–15 mg/dL)</option>
+                <option value="Severe / Deep Icterus — Intense yellow/greenish discoloration of sclera, skin & nail beds (Bilirubin >15 mg/dL)">Severe / Deep — Sclera, skin & nails (&gt;15 mg/dL)</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block font-semibold mb-1">6. Cyanosis Type & Sites</label>
+              <select id="gpeCyanosisDetail" class="w-full border rounded p-1.5 bg-white">
+                <option value="Absent (No central or peripheral cyanosis)">Absent</option>
+                <option value="Central Cyanosis — Bluish discoloration of tongue, lips & buccal mucosa (SaO2 <85%)">Central — Tongue, lips & buccal mucosa (SaO2 &lt;85%)</option>
+                <option value="Peripheral Cyanosis — Confined to extremities/fingertips/toes/nose tip, mucosa normal, relieved by warming">Peripheral — Extremities only, mucosa normal</option>
+                <option value="Differential Cyanosis — Cyanosis in lower limbs but not upper limbs (PDA with Eisenmenger's reversal of shunt)">Differential — Lower limbs only (PDA w/ Eisenmenger)</option>
+                <option value="Mixed Cyanosis — Both central and peripheral cyanosis present">Mixed — Central + Peripheral</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block font-semibold mb-1">7. Clubbing (Lovibond Angle & Schamroth Test)</label>
+              <select id="gpeClubbingDetail" class="w-full border rounded p-1.5 bg-white">
+                <option value="Absent (Normal Lovibond angle ~160°; Schamroth's diamond window present)">Absent (Schamroth's window present)</option>
+                <option value="Grade 1 — Increased fluctuation and sponginess of nail bed">Grade 1 — Sponginess / fluctuation of nail bed</option>
+                <option value="Grade 2 — Obliteration of Lovibond's angle (>180°) and loss of Schamroth's diamond window">Grade 2 — Loss of Lovibond's angle & Schamroth's window</option>
+                <option value="Grade 3 — Increased longitudinal and transverse nail curvature (Parrot-beak / drumstick fingers)">Grade 3 — Parrot-beak / Drumstick appearance</option>
+                <option value="Grade 4 — Hypertrophic osteoarthropathy with wrist/ankle tenderness">Grade 4 — Hypertrophic osteoarthropathy</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block font-semibold mb-1">8. Lymphadenopathy (11 Regional Stations)</label>
+              <input id="gpeLymphDetail" type="text" value="No palpable submental, submandibular, tonsillar, parotid, pre/post-auricular, superficial/deep/posterior cervical, occipital, or supraclavicular lymphadenopathy." class="w-full border rounded p-1.5 bg-white" />
+            </div>
+
+            <div>
+              <label class="block font-semibold mb-1">9. Pedal Oedema (5-sec Thumb Pitting over Malleolus)</label>
+              <select id="gpeEdemaDetail" class="w-full border rounded p-1.5 bg-white">
+                <option value="Absent (No pitting or non-pitting pedal/sacral edema)">Absent</option>
+                <option value="Bilateral Pitting Pedal Edema present (5-sec thumb pressure over medial malleolus/shin — Cardiac/Renal/Hepatic/Nutritional)">Bilateral Pitting Edema (CHF, Nephrotic, Kwashiorkor)</option>
+                <option value="Non-Pitting Edema present (Lymphedema / Myxedema)">Non-Pitting Edema (Lymphedema / Myxedema)</option>
+                <option value="Unilateral Pedal Edema present (DVT / Cellulitis / Lymphatic obstruction)">Unilateral Edema (DVT / Cellulitis)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+            <div>
+              <label class="block font-semibold mb-1">10. JVP (5–8 cm H2O) & Neck Veins</label>
+              <input id="gpeJvp" type="text" value="JVP not raised; normal waveforms." class="w-full border rounded p-1.5 bg-white" />
+            </div>
+            <div>
+              <label class="block font-semibold mb-1">11–13. Hair, Eyes, Skin & Other Specific Head-to-Toe Findings</label>
+              <input id="gpeOtherHeadToToe" type="text" value="Normal hair lusture, no bitot spots or ocular signs of vitamin deficiency, anterior fontanelle normal, no neurocutaneous markers." class="w-full border rounded p-1.5 bg-white" />
+            </div>
           </div>
         </div>
       </div>
     </details>
 
+    <!-- 14. SYSTEMIC EXAMINATION MODULES (SSIMS V2.0: ABDOMEN, CNS, RESPIRATORY, CVS) -->
+    <details class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden" open>
+      <summary class="bg-slate-50 px-4 py-3 font-bold text-slate-800 cursor-pointer flex justify-between items-center border-b">
+        <span>14. Systemic Examination (Abdomen, CNS, Respiratory & CVS — SSIMS V2.0)</span>
+        <span class="text-xs text-blue-600 font-normal">Inspection, Palpation, Percussion & Auscultation Builders</span>
+      </summary>
+      <div class="p-4 space-y-4">
+
+        <!-- 14A. ABDOMINAL EXAMINATION -->
+        <details class="bg-amber-50/40 rounded-xl border border-amber-200 overflow-hidden">
+          <summary class="bg-amber-100/70 px-3.5 py-2.5 font-bold text-amber-950 cursor-pointer flex justify-between items-center text-xs">
+            <span>A. Abdominal & Oral Cavity Examination (Liver, Spleen & Ascites)</span>
+            <span class="font-normal text-amber-800">Tap to expand</span>
+          </summary>
+          <div class="p-3.5 space-y-3 text-xs">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+              <div>
+                <label class="block font-semibold mb-1">Oral Cavity (Hygiene, Teeth/Caries, Tongue, Palate, Tonsils, Oropharynx)</label>
+                <input id="abdOral" type="text" value="Good oral hygiene, no dental caries, tongue moist and normal, palate intact, tonsils not enlarged." class="w-full border rounded p-1.5 bg-white" />
+              </div>
+              <div>
+                <label class="block font-semibold mb-1">Inspection (Shape, Flanks, Umbilicus, Veins, Peristalsis, Hernial Orifices)</label>
+                <input id="abdInspect" type="text" value="Abdomen scaphoid/flat, moves equally with respiration, umbilicus central and inverted, flanks free, no visible dilated veins (caput medusae), peristalsis, or scars; hernial orifices intact." class="w-full border rounded p-1.5 bg-white" />
+              </div>
+              <div>
+                <label class="block font-semibold mb-1">Superficial Palpation (Temp, Tenderness, Guarding/Rigidity)</label>
+                <input id="abdSuperficial" type="text" value="Soft, non-tender, no local rise of temperature, no guarding or rigidity." class="w-full border rounded p-1.5 bg-white" />
+              </div>
+              <div>
+                <label class="block font-semibold mb-1">Deep Palpation — Palpable Liver (Right MCL below costal margin)</label>
+                <input id="abdLiver" type="text" value="Liver not palpable (or just palpable <1–2 cm in infants, soft, smooth surface, sharp/rounded edge, non-tender, non-pulsatile, moves with respiration)." class="w-full border rounded p-1.5 bg-white" />
+              </div>
+              <div>
+                <label class="block font-semibold mb-1">Deep Palpable Spleen (Left MCL towards Right Iliac Fossa)</label>
+                <input id="abdSpleen" type="text" value="Spleen not palpable (If palpable: note cm below left costal margin towards RIF, notched medial edge, moves with respiration, unable to insinuate fingers below costal margin)." class="w-full border rounded p-1.5 bg-white" />
+              </div>
+              <div>
+                <label class="block font-semibold mb-1">Percussion (Liver Span, Puddle &gt;150mL, Shifting Dullness &gt;500mL, Fluid Thrill) & Auscultation</label>
+                <input id="abdPercAus" type="text" value="Tympanic note over abdomen, normal liver dullness/span, no shifting dullness or fluid thrill; normal bowel sounds heard (3–5/min), no renal/hepatic bruit or venous hum." class="w-full border rounded p-1.5 bg-white" />
+              </div>
+            </div>
+            <div class="clinical-pearl">
+              <strong>SSIMS Pearl — Massive Splenomegaly (&gt;8 cm) Mnemonic "CHILD":</strong> <strong>C</strong>ML, <strong>H</strong>airy cell leukemia, <strong>I</strong>nfections (Kala-azar, Chronic Malaria), <strong>L</strong>ymphomas, <strong>D</strong>iseases of storage (Gaucher's, Niemann-Pick). Soft & tender = Acute infection; Firm & non-tender = Portal HTN.
+            </div>
+          </div>
+        </details>
+
+        <!-- 14B. CENTRAL NERVOUS SYSTEM (CNS) EXAMINATION -->
+        <details class="bg-purple-50/40 rounded-xl border border-purple-200 overflow-hidden">
+          <summary class="bg-purple-100/70 px-3.5 py-2.5 font-bold text-purple-950 cursor-pointer flex justify-between items-center text-xs">
+            <span>B. Central Nervous System (CNS) Examination (HMF, CN I–XII, Motor, Reflexes & Meningeal)</span>
+            <span class="font-normal text-purple-800">Tap to expand</span>
+          </summary>
+          <div class="p-3.5 space-y-3 text-xs">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+              <div>
+                <label class="block font-semibold mb-1">Higher Mental Functions (Consciousness, Orientation, Memory, Speech)</label>
+                <input id="cnsHmf" type="text" value="Conscious, cooperative, oriented to time, place & person; immediate, recent & remote memory intact; speech normal in fluency, comprehension, naming & repetition." class="w-full border rounded p-1.5 bg-white" />
+              </div>
+              <div>
+                <label class="block font-semibold mb-1">Cranial Nerves I–XII (SO4/LR6/Rest3, Pupils, V, VII, Rinne/Weber, Gag, XII)</label>
+                <input id="cnsCranial" type="text" value="CN I–XII intact: Pupils bilateral equal and reactive to light (direct & consensual), full extraocular movements with no ptosis/nystagmus/squint, facial symmetry intact, Rinne AC>BC & Weber midline, gag/palatal reflex present, tongue midline with no fasciculations." class="w-full border rounded p-1.5 bg-white" />
+              </div>
+              <div>
+                <label class="block font-semibold mb-1">Motor System: Attitude, Bulk, Tone (Spasticity vs Rigidity) & MRC Power (0–5)</label>
+                <input id="cnsMotor" type="text" value="Normal limb attitude and muscle bulk bilaterally; normal tone (no clasp-knife spasticity, lead-pipe/cogwheel rigidity, or hypotonia); Power Grade 5/5 (MRC scale) across all upper and lower limb joints." class="w-full border rounded p-1.5 bg-white" />
+              </div>
+              <div>
+                <label class="block font-semibold mb-1">Reflexes: Superficial (Abdominal T7–12, Cremasteric L1–2, Plantar L5–S1) & DTRs</label>
+                <input id="cnsReflexes" type="text" value="Deep tendon reflexes normal (2+) bilaterally [Biceps C5–C6, Supinator C5–C6, Triceps C6–C7, Knee L2–L4, Ankle S1–S2]; superficial abdominal reflexes present; Bilateral Plantar flexor (Babinski negative)." class="w-full border rounded p-1.5 bg-white" />
+              </div>
+              <div>
+                <label class="block font-semibold mb-1">Sensory, Coordination (Finger-Nose, Knee-Heel, Romberg), Involuntary Movements & Gait</label>
+                <input id="cnsSensoryCoord" type="text" value="Exteroceptive (touch, pain, temp), proprioceptive (vibration, joint position) & cortical sensations intact; finger-nose & knee-heel coordination normal, no dysdiadochokinesia, Romberg negative; normal gait, no chorea/tremor/athetosis." class="w-full border rounded p-1.5 bg-white" />
+              </div>
+              <div>
+                <label class="block font-semibold mb-1">Cerebellar Signs, Meningeal Signs (Neck Stiffness, Kernig, Brudzinski) & Spine</label>
+                <input id="cnsMeningeal" type="text" value="No cerebellar signs (no nystagmus, titubation, or intention tremor); Meningeal signs absent (no neck stiffness, Kernig's sign negative, Brudzinski's sign negative); skull and spine normal." class="w-full border rounded p-1.5 bg-white" />
+              </div>
+            </div>
+            <div class="clinical-pearl">
+              <strong>SSIMS CNS Pearls:</strong> <strong>Brainstem Nuclei:</strong> Midbrain (III, IV), Pons (V, VI, VII, VIII), Medulla (IX, X, XI, XII). <strong>Spasticity (UMN):</strong> Velocity-dependent clasp-knife tone (UL flexors, LL extensors). <strong>Rigidity (Extrapyramidal):</strong> Velocity-independent lead-pipe or cogwheel tone. <strong>MRC Power:</strong> 0 = No contraction, 1 = Flicker, 2 = Gravity eliminated, 3 = Against gravity, 4 = Against some resistance, 5 = Normal power.
+            </div>
+          </div>
+        </details>
+
+        <!-- 14C. RESPIRATORY SYSTEM EXAMINATION -->
+        <details class="bg-cyan-50/40 rounded-xl border border-cyan-200 overflow-hidden">
+          <summary class="bg-cyan-100/70 px-3.5 py-2.5 font-bold text-cyan-950 cursor-pointer flex justify-between items-center text-xs">
+            <span>C. Respiratory System Examination (URT, Inspection, TVF, Percussion & Adventitious Sounds)</span>
+            <span class="font-normal text-cyan-800">Tap to expand</span>
+          </summary>
+          <div class="p-3.5 space-y-3 text-xs">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+              <div>
+                <label class="block font-semibold mb-1">Upper Respiratory Tract & Chest Inspection (Shape, Symmetry, Accessory Muscles)</label>
+                <input id="respInspect" type="text" value="No flaring of alae nasi, DNS, or pharyngeal congestion; chest bilaterally symmetrical and elliptical (no pigeon/rachitic or barrel chest), moves equally with respiration, trachea central, no intercostal/subcostal indrawing or accessory muscle use." class="w-full border rounded p-1.5 bg-white" />
+              </div>
+              <div>
+                <label class="block font-semibold mb-1">Palpation (Trachea, Chest Expansion, Tactile Vocal Fremitus) & Percussion</label>
+                <input id="respPalpPerc" type="text" value="Trachea central, symmetrical chest expansion, normal Tactile Vocal Fremitus (TVF) bilaterally, no bony tenderness; resonant percussion note across all lung fields." class="w-full border rounded p-1.5 bg-white" />
+              </div>
+              <div>
+                <label class="block font-semibold mb-1">Auscultation: Air Entry, Breath Sounds & Vocal Resonance</label>
+                <input id="respAuscult" type="text" value="Bilateral equal air entry with normal vesicular breath sounds (no inspiratory-expiratory gap); normal vocal resonance; no adventitious sounds." class="w-full border rounded p-1.5 bg-white" />
+              </div>
+              <div>
+                <label class="block font-semibold mb-1">Quick-Insert Adventitious Sound (If Present)</label>
+                <select onchange="if(this.value) document.getElementById('respAuscult').value = this.value" class="w-full border rounded p-1.5 bg-white">
+                  <option value="">-- Normal Vesicular Breath Sounds (Select if abnormal) --</option>
+                  <option value="Bilateral air entry present with fine late-inspiratory crackles (rales).">Fine Crackles (Late inspiration — Bronchiolitis, ILD, early edema)</option>
+                  <option value="Coarse early-inspiratory crackles with bronchial breath sounds and increased vocal resonance.">Coarse Crackles + Bronchial Breath Sounds (Pneumonia, bronchiectasis)</option>
+                  <option value="Bilateral polyphonic expiratory wheeze (high-pitched musical sound) with prolonged expiration.">Expiratory Wheeze (Asthma, bronchiolitis, small airway obstruction)</option>
+                  <option value="Low-pitched snoring/gurgling rhonchi (expiration > inspiration) clearing with cough.">Rhonchi (Secretions in larger airways / bronchitis)</option>
+                  <option value="Harsh, high-pitched inspiratory stridor at rest (Upper airway obstruction / croup / foreign body).">Inspiratory Stridor (Croup, laryngomalacia, foreign body — Emergency)</option>
+                  <option value="Localized grating/creaking pleural friction rub heard in both inspiration and expiration, unchanged by cough.">Pleural Friction Rub (Pleuritis, pneumonia)</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </details>
+
+        <!-- 14D. CARDIOVASCULAR SYSTEM (CVS) EXAMINATION -->
+        <details class="bg-rose-50/40 rounded-xl border border-rose-200 overflow-hidden">
+          <summary class="bg-rose-100/70 px-3.5 py-2.5 font-bold text-rose-950 cursor-pointer flex justify-between items-center text-xs">
+            <span>D. Cardiovascular System (CVS) Examination (Precordium & Classic 6-Area Auscultation)</span>
+            <span class="font-normal text-rose-800">Tap to expand</span>
+          </summary>
+          <div class="p-3.5 space-y-3 text-xs">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+              <div>
+                <label class="block font-semibold mb-1">Inspection & Palpation (Precordial Bulge, Apex Beat, Heave, Palpable P2, Thrills)</label>
+                <input id="cvsInspPalp" type="text" value="No precordial bulge or chest deformity; Apex beat localized in left 5th ICS (4th ICS in young children) 1–2 cm medial to mid-clavicular line, normal character; no parasternal heave, palpable P2, epigastric pulsations, or precordial/carotid thrills." class="w-full border rounded p-1.5 bg-white" />
+              </div>
+              <div>
+                <label class="block font-semibold mb-1">Auscultation Across All Areas (Mitral, Tricuspid, Pulmonary, Aortic, Erb's, Gibson's)</label>
+                <input id="cvsAuscult" type="text" value="First (S1) and Second (S2) heart sounds heard normally across Mitral (5th ICS MCL), Tricuspid (4th ICS LSB), Pulmonary (Left 2nd ICS), Aortic (Right 2nd ICS), and Erb's (Left 3rd ICS) areas; no S3/S4 gallop, opening snap, ejection click, or murmur." class="w-full border rounded p-1.5 bg-white" />
+              </div>
+              <div class="sm:col-span-2">
+                <label class="block font-semibold mb-1">Quick-Insert Classical SSIMS Murmur Template (Auto-fills Auscultation)</label>
+                <select onchange="if(this.value) document.getElementById('cvsAuscult').value = this.value" class="w-full border rounded p-1.5 bg-white">
+                  <option value="">-- Normal S1 & S2, No Murmur (Select a classical murmur template if present) --</option>
+                  <option value="MITRAL AREA (Left 5th ICS MCL): Loud S1 and Opening Snap; a low-pitched, rough rumbling Mid-Diastolic Murmur (MDM) with presystolic accentuation is heard with the bell of the stethoscope in the left lateral position with breath held in expiration, non-radiating (Mitral Stenosis).">Mitral Area — Mid-Diastolic Murmur (MDM) of Mitral Stenosis</option>
+                  <option value="MITRAL AREA (Left 5th ICS MCL): Soft S1; a high-pitched, soft blowing Pansystolic / Holosystolic Murmur (PSM) of Grade III/VI is heard with the diaphragm of the stethoscope in the left lateral position on expiration, radiating to the left axilla and back (Mitral Regurgitation).">Mitral Area — Pansystolic Murmur (PSM) of Mitral Regurgitation</option>
+                  <option value="LOWER LEFT STERNAL BORDER / TRICUSPID AREA (4th ICS): A harsh Pansystolic Murmur (PSM) of Grade III–IV/VI is heard with the diaphragm of the stethoscope in the supine position, accentuated on inspiration (VSD / Tricuspid Regurgitation).">Tricuspid / Left Lower Sternal Border — Pansystolic Murmur (VSD / TR)</option>
+                  <option value="PULMONARY AREA (Left 2nd ICS): Wide split S2 with Pulmonary Ejection Click; a high-pitched crescendo-decrescendo Ejection Systolic Murmur (ESM) of Grade III/VI is heard with the diaphragm in the supine position on inspiration (Pulmonary Stenosis / ASD flow murmur).">Pulmonary Area — Ejection Systolic Murmur (ESM) (PS / ASD)</option>
+                  <option value="AORTIC AREA (Right 2nd ICS): A high-pitched, rough crescendo-decrescendo Ejection Systolic Murmur (ESM) of Grade III/VI is heard with the diaphragm in the sitting position on expiration, conducted to the carotid arteries (Aortic Stenosis).">Aortic Area — Ejection Systolic Murmur (ESM) radiating to Carotids (AS)</option>
+                  <option value="SECOND AORTIC / ERB'S AREA (Left 3rd ICS): A high-pitched, soft blowing Early Diastolic Murmur (EDM) is heard with the diaphragm of the stethoscope with the patient sitting and leaning forward in expiration (Aortic Regurgitation).">Erb's / 2nd Aortic Area — Early Diastolic Murmur (EDM) of Aortic Regurgitation</option>
+                  <option value="INFRACLAVICULAR / GIBSON'S AREA (Left 1st ICS): A high-pitched, continuous machinery murmur with a crescendo-decrescendo quality that begins in systole, peaks around S2, and continues into diastole, conducted to the back, heard with the diaphragm in the supine position (Patent Ductus Arteriosus - PDA).">Gibson's Area (Left 1st ICS) — Continuous Machinery Murmur of PDA</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </details>
+
+      </div>
+    </details>
+    
     <!-- GENERATE SUMMARY SECTION -->
     <section id="summarySection" class="bg-white p-5 rounded-xl shadow-md border-2 border-blue-900 space-y-4">
       <div class="flex flex-wrap items-center justify-between gap-3">
@@ -3514,6 +3860,126 @@ ${htmlSnapshot}`;
     } else {
       filterFoodDropdown('');
     }
+
+// --- UPGRADED TABLE 3.3 SOCIAL MILESTONES, TABLE 10.3 NIS/IAP VACCINES & SSIMS V2.0 EXAM GENERATOR ---
+
+    // 1. Include Social & Adaptive Milestones (Table 3.3) in Developmental Summary
+    syncMilestoneSummary = function() {
+      const gross = document.getElementById('msGrossSelect')?.value;
+      const fine = document.getElementById('msFineSelect')?.value;
+      const social = document.getElementById('msSocialSelect')?.value;
+      const lang = document.getElementById('msLangSelect')?.value;
+      const redFlags = Array.from(document.querySelectorAll('.dev-redflag:checked')).map(cb => cb.value);
+
+      let parts = [];
+      if (gross) parts.push(`Gross motor [${gross}]`);
+      if (fine) parts.push(`Fine motor [${fine}]`);
+      if (social) parts.push(`Social & adaptive [${social}]`);
+      if (lang) parts.push(`Language [${lang}]`);
+
+      let text = parts.length > 0
+        ? `Attained milestones: ${parts.join('; ')}.`
+        : `Age-appropriate milestones attained across Gross Motor, Fine Motor, Social/Adaptive, and Language domains.`;
+
+      if (redFlags.length > 0) {
+        text += ` ⚠️ Developmental Red Flags (WHO Table 3.5): ${redFlags.join(', ')}.`;
+      } else {
+        text += ` Vision and hearing intact; no developmental regression or WHO upper-limit red flags.`;
+      }
+
+      document.getElementById('devSummary').value = text;
+      saveActiveWorkingDraft();
+    };
+
+    // 2. NIS vs. IAP Immunization Schedule (Table 10.3) Summary Builder
+    updateVaccineSummary = function() {
+      const mode = document.getElementById('vaxScheduleMode')?.value || 'NIS';
+      const unchecked = Array.from(document.querySelectorAll('.vax-chip:not(:checked)'));
+      const missedList = unchecked.map(cb => {
+        if (mode === 'NIS') return cb.getAttribute('data-nis') || '';
+        if (mode === 'IAP') return cb.getAttribute('data-iap') || '';
+        return cb.value;
+      }).filter(Boolean);
+
+      const scheduleLabel = mode === 'NIS'
+        ? 'National Immunization Schedule (NIS)'
+        : (mode === 'IAP' ? 'Indian Academy of Pediatrics (IAP) Schedule' : 'NIS and IAP Schedules');
+
+      const input = document.getElementById('immStatus');
+      if (missedList.length === 0) {
+        input.value = `Completely immunized for age as per ${scheduleLabel}; BCG scar present on left deltoid.`;
+      } else {
+        input.value = `Partially immunized for age as per ${scheduleLabel}; missed scheduled doses: ${missedList.join('; ')}.`;
+      }
+      saveActiveWorkingDraft();
+    };
+
+    // 3. Append SSIMS V2.0 Graded GPE & Systemic Examinations (Abdomen, CNS, Respiratory, CVS) to Case Output
+    const _baseGenerateHistoryParagraphs = generateHistoryParagraphs;
+    generateHistoryParagraphs = function(autoArchive = false) {
+      _baseGenerateHistoryParagraphs(false);
+
+      const outEl = document.getElementById('outputParagraphs');
+      if (!outEl) return;
+
+      const sensorium = document.getElementById('gpeSensorium')?.value || '';
+      const built = document.getElementById('gpeBuilt')?.value || '';
+      const bp = document.getElementById('vitalBP')?.value || '';
+      const pulseChar = document.getElementById('pulseCharacter')?.value || '';
+      const pallor = document.getElementById('gpePallorDetail')?.value || '';
+      const icterus = document.getElementById('gpeIcterusDetail')?.value || '';
+      const cyanosis = document.getElementById('gpeCyanosisDetail')?.value || '';
+      const clubbing = document.getElementById('gpeClubbingDetail')?.value || '';
+      const lymph = document.getElementById('gpeLymphDetail')?.value || '';
+      const edema = document.getElementById('gpeEdemaDetail')?.value || '';
+      const jvp = document.getElementById('gpeJvp')?.value || '';
+      const otherGpe = document.getElementById('gpeOtherHeadToToe')?.value || '';
+
+      const gpeDetailedBlock =
+        `\n\nDETAILED GENERAL PHYSICAL EXAMINATION (SSIMS PROTOCOL):\n` +
+        `${sensorium} Built: ${built}. ${bp ? `BP: ${bp}. ` : ''}Pulse details: ${pulseChar}\n` +
+        `• Pallor: ${pallor}\n` +
+        `• Icterus: ${icterus}\n` +
+        `• Cyanosis: ${cyanosis}\n` +
+        `• Clubbing: ${clubbing}\n` +
+        `• Lymphadenopathy: ${lymph}\n` +
+        `• Pedal Oedema: ${edema}\n` +
+        `• JVP & Head-to-Toe: ${jvp} ${otherGpe}`;
+
+      const abdOral = document.getElementById('abdOral')?.value || '';
+      const abdInsp = document.getElementById('abdInspect')?.value || '';
+      const abdSup = document.getElementById('abdSuperficial')?.value || '';
+      const abdLiv = document.getElementById('abdLiver')?.value || '';
+      const abdSpl = document.getElementById('abdSpleen')?.value || '';
+      const abdPA = document.getElementById('abdPercAus')?.value || '';
+
+      const cnsHmf = document.getElementById('cnsHmf')?.value || '';
+      const cnsCN = document.getElementById('cnsCranial')?.value || '';
+      const cnsMot = document.getElementById('cnsMotor')?.value || '';
+      const cnsRef = document.getElementById('cnsReflexes')?.value || '';
+      const cnsSen = document.getElementById('cnsSensoryCoord')?.value || '';
+      const cnsMen = document.getElementById('cnsMeningeal')?.value || '';
+
+      const respIns = document.getElementById('respInspect')?.value || '';
+      const respPP = document.getElementById('respPalpPerc')?.value || '';
+      const respAus = document.getElementById('respAuscult')?.value || '';
+
+      const cvsIP = document.getElementById('cvsInspPalp')?.value || '';
+      const cvsAus = document.getElementById('cvsAuscult')?.value || '';
+
+      const systemicBlock =
+        `\n\nSYSTEMIC EXAMINATION:\n` +
+        `1. ABDOMINAL EXAMINATION:\nOral Cavity: ${abdOral} Inspection: ${abdInsp} Palpation: ${abdSup} ${abdLiv} ${abdSpl} Percussion & Auscultation: ${abdPA}\n\n` +
+        `2. CENTRAL NERVOUS SYSTEM (CNS) EXAMINATION:\nHigher Mental Functions: ${cnsHmf} Cranial Nerves: ${cnsCN} Motor System: ${cnsMot} Reflexes: ${cnsRef} Sensory & Coordination: ${cnsSen} Cerebellar & Meningeal: ${cnsMen}\n\n` +
+        `3. RESPIRATORY SYSTEM EXAMINATION:\nInspection: ${respIns} Palpation & Percussion: ${respPP} Auscultation: ${respAus}\n\n` +
+        `4. CARDIOVASCULAR SYSTEM (CVS) EXAMINATION:\nInspection & Palpation: ${cvsIP} Auscultation: ${cvsAus}`;
+
+      outEl.value = outEl.value + gpeDetailedBlock + systemicBlock;
+      saveActiveWorkingDraft();
+      if (autoArchive && document.getElementById('ptName')?.value.trim()) {
+        saveCurrentCaseToStorage(false);
+      }
+    };
     
   </script>
 </body>
