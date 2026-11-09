@@ -281,6 +281,252 @@
     html.dark main [class*="bg-blue-50"],
     html.dark main [class*="bg-emerald-50"],
     html.dark main [class*="bg-purple-50"],
+  <!-- ==========================================================================
+       [SECTION 02] CUSTOM CSS STYLESHEET
+       (CLINICAL CALLOUTS, SMOOTH ORBIT STAGE, MOBILE SWIPE RAIL & SECURITY)
+       ========================================================================== -->
+  <style>
+    /* 2.1 Base Typography & Anti-Copy Selection Protection */
+    body {
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      letter-spacing: -0.01em;
+      -webkit-user-select: none;
+      user-select: none;
+      overflow-x: hidden;
+    }
+    input, textarea, select, #outputParagraphs, #geminiModalOutput {
+      -webkit-user-select: text;
+      user-select: text;
+    }
+    .font-clinical-serif {
+      font-family: 'Source Serif 4', Georgia, serif;
+    }
+    .font-clinical-mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    details > summary { list-style: none; }
+    details > summary::-webkit-details-marker { display: none; }
+
+    /* 2.2 Clinical Prompt & Pearl Callout Boxes */
+    .ask-prompt {
+      background-color: #eff6ff;
+      border-left: 3.5px solid #2563eb;
+      padding: 0.45rem 0.75rem;
+      font-size: 0.78rem;
+      color: #1e3a8a;
+      margin-bottom: 0.5rem;
+      border-radius: 0 0.4rem 0.4rem 0;
+    }
+    .clinical-pearl {
+      background-color: #f0fdf4;
+      border-left: 3.5px solid #16a34a;
+      padding: 0.45rem 0.75rem;
+      font-size: 0.76rem;
+      color: #14532d;
+      margin-bottom: 0.5rem;
+      border-radius: 0 0.4rem 0.4rem 0;
+    }
+
+    /* 2.3 Google 4-Color Ring Avatar (Symmetric Even-Pixel Grid Centering) & Chrome Pill Buttons */
+    .google-avatar-ring {
+      background: conic-gradient(
+        #ea4335 0deg 90deg,
+        #4285f4 90deg 180deg,
+        #34a853 180deg 270deg,
+        #fbbc05 270deg 360deg
+      );
+      padding: 3px;
+      border-radius: 50%;
+      display: inline-grid;
+      place-items: center;
+      aspect-ratio: 1 / 1;
+      line-height: 0;
+      vertical-align: middle;
+      box-sizing: border-box;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .google-avatar-ring:hover {
+      transform: scale(1.04);
+      box-shadow: 0 0 12px rgba(66, 133, 244, 0.45);
+    }
+    .google-avatar-inner {
+      display: block;
+      border: 2px solid #0f172a;
+      border-radius: 50%;
+      object-fit: cover;
+      aspect-ratio: 1 / 1;
+      box-sizing: border-box;
+      background-color: #1e293b;
+    }
+    .chrome-pill-btn {
+      border-radius: 9999px;
+      font-weight: 600;
+      transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .chrome-pill-btn:active {
+      transform: scale(0.97);
+    }
+    .gemini-chrome-fab {
+      background: linear-gradient(135deg, #1a73e8 0%, #7c3aed 55%, #db2777 100%);
+      box-shadow: 0 8px 24px -4px rgba(124, 58, 237, 0.55);
+    }
+    .gemini-chrome-fab:hover {
+      box-shadow: 0 12px 28px -3px rgba(124, 58, 237, 0.75);
+      filter: brightness(1.06);
+    }
+
+    /* 2.4 Center Stage, Extreme-Right Rail & Smooth Orbit Section Transitions */
+    #orbitWorkspaceWrapper {
+      position: relative;
+    }
+    .orbit-center-stage {
+      position: relative;
+      min-height: 520px;
+    }
+    main details.orbit-section-card {
+      display: none;
+      opacity: 0;
+      pointer-events: none;
+      transform: translate3d(30px, 0, 0) scale(0.98);
+      transition: opacity 0.3s cubic-bezier(0.25, 1, 0.5, 1), transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+    main details.orbit-section-card.orbit-active {
+      display: block;
+      opacity: 1;
+      pointer-events: auto;
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+    main details.orbit-section-card.orbit-leaving {
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 10;
+      pointer-events: none;
+      animation: smoothOrbitOut 0.38s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+    }
+    main details.orbit-section-card.orbit-entering {
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 20;
+      pointer-events: none;
+      animation: smoothOrbitIn 0.38s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+    }
+
+    @keyframes smoothOrbitOut {
+      0% { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+      100% { opacity: 0; transform: translate3d(-35px, 0, 0) scale(0.96); }
+    }
+    @keyframes smoothOrbitIn {
+      0% { opacity: 0; transform: translate3d(35px, 0, 0) scale(0.96); }
+      100% { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+    }
+
+    /* Right Vertical Section Rail Item Styling */
+    .rail-item-btn {
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .rail-item-btn.rail-active {
+      background: linear-gradient(135deg, #1d4ed8 0%, #3b82f6 100%) !important;
+      color: #ffffff !important;
+      border-color: #1e40af !important;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
+      transform: translateX(-4px);
+    }
+
+    /* Mobile Bottom Horizontal Swipe Rail (No Scrollbar or Arrows) */
+    #mobileBottomRail {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      touch-action: pan-x;
+      overscroll-behavior-x: contain;
+      scroll-snap-type: x proximity;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    #mobileBottomRail::-webkit-scrollbar {
+      display: none;
+      width: 0;
+      height: 0;
+    }
+    #mobileBottomRail button {
+      scroll-snap-align: center;
+      touch-action: manipulation;
+    }
+
+    /* 2.5 Forensic Watermark & Instant Anti-Screenshot Privacy Curtain */
+    #forensicWatermark {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 35;
+      overflow: hidden;
+      opacity: 0.045;
+      display: flex;
+      flex-wrap: wrap;
+      align-content: space-around;
+      justify-content: space-around;
+      user-select: none;
+    }
+    html.dark #forensicWatermark {
+      opacity: 0.065;
+    }
+    .watermark-stamp {
+      transform: rotate(-24deg);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 700;
+      white-space: nowrap;
+      padding: 2rem;
+      color: currentColor;
+    }
+    body.capture-shield-active #antiCaptureCurtain {
+      display: flex !important;
+    }
+    body.capture-shield-active main,
+    body.capture-shield-active header {
+      filter: blur(28px) brightness(0.1);
+    }
+
+    /* 2.6 Comprehensive Dark Mode Overrides */
+    html.dark body { background-color: #0f172a; color: #e2e8f0; }
+    html.dark details, html.dark section, html.dark .modal-card, html.dark #leftSidebar, html.dark #rightSectionRail {
+      background-color: #1e293b !important;
+      border-color: #334155 !important;
+      color: #f1f5f9 !important;
+    }
+    html.dark summary {
+      background-color: #0f172a !important;
+      color: #f8fafc !important;
+      border-color: #334155 !important;
+    }
+    html.dark input, html.dark select, html.dark textarea {
+      background-color: #0f172a !important;
+      border-color: #475569 !important;
+      color: #f8fafc !important;
+    }
+    html.dark .bg-slate-50 { background-color: #0f172a !important; border-color: #334155 !important; }
+    html.dark .ask-prompt { background-color: #1e3a8a40; color: #bfdbfe; border-left-color: #60a5fa; }
+    html.dark .clinical-pearl { background-color: #14532d40; color: #bbf7d0; border-left-color: #4ade80; }
+
+    html.dark main [class*="bg-white"],
+    html.dark .modal-card [class*="bg-white"] {
+      background-color: #0f172a !important;
+      color: #f1f5f9 !important;
+      border-color: #334155 !important;
+    }
+    html.dark main [class*="bg-slate-50"],
+    html.dark main [class*="bg-slate-100"],
+    html.dark main [class*="bg-blue-50"],
+    html.dark main [class*="bg-emerald-50"],
+    html.dark main [class*="bg-purple-50"],
     html.dark main [class*="bg-amber-50"],
     html.dark main [class*="bg-rose-50"],
     html.dark main [class*="bg-cyan-50"],
@@ -342,13 +588,12 @@
       body:not(.authorized-print) * {
         display: none !important;
       }
-      header, .no-print, #geminiFloatBtn, #geminiModal, #settingsModal, #loginModal, #leftSidebar, #sidebarOverlay, #profileModal, #storageModal, #aboutModal, #accountPopup, #privateAccessOverlay, #antiCaptureCurtain, #rightSectionRail {
+      header, .no-print, #geminiFloatBtn, #geminiModal, #settingsModal, #loginModal, #leftSidebar, #sidebarOverlay, #profileModal, #storageModal, #aboutModal, #accountPopup, #privateAccessOverlay, #antiCaptureCurtain, #rightSectionRail, #mobileBottomRail {
         display: none !important;
       }
     }
   </style>
 </head>
-<body class="bg-slate-100 text-slate-800 min-h-screen pb-24 transition-colors duration-200" oncontextmenu="return false;">
 
   <!-- ==========================================================================
        [SECTION 03] STICKY TOP HEADER (MORE MENU BUTTON, CASE SEARCH BAR & ACCOUNT POPUP)
