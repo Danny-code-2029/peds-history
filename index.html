@@ -84,14 +84,13 @@
       border-radius: 0 0.4rem 0.4rem 0;
     }
 
+   @keyframes revolveColoredBeads {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
     .google-avatar-ring {
-      background: conic-gradient(
-        #ea4335 0deg 90deg,
-        #4285f4 90deg 180deg,
-        #34a853 180deg 270deg,
-        #fbbc05 270deg 360deg
-      );
-      padding: 3px;
+      position: relative;
+      padding: 4px;
       border-radius: 50%;
       display: inline-grid;
       place-items: center;
@@ -99,13 +98,34 @@
       line-height: 0;
       vertical-align: middle;
       box-sizing: border-box;
-      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      transition: transform 0.2s ease, filter 0.2s ease;
+    }
+    .google-avatar-ring::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: conic-gradient(
+        #ea4335 0deg 90deg,
+        #4285f4 90deg 180deg,
+        #34a853 180deg 270deg,
+        #fbbc05 270deg 360deg,
+        #ea4335 360deg
+      );
+      -webkit-mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='none' stroke='black' stroke-width='9' stroke-linecap='round' stroke-dasharray='0.5 17.17'/></svg>");
+      mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='none' stroke='black' stroke-width='9' stroke-linecap='round' stroke-dasharray='0.5 17.17'/></svg>");
+      -webkit-mask-size: 100% 100%;
+      mask-size: 100% 100%;
+      animation: revolveColoredBeads 5s linear infinite;
+      pointer-events: none;
     }
     .google-avatar-ring:hover {
-      transform: scale(1.04);
-      box-shadow: 0 0 12px rgba(66, 133, 244, 0.45);
+      transform: scale(1.06);
+      filter: drop-shadow(0 0 8px rgba(66, 133, 244, 0.55));
     }
     .google-avatar-inner {
+      position: relative;
+      z-index: 1;
       display: block;
       border: 2px solid #0f172a;
       border-radius: 50%;
@@ -211,20 +231,20 @@
       transition: top 0.28s cubic-bezier(0.25, 1, 0.5, 1), height 0.28s ease;
     }
 
-    /* Slide-In Vertical Rail (Opens Towards Left, Translucent Body, Transparent Font) */
+   /* Slide-In Vertical Rail (Opens Towards Left, Translucent Body, Search-Bar Font Colors) */
     #rightSectionRail {
       position: fixed !important;
       top: 58px !important;
       right: 18px !important;
-      width: 280px !important;
+      width: 288px !important;
       max-height: calc(100vh - 130px) !important;
       z-index: 45 !important;
-      background: rgba(15, 23, 42, 0.28) !important;
+      background: rgba(15, 23, 42, 0.35) !important;
       backdrop-filter: blur(16px) !important;
       -webkit-backdrop-filter: blur(16px) !important;
-      border: 1px solid rgba(255, 255, 255, 0.14) !important;
-      box-shadow: -12px 12px 32px rgba(2, 6, 23, 0.35) !important;
-      color: transparent !important;
+      border: 1px solid rgba(148, 163, 184, 0.22) !important;
+      box-shadow: -12px 12px 32px rgba(2, 6, 23, 0.4) !important;
+      color: #94a3b8 !important;
       transform: translateX(calc(100% + 28px));
       opacity: 0;
       pointer-events: none;
@@ -236,28 +256,32 @@
       opacity: 1;
       pointer-events: auto;
     }
-    #rightSectionRail * {
-      color: transparent !important;
-      user-select: none;
-    }
 
-    /* Inactive vs Highlighted Active Section Inside Translucent Rail */
+    /* Section Items: Search-Bar Slate-400 Text + Pop-Up Effect on Cursor Hover */
     .rail-item-btn {
-      background: rgba(255, 255, 255, 0.03) !important;
-      border: 1px solid rgba(255, 255, 255, 0.08) !important;
-      color: transparent !important;
-      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      background: rgba(30, 41, 59, 0.28) !important;
+      border: 1px solid rgba(148, 163, 184, 0.16) !important;
+      color: #94a3b8 !important;
+      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.18s ease, color 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
     }
     .rail-item-btn:hover {
-      background: rgba(59, 130, 246, 0.18) !important;
-      border-color: rgba(96, 165, 250, 0.4) !important;
+      background: rgba(30, 41, 59, 0.78) !important;
+      border-color: rgba(96, 165, 250, 0.55) !important;
+      color: #ffffff !important;
+      transform: translateX(-6px) scale(1.04);
+      box-shadow: 0 8px 20px -4px rgba(2, 6, 23, 0.65);
+      z-index: 5;
     }
     .rail-item-btn.rail-active {
-      background: linear-gradient(135deg, rgba(29, 78, 216, 0.78) 0%, rgba(59, 130, 246, 0.78) 100%) !important;
-      color: transparent !important;
-      border-color: rgba(96, 165, 250, 0.85) !important;
-      box-shadow: 0 4px 16px rgba(37, 99, 235, 0.5) !important;
+      background: linear-gradient(135deg, rgba(29, 78, 216, 0.85) 0%, rgba(59, 130, 246, 0.85) 100%) !important;
+      color: #ffffff !important;
+      border-color: rgba(147, 197, 253, 0.9) !important;
+      box-shadow: 0 6px 18px rgba(37, 99, 235, 0.5) !important;
       transform: translateX(-4px);
+    }
+    .rail-item-btn.rail-active:hover {
+      transform: translateX(-7px) scale(1.045);
     }
 
     #forensicWatermark {
@@ -287,7 +311,6 @@
     body.capture-shield-active main, body.capture-shield-active header { filter: blur(28px) brightness(0.1); }
 
     html.dark body { background-color: #0f172a; color: #e2e8f0; }
-    /* Removed #rightSectionRail from solid dark-mode override so its body stays translucent */
     html.dark details, html.dark section, html.dark .modal-card, html.dark #leftSidebar {
       background-color: #1e293b !important;
       border-color: #334155 !important;
@@ -298,10 +321,16 @@
       color: #f8fafc !important;
       border-color: #334155 !important;
     }
-    html.dark input, html.dark select, html.dark textarea {
+    /* Exclude #headerCaseSearch so it stays transparent inside the search pill without a rectangular patch */
+    html.dark input:not(#headerCaseSearch), html.dark select, html.dark textarea {
       background-color: #0f172a !important;
       border-color: #475569 !important;
       color: #f8fafc !important;
+    }
+    #headerCaseSearch {
+      background-color: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
     }
 
     @media print {
@@ -370,12 +399,8 @@
         <div id="searchResultsDropdown" class="hidden absolute left-0 right-0 mt-2 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700 overflow-hidden z-50 max-h-72 overflow-y-auto"></div>
       </div>
 
-      <!-- 3.3 Right: Device Lock Badge + Save Action + Sign-In Button OR Profile Avatar -->
+     <!-- 3.3 Extreme Right: Save Action + Sign-In Button OR Profile Avatar -->
       <div class="flex items-center gap-2 shrink-0 relative">
-        <span id="deviceLockBadge" class="hidden lg:inline-flex items-center gap-1 text-[10px] bg-emerald-950/90 text-emerald-300 border border-emerald-700/60 px-2.5 py-1 rounded-full font-clinical-mono">
-          🛡️ 1-Device Lock
-        </span>
-
         <button onclick="saveCurrentCaseToStorage(true)" class="chrome-pill-btn text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-1.5 border border-slate-700 hidden md:inline-flex" title="Save patient to Storage">
           <span>💾</span> <span>Save Case</span>
         </button>
@@ -388,14 +413,14 @@
           <span>Sign in</span>
         </button>
 
-        <!-- State B (Logged In): Only Circular Profile Picture with Concentric Google 4-Color Ring -->
+        <!-- State B (Logged In): Circular Profile Picture with Revolving Colored Beads -->
         <button id="headerAvatarBtn" onclick="toggleAccountPopup(event)" class="hidden inline-flex items-center justify-center p-0 leading-none rounded-full focus:outline-none" title="Google Account &amp; Logout">
           <span class="google-avatar-ring">
             <img id="headerAvatarImg" src="" alt="Profile" class="w-8 h-8 google-avatar-inner" />
           </span>
         </button>
 
-        <!-- 3.4 Upper-Right Account Popup Window -->
+        <!-- 3.4 Upper-Right Account Popup Window (Includes 1-Device Lock Active Status) -->
         <div id="accountPopup" class="hidden absolute right-0 top-12 w-72 bg-slate-900 text-white rounded-3xl shadow-2xl border border-slate-700 p-4 z-50">
           <div class="flex justify-between items-center mb-2">
             <span id="popupUserEmail" class="text-[11px] text-slate-300 truncate font-medium">user@gmail.com</span>
@@ -407,6 +432,9 @@
             </div>
             <div id="popupUserName" class="font-bold text-sm">Dr. Medico</div>
             <div id="popupUserMeta" class="text-[11px] text-slate-400 mt-0.5">MBBS</div>
+            <span id="deviceLockBadge" class="mt-2 inline-flex items-center gap-1 text-[10px] bg-emerald-950/90 text-emerald-300 border border-emerald-700/60 px-2.5 py-0.5 rounded-full font-clinical-mono">
+              🛡️ 1-Device Lock Active
+            </span>
             <button onclick="closeAccountPopup(); openProfileModal();" class="mt-2.5 text-xs border border-slate-600 hover:bg-slate-800 text-blue-300 px-4 py-1 rounded-full font-medium transition-colors">
               Manage your Medico Profile
             </button>
