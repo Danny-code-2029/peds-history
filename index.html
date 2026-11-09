@@ -185,14 +185,78 @@
       100% { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
     }
 
+   /* Vertical Slider Indicator Track (Extreme Right, Directly Below Profile Button) */
+    #rightRailSliderTrack {
+      position: fixed;
+      top: 58px;
+      right: 6px;
+      width: 8px;
+      height: calc(100vh - 130px);
+      background: rgba(148, 163, 184, 0.22);
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      border-radius: 9999px;
+      z-index: 46;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      transition: background 0.2s ease, box-shadow 0.2s ease;
+    }
+    #rightRailSliderThumb {
+      position: absolute;
+      left: 1px;
+      right: 1px;
+      height: 36px;
+      border-radius: 9999px;
+      background: linear-gradient(180deg, #3b82f6 0%, #1d4ed8 100%);
+      box-shadow: 0 0 10px rgba(59, 130, 246, 0.8);
+      transition: top 0.28s cubic-bezier(0.25, 1, 0.5, 1), height 0.28s ease;
+    }
+
+    /* Slide-In Vertical Rail (Opens Towards Left, Translucent Body, Transparent Font) */
+    #rightSectionRail {
+      position: fixed !important;
+      top: 58px !important;
+      right: 18px !important;
+      width: 280px !important;
+      max-height: calc(100vh - 130px) !important;
+      z-index: 45 !important;
+      background: rgba(15, 23, 42, 0.28) !important;
+      backdrop-filter: blur(16px) !important;
+      -webkit-backdrop-filter: blur(16px) !important;
+      border: 1px solid rgba(255, 255, 255, 0.14) !important;
+      box-shadow: -12px 12px 32px rgba(2, 6, 23, 0.35) !important;
+      color: transparent !important;
+      transform: translateX(calc(100% + 28px));
+      opacity: 0;
+      pointer-events: none;
+      transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.25s ease;
+      scrollbar-width: thin;
+    }
+    #rightSectionRail.rail-open {
+      transform: translateX(0);
+      opacity: 1;
+      pointer-events: auto;
+    }
+    #rightSectionRail * {
+      color: transparent !important;
+      user-select: none;
+    }
+
+    /* Inactive vs Highlighted Active Section Inside Translucent Rail */
     .rail-item-btn {
+      background: rgba(255, 255, 255, 0.03) !important;
+      border: 1px solid rgba(255, 255, 255, 0.08) !important;
+      color: transparent !important;
       transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     }
+    .rail-item-btn:hover {
+      background: rgba(59, 130, 246, 0.18) !important;
+      border-color: rgba(96, 165, 250, 0.4) !important;
+    }
     .rail-item-btn.rail-active {
-      background: linear-gradient(135deg, #1d4ed8 0%, #3b82f6 100%) !important;
-      color: #ffffff !important;
-      border-color: #1e40af !important;
-      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
+      background: linear-gradient(135deg, rgba(29, 78, 216, 0.78) 0%, rgba(59, 130, 246, 0.78) 100%) !important;
+      color: transparent !important;
+      border-color: rgba(96, 165, 250, 0.85) !important;
+      box-shadow: 0 4px 16px rgba(37, 99, 235, 0.5) !important;
       transform: translateX(-4px);
     }
 
@@ -223,7 +287,8 @@
     body.capture-shield-active main, body.capture-shield-active header { filter: blur(28px) brightness(0.1); }
 
     html.dark body { background-color: #0f172a; color: #e2e8f0; }
-    html.dark details, html.dark section, html.dark .modal-card, html.dark #leftSidebar, html.dark #rightSectionRail {
+    /* Removed #rightSectionRail from solid dark-mode override so its body stays translucent */
+    html.dark details, html.dark section, html.dark .modal-card, html.dark #leftSidebar {
       background-color: #1e293b !important;
       border-color: #334155 !important;
       color: #f1f5f9 !important;
@@ -268,10 +333,10 @@
   <!-- ==========================================================================
        [SECTION 03] STICKY TOP HEADER (MORE MENU BUTTON, CASE SEARCH BAR & ACCOUNT POPUP)
        ========================================================================== -->
-  <header class="bg-slate-900 text-white sticky top-0 z-30 shadow-md border-b border-slate-800">
-    <div class="max-w-6xl mx-auto px-3 sm:px-4 py-2.5 flex items-center justify-between gap-2 sm:gap-4">
+  <header class="bg-slate-900 text-white sticky top-0 z-30 shadow-md border-b border-slate-800 w-full">
+    <div class="w-full px-2 sm:px-3 py-2.5 flex items-center justify-between gap-2 sm:gap-4">
 
-      <!-- 3.1 Left: More Menu Button (3 Horizontal Lines) + Application Title -->
+      <!-- 3.1 Extreme Left: More Menu Button (3 Horizontal Lines) + Application Title -->
       <div class="flex items-center gap-2.5 shrink-0">
         <button onclick="toggleSidebar()" class="p-2 rounded-full hover:bg-slate-800 active:bg-slate-700 transition-colors focus:outline-none" title="More Menu" aria-label="Open More Menu">
           <svg class="w-6 h-6 text-slate-100" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
@@ -2988,7 +3053,9 @@
       } catch (err) {} finally { btn.disabled = false; }
     }
 
-    // Orbit workspace layout with right rail & mobile bottom number rail
+  // Orbit workspace layout with hidden vertical slider rail & mobile bottom number rail
+    let lastCursorX = 0;
+
     function initOrbitWorkspaceLayout() {
       setupDevelopmentalTableSteppers();
       setupSystemicExamSteppers();
@@ -3008,11 +3075,18 @@
 
       const centerStage = document.createElement('div');
       centerStage.id = 'orbitCenterStage';
-      centerStage.className = 'lg:col-span-8 xl:col-span-9 orbit-center-stage';
+      centerStage.className = 'lg:col-span-12 orbit-center-stage';
 
       const rightRail = document.createElement('aside');
       rightRail.id = 'rightSectionRail';
-      rightRail.className = 'hidden lg:block lg:col-span-4 xl:col-span-3 bg-white dark:bg-slate-900 rounded-2xl shadow-md border border-slate-200 dark:border-slate-800 p-3 lg:sticky lg:top-16 space-y-1 max-h-[82vh] overflow-y-auto no-print';
+      rightRail.className = 'hidden lg:block rounded-2xl p-3 space-y-1 overflow-y-auto no-print';
+
+      // Vertical Slider Indicator Track fixed just below the Profile Button on Extreme Right
+      const sliderTrack = document.createElement('div');
+      sliderTrack.id = 'rightRailSliderTrack';
+      sliderTrack.className = 'hidden lg:block no-print';
+      sliderTrack.innerHTML = '<div id="rightRailSliderThumb"></div>';
+      document.body.appendChild(sliderTrack);
 
       // Mobile Bottom Horizontal Number Rail
       const mobileRail = document.createElement('div');
@@ -3022,7 +3096,7 @@
 
       mainEl.insertBefore(wrapper, footerEl);
       wrapper.appendChild(centerStage);
-      wrapper.appendChild(rightRail);
+      document.body.appendChild(rightRail);
 
       allSections.forEach((sec, idx) => {
         sec.open = true;
@@ -3033,22 +3107,78 @@
 
       currentOrbitSectionIndex = 0;
       renderRightSectionRail();
+      initRightRailProximitySensor();
+    }
+
+    function initRightRailProximitySensor() {
+      const rail = document.getElementById('rightSectionRail');
+      const track = document.getElementById('rightRailSliderTrack');
+      if (!rail || !track) return;
+
+      document.addEventListener('mousemove', (e) => {
+        if (window.innerWidth < 1024) return;
+        const vw = window.innerWidth;
+        const x = e.clientX;
+        const y = e.clientY;
+        const isBelowHeader = y >= 55;
+        const isApproachingFromLeft = x >= lastCursorX;
+        const isOpen = rail.classList.contains('rail-open');
+
+        // Slider sits at [vw - 14, vw - 6].
+        // 1. Open when approaching the slider from the left (within 55px to the left of slider)
+        if (!isOpen && isBelowHeader && isApproachingFromLeft && x >= vw - 68 && x <= vw - 14) {
+          rail.classList.add('rail-open');
+        }
+        // 2. Once cursor goes past the slider to the extreme right (x > vw - 10) OR exits left of the open rail, close it
+        else if (isOpen) {
+          const railRect = rail.getBoundingClientRect();
+          const passedSliderToRight = x >= vw - 10;
+          const exitedLeftOfRail = x < railRect.left - 16;
+          const aboveOrBelowRail = y < 50 || y > window.innerHeight - 50;
+          if (passedSliderToRight || exitedLeftOfRail || aboveOrBelowRail) {
+            rail.classList.remove('rail-open');
+          }
+        }
+
+        lastCursorX = x;
+      });
+
+      document.addEventListener('mouseleave', () => {
+        rail.classList.remove('rail-open');
+      });
     }
 
     function getAllMainSections() { return Array.from(document.querySelectorAll('#orbitCenterStage > details.orbit-section-card')); }
 
     function renderRightSectionRail() {
       const sections = getAllMainSections();
+      const visibleSections = sections.filter(s => !s.classList.contains('hidden'));
       const rail = document.getElementById('rightSectionRail');
+
       if (rail) {
-        let html = `<div class="px-2 py-1 border-b text-[11px] font-extrabold uppercase text-slate-500">Clinical Sections Rail</div><div class="space-y-1 pt-1">`;
+        let html = `<div class="px-2 py-1 border-b border-white/10 text-[11px] font-extrabold uppercase">Clinical Sections Rail</div><div class="space-y-1 pt-1">`;
         sections.forEach((sec, idx) => {
           if (sec.classList.contains('hidden')) return;
           const title = (sec.querySelector(':scope > summary > span:first-child')?.textContent.trim() || `Section ${idx+1}`).replace(/^\d+\.\s*/, '');
           const isActive = idx === currentOrbitSectionIndex;
-          html += `<button type="button" onclick="switchToOrbitSection(${idx})" class="rail-item-btn ${isActive ? 'rail-active' : 'bg-slate-50 hover:bg-blue-50 text-slate-700 dark:bg-slate-800 dark:text-slate-200'} w-full text-left px-3 py-2 rounded-xl border text-xs font-semibold flex items-center justify-between"><span>${idx+1}. ${title}</span><span>${isActive ? '● Active' : 'Open'}</span></button>`;
+          html += `<button type="button" onclick="switchToOrbitSection(${idx})" class="rail-item-btn ${isActive ? 'rail-active' : ''} w-full text-left px-3 py-2 rounded-xl border text-xs font-semibold flex items-center justify-between"><span>${idx+1}. ${title}</span><span>${isActive ? '● Active' : 'Open'}</span></button>`;
         });
         rail.innerHTML = html + `</div>`;
+      }
+
+      // Sync Vertical Slider Thumb Position with Active Section
+      const thumb = document.getElementById('rightRailSliderThumb');
+      const track = document.getElementById('rightRailSliderTrack');
+      if (thumb && track && visibleSections.length > 0) {
+        const activeVisibleIdx = Math.max(0, visibleSections.indexOf(sections[currentOrbitSectionIndex]));
+        const trackHeight = track.clientHeight || 400;
+        const thumbHeight = Math.max(28, Math.floor(trackHeight / visibleSections.length));
+        const maxTop = Math.max(0, trackHeight - thumbHeight - 4);
+        const topPx = visibleSections.length > 1
+          ? Math.round((activeVisibleIdx / (visibleSections.length - 1)) * maxTop) + 2
+          : 2;
+        thumb.style.height = `${thumbHeight}px`;
+        thumb.style.top = `${topPx}px`;
       }
 
       const mobileRail = document.getElementById('mobileBottomRail');
@@ -3059,7 +3189,7 @@
           const isActive = idx === currentOrbitSectionIndex;
           mHtml += `<button type="button" onclick="switchToOrbitSection(${idx})" class="w-8 h-8 rounded-full font-bold text-xs flex items-center justify-center shrink-0 ${isActive ? 'bg-blue-600 text-white shadow-md scale-110' : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300'}" title="Sec ${idx+1}">${idx+1}</button>`;
         });
-mobileRail.innerHTML = mHtml;
+        mobileRail.innerHTML = mHtml;
         const activeBadge = mobileRail.querySelector('button.scale-110');
         if (activeBadge) {
           activeBadge.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
