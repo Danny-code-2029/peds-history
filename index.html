@@ -115,8 +115,13 @@
       animation: revolveColoredBeads 4.5s linear infinite;
       pointer-events: none;
     }
-    .google-avatar-ring:hover {
+.google-avatar-ring:hover {
       transform: scale(1.06);
+    }
+    /* Pause revolving beads inside hidden modals/sidebars so only the visible header ring runs */
+    .hidden .google-avatar-ring::before,
+    .-translate-x-full .google-avatar-ring::before {
+      animation-play-state: paused !important;
     }
     .google-avatar-inner {
       position: relative;
@@ -200,83 +205,96 @@
       100% { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
     }
 
-   /* Vertical Slider Indicator Track (Extreme Right, Directly Below Profile Button) */
+/* Disable Collapse/Expand UI on Main Section Headers */
+    #orbitCenterStage > details.orbit-section-card > summary {
+      cursor: default !important;
+      user-select: none;
+    }
+    #orbitCenterStage > details.orbit-section-card > summary > span:nth-child(2) {
+      display: none !important;
+    }
+
+    /* 2 White Lines Adjacent to Rail (No Black Middle Line) */
     #rightRailSliderTrack {
       position: fixed;
       top: 58px;
-      right: 6px;
-      width: 8px;
+      right: 4px;
+      width: 5px;
       height: calc(100vh - 130px);
-      background: rgba(148, 163, 184, 0.22);
-      border: 1px solid rgba(148, 163, 184, 0.35);
+      background: rgba(255, 255, 255, 0.55);
+      border-left: 1.5px solid rgba(255, 255, 255, 0.95);
+      border-right: 1.5px solid rgba(255, 255, 255, 0.95);
       border-radius: 9999px;
       z-index: 46;
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      transition: background 0.2s ease, box-shadow 0.2s ease;
+      contain: layout style paint;
     }
     #rightRailSliderThumb {
       position: absolute;
-      left: 1px;
-      right: 1px;
+      top: 0;
+      left: -1px;
+      right: -1px;
       height: 36px;
       border-radius: 9999px;
-      background: linear-gradient(180deg, #3b82f6 0%, #1d4ed8 100%);
-      box-shadow: 0 0 10px rgba(59, 130, 246, 0.8);
-      transition: top 0.28s cubic-bezier(0.25, 1, 0.5, 1), height 0.28s ease;
+      background: #3b82f6;
+      will-change: transform;
+      transform: translate3d(0, 2px, 0);
+      transition: transform 0.22s cubic-bezier(0.25, 1, 0.5, 1);
     }
 
-   /* Slide-In Vertical Rail (Opens Towards Left, Translucent Body, Search-Bar Font Colors) */
+    /* Slide-In Vertical Rail Adjacent to the 2 White Lines (GPU-Accelerated, Zero Blur Lag) */
     #rightSectionRail {
       position: fixed !important;
       top: 58px !important;
-      right: 18px !important;
-      width: 288px !important;
+      right: 9px !important;
+      width: 280px !important;
       max-height: calc(100vh - 130px) !important;
       z-index: 45 !important;
-      background: rgba(15, 23, 42, 0.35) !important;
-      backdrop-filter: blur(16px) !important;
-      -webkit-backdrop-filter: blur(16px) !important;
-      border: 1px solid rgba(148, 163, 184, 0.22) !important;
-      box-shadow: -12px 12px 32px rgba(2, 6, 23, 0.4) !important;
+      background: rgba(15, 23, 42, 0.76) !important;
+      border: 1px solid rgba(148, 163, 184, 0.28) !important;
+      box-shadow: -10px 10px 24px rgba(2, 6, 23, 0.45) !important;
       color: #94a3b8 !important;
-      transform: translateX(calc(100% + 28px));
+      will-change: transform, opacity;
+      contain: layout paint;
+      transform: translate3d(calc(100% + 16px), 0, 0);
       opacity: 0;
       pointer-events: none;
-      transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.25s ease;
-      scrollbar-width: thin;
+      transition: transform 0.24s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.18s ease;
+      scrollbar-width: none;
+    }
+    #rightSectionRail::-webkit-scrollbar {
+      display: none;
     }
     #rightSectionRail.rail-open {
-      transform: translateX(0);
+      transform: translate3d(0, 0, 0);
       opacity: 1;
       pointer-events: auto;
     }
 
-    /* Section Items: Search-Bar Slate-400 Text + Pop-Up Effect on Cursor Hover */
+    /* Section Items: Fast GPU Transform Pop-Up & Search-Bar Font Colors */
     .rail-item-btn {
       position: relative;
-      background: rgba(30, 41, 59, 0.28) !important;
-      border: 1px solid rgba(148, 163, 184, 0.16) !important;
+      background: rgba(30, 41, 59, 0.42) !important;
+      border: 1px solid rgba(148, 163, 184, 0.18) !important;
       color: #94a3b8 !important;
-      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.18s ease, color 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+      will-change: transform;
+      transform: translate3d(0, 0, 0) scale(1);
+      transition: transform 0.15s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
     }
     .rail-item-btn:hover {
-      background: rgba(30, 41, 59, 0.78) !important;
-      border-color: rgba(96, 165, 250, 0.55) !important;
+      background: rgba(30, 41, 59, 0.92) !important;
+      border-color: rgba(96, 165, 250, 0.65) !important;
       color: #ffffff !important;
-      transform: translateX(-6px) scale(1.04);
-      box-shadow: 0 8px 20px -4px rgba(2, 6, 23, 0.65);
+      transform: translate3d(-5px, 0, 0) scale(1.03);
       z-index: 5;
     }
     .rail-item-btn.rail-active {
-      background: linear-gradient(135deg, rgba(29, 78, 216, 0.85) 0%, rgba(59, 130, 246, 0.85) 100%) !important;
+      background: linear-gradient(135deg, rgba(29, 78, 216, 0.92) 0%, rgba(59, 130, 246, 0.92) 100%) !important;
       color: #ffffff !important;
-      border-color: rgba(147, 197, 253, 0.9) !important;
-      box-shadow: 0 6px 18px rgba(37, 99, 235, 0.5) !important;
-      transform: translateX(-4px);
+      border-color: rgba(147, 197, 253, 0.95) !important;
+      transform: translate3d(-3px, 0, 0);
     }
     .rail-item-btn.rail-active:hover {
-      transform: translateX(-7px) scale(1.045);
+      transform: translate3d(-6px, 0, 0) scale(1.035);
     }
 
     #forensicWatermark {
@@ -291,6 +309,8 @@
       align-content: space-around;
       justify-content: space-around;
       user-select: none;
+      contain: strict;
+      transform: translate3d(0, 0, 0);
     }
     html.dark #forensicWatermark { opacity: 0.065; }
     .watermark-stamp {
@@ -3079,7 +3099,7 @@
   // Orbit workspace layout with hidden vertical slider rail & mobile bottom number rail
     let lastCursorX = 0;
 
-    function initOrbitWorkspaceLayout() {
+function initOrbitWorkspaceLayout() {
       setupDevelopmentalTableSteppers();
       setupSystemicExamSteppers();
 
@@ -3104,7 +3124,7 @@
       rightRail.id = 'rightSectionRail';
       rightRail.className = 'hidden lg:block rounded-2xl p-3 space-y-1 overflow-y-auto no-print';
 
-      // Vertical Slider Indicator Track fixed just below the Profile Button on Extreme Right
+      // 2 White Vertical Lines Slider Track below Profile Button
       const sliderTrack = document.createElement('div');
       sliderTrack.id = 'rightRailSliderTrack';
       sliderTrack.className = 'hidden lg:block no-print';
@@ -3125,20 +3145,33 @@
         sec.open = true;
         sec.classList.add('orbit-section-card');
         if (idx === 0) sec.classList.add('orbit-active');
+
+        // Disable "Tap to collapse/expand" behavior on main section headers
+        const summaryEl = sec.querySelector(':scope > summary');
+        if (summaryEl) {
+          const secondSpan = summaryEl.querySelector('span:nth-child(2)');
+          if (secondSpan) secondSpan.remove();
+          summaryEl.addEventListener('click', (e) => {
+            e.preventDefault();
+            sec.open = true;
+          });
+        }
+
         centerStage.appendChild(sec);
       });
 
       currentOrbitSectionIndex = 0;
       renderRightSectionRail();
       initRightRailProximitySensor();
+      initKeyboardArrowNavigation();
     }
 
-// Debounce draft auto-saving so typing in inputs never slows down animations
+    // Debounce draft auto-saving so typing in inputs never slows down animations
     let draftSaveTimer = null;
     const _origSaveDraft = saveActiveWorkingDraft;
     saveActiveWorkingDraft = function() {
       clearTimeout(draftSaveTimer);
-      draftSaveTimer = setTimeout(() => _origSaveDraft(), 350);
+      draftSaveTimer = setTimeout(() => _origSaveDraft(), 450);
     };
 
     function formatCrispSectionTitle(rawText) {
@@ -3156,6 +3189,7 @@
       return shortMap[clean] || clean;
     }
 
+    // Open Rail when Left White Line is approached; close once past it or exiting rail
     function initRightRailProximitySensor() {
       const rail = document.getElementById('rightSectionRail');
       const track = document.getElementById('rightRailSliderTrack');
@@ -3171,17 +3205,19 @@
         requestAnimationFrame(() => {
           rafPending = false;
           const vw = window.innerWidth;
+          const leftWhiteLineX = vw - 9; // Exact X position of the left white line
           const isBelowHeader = y >= 55;
-          const isApproachingFromLeft = x >= lastCursorX;
+          const isMovingRight = x >= lastCursorX;
           const isOpen = rail.classList.contains('rail-open');
 
-          if (!isOpen && isBelowHeader && isApproachingFromLeft && x >= vw - 68 && x <= vw - 14) {
+          // Open when approaching the left white line from the left (within 22px of the left white line)
+          if (!isOpen && isBelowHeader && isMovingRight && x >= leftWhiteLineX - 22 && x <= leftWhiteLineX + 2) {
             rail.classList.add('rail-open');
           } else if (isOpen) {
-            const passedSliderToRight = x >= vw - 10;
-            const exitedLeftOfRail = x < vw - 322;
+            const passedWhiteLineToRight = x > leftWhiteLineX + 3;
+            const exitedLeftOfRail = x < vw - 296;
             const aboveOrBelowRail = y < 50 || y > window.innerHeight - 50;
-            if (passedSliderToRight || exitedLeftOfRail || aboveOrBelowRail) {
+            if (passedWhiteLineToRight || exitedLeftOfRail || aboveOrBelowRail) {
               rail.classList.remove('rail-open');
             }
           }
@@ -3194,11 +3230,75 @@
       });
     }
 
+    // Keyboard Shortcut: Left Arrow = Previous Section, Right Arrow = Next Section
+    function initKeyboardArrowNavigation() {
+      document.addEventListener('keydown', (e) => {
+        if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+        if (e.altKey || e.ctrlKey || e.metaKey) return;
+
+        // Ignore if a popup modal is open
+        const openModal = document.querySelector('#summaryPopupModal:not(.hidden), #profileModal:not(.hidden), #storageModal:not(.hidden), #aboutModal:not(.hidden), #loginModal:not(.hidden), #settingsModal:not(.hidden), #geminiModal:not(.hidden)');
+        if (openModal) return;
+
+        // Allow normal caret movement only when typing inside a non-empty text field away from its edges
+        const active = document.activeElement;
+        if (active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA') && !active.readOnly) {
+          const nonTextTypes = ['checkbox', 'radio', 'button', 'submit', 'range', 'file'];
+          if (!nonTextTypes.includes((active.type || '').toLowerCase())) {
+            const val = active.value || '';
+            if (val.length > 0) {
+              if (typeof active.selectionStart === 'number') {
+                if (e.key === 'ArrowLeft' && active.selectionStart > 0) return;
+                if (e.key === 'ArrowRight' && active.selectionEnd < val.length) return;
+              } else {
+                return;
+              }
+            }
+          }
+        }
+
+        e.preventDefault();
+        navigateMainSection(currentOrbitSectionIndex, e.key === 'ArrowLeft' ? -1 : 1);
+      });
+    }
+
     function getAllMainSections() { return Array.from(document.querySelectorAll('#orbitCenterStage > details.orbit-section-card')); }
+
+    function updateRailActiveStateFast() {
+      const sections = getAllMainSections();
+      const visibleSections = sections.filter(s => !s.classList.contains('hidden'));
+
+      document.querySelectorAll('#rightSectionRail .rail-item-btn').forEach(btn => {
+        const secIdx = parseInt(btn.dataset.secIdx, 10);
+        btn.classList.toggle('rail-active', secIdx === currentOrbitSectionIndex);
+      });
+
+      const thumb = document.getElementById('rightRailSliderThumb');
+      const track = document.getElementById('rightRailSliderTrack');
+      if (thumb && track && visibleSections.length > 0) {
+        const activeVisibleIdx = Math.max(0, visibleSections.indexOf(sections[currentOrbitSectionIndex]));
+        const trackHeight = track.clientHeight || 400;
+        const thumbHeight = Math.max(28, Math.floor(trackHeight / visibleSections.length));
+        const maxTop = Math.max(0, trackHeight - thumbHeight - 4);
+        const topPx = visibleSections.length > 1
+          ? Math.round((activeVisibleIdx / (visibleSections.length - 1)) * maxTop) + 2
+          : 2;
+        thumb.style.height = `${thumbHeight}px`;
+        thumb.style.transform = `translate3d(0, ${topPx}px, 0)`;
+      }
+
+      const mobileRail = document.getElementById('mobileBottomRail');
+      if (mobileRail) {
+        mobileRail.querySelectorAll('button[data-sec-idx]').forEach(btn => {
+          const isActive = parseInt(btn.dataset.secIdx, 10) === currentOrbitSectionIndex;
+          btn.className = `w-8 h-8 rounded-full font-bold text-xs flex items-center justify-center shrink-0 ${isActive ? 'bg-blue-600 text-white shadow-md scale-110' : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300'}`;
+          if (isActive) btn.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+        });
+      }
+    }
 
     function renderRightSectionRail() {
       const sections = getAllMainSections();
-      const visibleSections = sections.filter(s => !s.classList.contains('hidden'));
       const rail = document.getElementById('rightSectionRail');
 
       if (rail) {
@@ -3211,24 +3311,9 @@
           if (summarySpan) summarySpan.textContent = `${idx + 1}. ${crispTitle}`;
 
           const isActive = idx === currentOrbitSectionIndex;
-          html += `<button type="button" onclick="switchToOrbitSection(${idx})" class="rail-item-btn ${isActive ? 'rail-active' : ''} w-full text-left px-3 py-2 rounded-xl border text-xs font-semibold truncate">${idx + 1}. ${crispTitle}</button>`;
+          html += `<button type="button" data-sec-idx="${idx}" onclick="switchToOrbitSection(${idx})" class="rail-item-btn ${isActive ? 'rail-active' : ''} w-full text-left px-3 py-2 rounded-xl border text-xs font-semibold truncate">${idx + 1}. ${crispTitle}</button>`;
         });
         rail.innerHTML = html + `</div>`;
-      }
-
-      // Sync Vertical Slider Thumb Position with Active Section
-      const thumb = document.getElementById('rightRailSliderThumb');
-      const track = document.getElementById('rightRailSliderTrack');
-      if (thumb && track && visibleSections.length > 0) {
-        const activeVisibleIdx = Math.max(0, visibleSections.indexOf(sections[currentOrbitSectionIndex]));
-        const trackHeight = track.clientHeight || 400;
-        const thumbHeight = Math.max(28, Math.floor(trackHeight / visibleSections.length));
-        const maxTop = Math.max(0, trackHeight - thumbHeight - 4);
-        const topPx = visibleSections.length > 1
-          ? Math.round((activeVisibleIdx / (visibleSections.length - 1)) * maxTop) + 2
-          : 2;
-        thumb.style.height = `${thumbHeight}px`;
-        thumb.style.top = `${topPx}px`;
       }
 
       const mobileRail = document.getElementById('mobileBottomRail');
@@ -3237,14 +3322,12 @@
         sections.forEach((sec, idx) => {
           if (sec.classList.contains('hidden')) return;
           const isActive = idx === currentOrbitSectionIndex;
-          mHtml += `<button type="button" onclick="switchToOrbitSection(${idx})" class="w-8 h-8 rounded-full font-bold text-xs flex items-center justify-center shrink-0 ${isActive ? 'bg-blue-600 text-white shadow-md scale-110' : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300'}" title="Sec ${idx+1}">${idx+1}</button>`;
+          mHtml += `<button type="button" data-sec-idx="${idx}" onclick="switchToOrbitSection(${idx})" class="w-8 h-8 rounded-full font-bold text-xs flex items-center justify-center shrink-0 ${isActive ? 'bg-blue-600 text-white shadow-md scale-110' : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300'}" title="Sec ${idx+1}">${idx+1}</button>`;
         });
         mobileRail.innerHTML = mHtml;
-        const activeBadge = mobileRail.querySelector('button.scale-110');
-        if (activeBadge) {
-          activeBadge.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
-        }
       }
+
+      updateRailActiveStateFast();
       rebuildSectionBottomNavBars();
     }
 
@@ -3262,8 +3345,13 @@
           navBar.className = 'section-step-nav flex flex-wrap items-center justify-between gap-2 pt-3 mt-4 border-t no-print';
           contentDiv.appendChild(navBar);
         }
-        const prevBtn = idx > 0 ? `<button type="button" onclick="navigateMainSection(${idx}, -1)" class="chrome-pill-btn text-xs bg-slate-200 text-slate-800 px-3.5 py-2">← Prev</button>` : `<span></span>`;
-        const nextBtn = idx < lastVisibleIdx ? `<button type="button" onclick="navigateMainSection(${idx}, 1)" class="chrome-pill-btn text-xs bg-blue-600 text-white px-4 py-2 shadow">Next ➔</button>` : `<button type="button" onclick="triggerFinalGenerateAndPopup()" class="chrome-pill-btn text-xs gemini-chrome-fab text-white px-5 py-2.5 shadow-lg font-bold">✨ Generate &amp; Auto-Save ➔</button>`;
+        // Identical consistent blue pill buttons for both Prev and Next
+        const prevBtn = idx > 0
+          ? `<button type="button" onclick="navigateMainSection(${idx}, -1)" class="chrome-pill-btn text-xs bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 shadow">⬅ Prev</button>`
+          : `<span></span>`;
+        const nextBtn = idx < lastVisibleIdx
+          ? `<button type="button" onclick="navigateMainSection(${idx}, 1)" class="chrome-pill-btn text-xs bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 shadow">Next ➔</button>`
+          : `<button type="button" onclick="triggerFinalGenerateAndPopup()" class="chrome-pill-btn text-xs gemini-chrome-fab text-white px-5 py-2.5 shadow-lg font-bold">✨ Generate &amp; Auto-Save ➔</button>`;
         navBar.innerHTML = prevBtn + nextBtn;
       });
     }
@@ -3291,14 +3379,14 @@
       newSec.classList.remove('orbit-leaving'); newSec.classList.add('orbit-active', 'orbit-entering');
 
       currentOrbitSectionIndex = targetIndex;
-      renderRightSectionRail();
+      updateRailActiveStateFast();
       window.scrollTo({ top: 0, behavior: 'smooth' });
 
       setTimeout(() => {
         oldSec.classList.remove('orbit-leaving');
         newSec.classList.remove('orbit-entering');
         isOrbitAnimating = false;
-      }, 400);
+      }, 380);
     }
 
     function setupDevelopmentalTableSteppers() {
