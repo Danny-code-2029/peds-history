@@ -270,34 +270,35 @@
       pointer-events: auto;
     }
 
-    /* Uniform Pill Cabinets Like Section 7 + Pop-Out Hover Effect */
+/* Every Rail Label Looks Like Section 7 All the Time (#0f172a Fill, #60a5fa Outline, White Text) */
     .rail-item-btn {
       position: relative;
-      background-color: #1e293b !important;
-      border: 1px solid #334155 !important;
-      color: #cbd5e1 !important;
+      background-color: #0f172a !important;
+      border: 1.5px solid #60a5fa !important;
+      color: #ffffff !important;
       font-weight: 600 !important;
       letter-spacing: 0.01em;
       border-radius: 9999px !important;
       padding: 0.5rem 1rem !important;
-      transition: transform 0.14s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.14s ease, color 0.14s ease, border-color 0.14s ease;
+      box-shadow: 0 2px 8px rgba(2, 6, 23, 0.45);
+      transition: transform 0.14s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.14s ease, border-color 0.14s ease, box-shadow 0.14s ease;
     }
     .rail-item-btn:hover {
       background-color: #0f172a !important;
-      border-color: #60a5fa !important;
+      border-color: #93c5fd !important;
       color: #ffffff !important;
-      transform: translateX(-6px) scale(1.02);
-      box-shadow: 0 4px 14px rgba(2, 6, 23, 0.5);
+      transform: translateX(-6px) scale(1.025);
+      box-shadow: 0 6px 16px rgba(2, 6, 23, 0.7);
       z-index: 5;
     }
     .rail-item-btn.rail-active {
       background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 100%) !important;
       color: #ffffff !important;
-      border-color: #93c5fd !important;
+      border-color: #bfdbfe !important;
       transform: translateX(-4px);
     }
     .rail-item-btn.rail-active:hover {
-      transform: translateX(-7px) scale(1.025);
+      transform: translateX(-7px) scale(1.03);
     }
     #forensicWatermark {
       position: fixed;
@@ -437,15 +438,15 @@
           </span>
         </button>
 
-        <!-- 3.4 Upper-Right Account Popup Window (Includes 1-Device Lock Active Status) -->
+<!-- 3.4 Upper-Right Account Popup Window (No Avatar Ring Inside Popup; Centered Red Logout Button with Black Outline) -->
         <div id="accountPopup" class="hidden absolute right-0 top-12 w-72 bg-slate-900 text-white rounded-3xl shadow-2xl border border-slate-700 p-4 z-50">
           <div class="flex justify-between items-center mb-2">
             <span id="popupUserEmail" class="text-[11px] text-slate-300 truncate font-medium">user@gmail.com</span>
             <button onclick="closeAccountPopup()" class="text-slate-400 hover:text-white text-base leading-none">&times;</button>
           </div>
           <div class="flex flex-col items-center text-center py-2">
-            <div class="google-avatar-ring mb-2 cursor-pointer" onclick="closeAccountPopup(); openProfileModal();">
-              <img id="popupAvatarImg" src="" alt="Profile" class="w-16 h-16 google-avatar-inner" />
+            <div class="mb-2 cursor-pointer" onclick="closeAccountPopup(); openProfileModal();">
+              <img id="popupAvatarImg" src="" alt="Profile" class="w-16 h-16 rounded-full object-cover border-2 border-slate-700 bg-slate-800" />
             </div>
             <div id="popupUserName" class="font-bold text-sm">Dr. Medico</div>
             <div id="popupUserMeta" class="text-[11px] text-slate-400 mt-0.5">MBBS</div>
@@ -464,7 +465,9 @@
             <button onclick="closeAccountPopup(); toggleSettingsModal();" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-800 text-left text-slate-200">
               <span>⚙️</span> <span>Settings &amp; Privacy Lock</span>
             </button>
-            <button onclick="closeAccountPopup(); handleMedicoLogout();" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl bg-red-600/20 hover:bg-red-600/30 text-red-300 font-semibold text-left">
+          </div>
+          <div class="pt-3 mt-2 border-t border-slate-800 flex justify-center">
+            <button onclick="closeAccountPopup(); handleMedicoLogout();" class="chrome-pill-btn justify-center px-5 py-2 rounded-full bg-red-600 hover:bg-red-700 text-white font-bold text-xs border-2 border-black shadow-md">
               <span>🚪</span> <span>Log out &amp; Release Device Slot</span>
             </button>
           </div>
@@ -3232,35 +3235,40 @@ function initOrbitWorkspaceLayout() {
       });
     }
 
-    // Keyboard Shortcut: Left Arrow = Previous Section, Right Arrow = Next Section
+// Keyboard Shortcut: Left/Up Arrow = Previous Section, Right/Down Arrow = Next Section (All the Way to the End)
     function initKeyboardArrowNavigation() {
       document.addEventListener('keydown', (e) => {
-        if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+        const isHorizontal = e.key === 'ArrowLeft' || e.key === 'ArrowRight';
+        const isVertical = e.key === 'ArrowUp' || e.key === 'ArrowDown';
+        if (!isHorizontal && !isVertical) return;
         if (e.altKey || e.ctrlKey || e.metaKey) return;
 
         // Ignore if a popup modal is open
         const openModal = document.querySelector('#summaryPopupModal:not(.hidden), #profileModal:not(.hidden), #storageModal:not(.hidden), #aboutModal:not(.hidden), #loginModal:not(.hidden), #settingsModal:not(.hidden), #geminiModal:not(.hidden)');
         if (openModal) return;
 
-        // Allow normal caret movement only when typing inside a non-empty text field away from its edges
+        const rail = document.getElementById('rightSectionRail');
+        const isRailOpen = rail && rail.classList.contains('rail-open');
         const active = document.activeElement;
-        if (active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA') && !active.readOnly) {
+
+        // If typing inside an input/textarea/select while the rail is closed, preserve normal cursor behavior
+        if (!isRailOpen && active && (active.tagName === 'SELECT' || active.tagName === 'TEXTAREA' || active.tagName === 'INPUT') && !active.readOnly) {
+          if (active.tagName === 'SELECT' && isVertical) return;
+          if (active.tagName === 'TEXTAREA' && isVertical) return;
           const nonTextTypes = ['checkbox', 'radio', 'button', 'submit', 'range', 'file'];
-          if (!nonTextTypes.includes((active.type || '').toLowerCase())) {
+          if (active.tagName === 'INPUT' && !nonTextTypes.includes((active.type || '').toLowerCase())) {
+            if (isVertical && active.type === 'number') return;
             const val = active.value || '';
-            if (val.length > 0) {
-              if (typeof active.selectionStart === 'number') {
-                if (e.key === 'ArrowLeft' && active.selectionStart > 0) return;
-                if (e.key === 'ArrowRight' && active.selectionEnd < val.length) return;
-              } else {
-                return;
-              }
+            if (isHorizontal && val.length > 0 && typeof active.selectionStart === 'number') {
+              if (e.key === 'ArrowLeft' && active.selectionStart > 0) return;
+              if (e.key === 'ArrowRight' && active.selectionEnd < val.length) return;
             }
           }
         }
 
         e.preventDefault();
-        navigateMainSection(currentOrbitSectionIndex, e.key === 'ArrowLeft' ? -1 : 1);
+        const direction = (e.key === 'ArrowLeft' || e.key === 'ArrowUp') ? -1 : 1;
+        navigateMainSection(currentOrbitSectionIndex, direction);
       });
     }
 
@@ -3272,7 +3280,11 @@ function initOrbitWorkspaceLayout() {
 
       document.querySelectorAll('#rightSectionRail .rail-item-btn').forEach(btn => {
         const secIdx = parseInt(btn.dataset.secIdx, 10);
-        btn.classList.toggle('rail-active', secIdx === currentOrbitSectionIndex);
+        const isActive = secIdx === currentOrbitSectionIndex;
+        btn.classList.toggle('rail-active', isActive);
+        if (isActive) {
+          btn.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
       });
 
       const thumb = document.getElementById('rightRailSliderThumb');
