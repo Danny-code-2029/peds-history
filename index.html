@@ -246,7 +246,7 @@
       position: fixed !important;
       top: 58px !important;
       right: 9px !important;
-      width: 280px !important;
+      width: 288px !important;
       max-height: calc(100vh - 130px) !important;
       z-index: 45 !important;
       background-color: #1e293b !important;
@@ -270,7 +270,7 @@
       pointer-events: auto;
     }
 
-    /* Section Items: Solid Opaque Background Matching Card Color + Crisp Text Pop-Out */
+    /* Uniform Pill Cabinets Like Section 7 + Pop-Out Hover Effect */
     .rail-item-btn {
       position: relative;
       background-color: #1e293b !important;
@@ -278,15 +278,16 @@
       color: #cbd5e1 !important;
       font-weight: 600 !important;
       letter-spacing: 0.01em;
-      transition: transform 0.14s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.14s ease, color 0.14s ease, border-color 0.14s ease, padding 0.14s ease;
+      border-radius: 9999px !important;
+      padding: 0.5rem 1rem !important;
+      transition: transform 0.14s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.14s ease, color 0.14s ease, border-color 0.14s ease;
     }
     .rail-item-btn:hover {
       background-color: #0f172a !important;
       border-color: #60a5fa !important;
       color: #ffffff !important;
-      transform: translateX(-6px);
-      padding-top: 0.6rem !important;
-      padding-bottom: 0.6rem !important;
+      transform: translateX(-6px) scale(1.02);
+      box-shadow: 0 4px 14px rgba(2, 6, 23, 0.5);
       z-index: 5;
     }
     .rail-item-btn.rail-active {
@@ -296,11 +297,8 @@
       transform: translateX(-4px);
     }
     .rail-item-btn.rail-active:hover {
-      transform: translateX(-7px);
-      padding-top: 0.6rem !important;
-      padding-bottom: 0.6rem !important;
+      transform: translateX(-7px) scale(1.025);
     }
-
     #forensicWatermark {
       position: fixed;
       inset: 0;
@@ -3301,21 +3299,23 @@ function initOrbitWorkspaceLayout() {
       }
     }
 
-    function renderRightSectionRail() {
+function renderRightSectionRail() {
       const sections = getAllMainSections();
       const rail = document.getElementById('rightSectionRail');
 
       if (rail) {
-        let html = `<div class="px-2 py-1 border-b border-white/10 text-[11px] font-extrabold uppercase">Clinical Sections Rail</div><div class="space-y-1 pt-1">`;
+        let html = `<div class="space-y-1.5 p-1.5">`;
+        let visibleCounter = 1;
         sections.forEach((sec, idx) => {
           if (sec.classList.contains('hidden')) return;
           const summarySpan = sec.querySelector(':scope > summary > span:first-child');
           const rawTitle = summarySpan ? summarySpan.textContent.trim() : `Section ${idx + 1}`;
           const crispTitle = formatCrispSectionTitle(rawTitle);
-          if (summarySpan) summarySpan.textContent = `${idx + 1}. ${crispTitle}`;
+          if (summarySpan) summarySpan.textContent = `${visibleCounter}. ${crispTitle}`;
 
           const isActive = idx === currentOrbitSectionIndex;
-          html += `<button type="button" data-sec-idx="${idx}" onclick="switchToOrbitSection(${idx})" class="rail-item-btn ${isActive ? 'rail-active' : ''} w-full text-left px-3 py-2 rounded-xl border text-xs font-semibold truncate">${idx + 1}. ${crispTitle}</button>`;
+          html += `<button type="button" data-sec-idx="${idx}" onclick="switchToOrbitSection(${idx})" class="rail-item-btn ${isActive ? 'rail-active' : ''} w-full text-left px-4 py-2.5 rounded-full border text-xs font-semibold truncate">${visibleCounter}. ${crispTitle}</button>`;
+          visibleCounter++;
         });
         rail.innerHTML = html + `</div>`;
       }
@@ -3323,10 +3323,12 @@ function initOrbitWorkspaceLayout() {
       const mobileRail = document.getElementById('mobileBottomRail');
       if (mobileRail) {
         let mHtml = '';
+        let mobCounter = 1;
         sections.forEach((sec, idx) => {
           if (sec.classList.contains('hidden')) return;
           const isActive = idx === currentOrbitSectionIndex;
-          mHtml += `<button type="button" data-sec-idx="${idx}" onclick="switchToOrbitSection(${idx})" class="w-8 h-8 rounded-full font-bold text-xs flex items-center justify-center shrink-0 ${isActive ? 'bg-blue-600 text-white shadow-md scale-110' : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300'}" title="Sec ${idx+1}">${idx+1}</button>`;
+          mHtml += `<button type="button" data-sec-idx="${idx}" onclick="switchToOrbitSection(${idx})" class="w-8 h-8 rounded-full font-bold text-xs flex items-center justify-center shrink-0 ${isActive ? 'bg-blue-600 text-white shadow-md scale-110' : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300'}" title="Sec ${mobCounter}">${mobCounter}</button>`;
+          mobCounter++;
         });
         mobileRail.innerHTML = mHtml;
       }
@@ -3334,7 +3336,6 @@ function initOrbitWorkspaceLayout() {
       updateRailActiveStateFast();
       rebuildSectionBottomNavBars();
     }
-
     function rebuildSectionBottomNavBars() {
       const sections = getAllMainSections();
       let lastVisibleIdx = sections.length - 1;
