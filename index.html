@@ -502,8 +502,8 @@
             </button>
           </div>
             <div class="pt-3 mt-2 border-t border-slate-800 flex justify-center">
-            <button onclick="closeAccountPopup(); handleMedicoLogout();" class="chrome-pill-btn justify-center px-6 py-2 rounded-full bg-red-600 hover:bg-red-700 text-white font-extrabold text-xs border-2 border-black shadow-md tracking-wide" style="-webkit-text-stroke: 0.5px #000000; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;">
-            <span>Log out</span>
+            <button onclick="closeAccountPopup(); handleMedicoLogout();" class="chrome-pill-btn logout-crisp-btn justify-center px-7 py-2 rounded-full text-xs">
+              <span>Log out</span>
             </button>
           </div>
         </div>
@@ -3377,6 +3377,7 @@ function initOrbitWorkspaceLayout() {
     }
 
 let railFocusedSecIndex = null;
+    let moreFocusedItemIndex = null;
 
     function highlightRailLabelOnly(targetSecIdx) {
       railFocusedSecIndex = targetSecIdx;
@@ -3397,68 +3398,214 @@ let railFocusedSecIndex = null;
       });
     }
 
-    // Keyboard Shortcuts:
-    // • Up/Down Arrows = Scroll & highlight labels in the rail (does NOT open section)
-    // • Enter Key = Opens the highlighted rail label
-    // • Left/Right Arrows = Switch directly to Previous / Next section
+    function getMoreMenuNavigableItems() {
+      const sb = document.getElementById('leftSidebar');
+      if (!sb) return [];
+      const profileCard = sb.querySelector('div[onclick*="openProfileModal"]');
+      const navBtns = Array.from(sb.querySelectorAll('nav button'));
+      const bottomBtns = Array.from(sb.querySelectorAll(':scope > div:last-child button'));
+      return [profileCard, ...navBtns, ...bottomBtns].filter(Boolean);
+    }
+
+    function highlightMoreMenuItem(index) {
+      const items = getMoreMenuNavigableItems();
+      if (items.length === 0) return;
+      moreFocusedItemIndex = Math.max(0, Math.min(items.length - 1, index));
+      items.forEach((el, idx) => {
+        const isFocused = idx === moreFocusedItemIndex;
+        el.classList.toggle('more-kb-focus', isFocused);
+        if (isFocused) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+      });
+    }
+
+    function clearMoreKeyboardFocus() {
+      moreFocusedItemIndex = null;
+      document.querySelectorAll('#leftSidebar .more-kb-focus').forEach(el => {
+        el.classList.remove('more-kb-focus');
+      });
+    }
+
+    function closeAllPanelsAndModals() {
+      const rail = document.getElementById('rightSectionRail');
+      if (rail) rail.classList.remove('rail-open');
+      clearRailKeyboardFocus();
+
+      const sb = document.getElementById('leftSidebar');
+      const ov = document.getElementById('sidebarOverlay');
+      if (sb && !sb.classList.contains('-translate-x-full')) {
+        sb.classList.add('-translate-x-full');
+        if (ov) ov.classList.add('hidden');
+      }
+      clearMoreKeyboardFocus();
+
+      ['accountPopup', 'profileModal', 'settingsModal', 'storageModal', 'aboutModal', 'loginModal', 'geminiModal', 'summaryPopupModal', 'searchResultsDropdown'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.classList.add('hidden');
+      });
+    }
+
     function initKeyboardArrowNavigation() {
       const rail = document.getElementById('rightSectionRail');
+      const sb = document.getElementById('leftSidebar');
+
       if (rail) {
         rail.addEventListener('mousemove', () => {
           if (railFocusedSecIndex !== null) clearRailKeyboardFocus();
         }, { passive: true });
       }
+      if (sb) {
+        sb.addEventListener('mousemove', () => {
+          if (moreFocusedItemIndex !== null) clearMoreKeyboardFocus();
+        }, { passive: true });
+      }
 
       document.addEventListener('keydown', (e) => {
+        // 1. CTRL + SHIFT: Close More, Rail, Profile, Settings, Storage, Ask Gemini & Any Open Modal
+        if (e.ctrlKey && e.shiftKey && (e.key === 'Shift' || e.key === 'Control')) {
+          e.preventDefault();
+          closeAllPanelsAndModals();
+          if (document.activeElement && document.activeElement !== document.body) {
+            document.activeElement.blur();
+          }
+          return;
+        }
+
+        // 2. CTRL + S: Save Current Case to Storage
+        if ((e.ctrlKey || e.metaKey) && !e.shiftKey && !e.altKey && (e.key === 's' || e.key === 'S')) {
+          e.preventDefault();
+          saveCurrentCaseToStorage(true);
+          const badge = document.getElementById('autoSaveBadge');
+          if (badge) {
+            badge.textContent = '💾 Saved to Case Storage!';
+            setTimeout(() => { badge.textContent = '✓ Auto-saved locally'; }, 2200);
+          }
+          return;
+        }
+
+        // 3. CTRL + BACKSPACE: Reset Form
+        if ((e.ctrlKey || e.metaKey) && !e.shiftKey && !e.altKey && e.key === 'Backspace') {
+          e.preventDefault();
+          resetForm();
+          return;
+        }
+
+        // 4. CTRL + RIGHT ARROW: Open Right Section Rail
+        if (e.ctrlKey && !e.shiftKey && !e.altKey && e.key === 'ArrowRight') {
+          e.preventDefault();
+          if (sb && !sb.classList.contains('-translate-x-full')) {
+            toggleSidebar();
+            clearMoreKeyboardFocus();
+          }
+          if (rail) {
+            rail.classList.add('rail-open');
+            highlightRailLabelOnly(railFocusedSecIndex !== null ? railFocusedSecIndex : currentOrbitSectionIndex);
+          }
+          return;
+        }
+
+        // 5. CTRL + LEFT ARROW: Open Left "More" Sidebar
+        if (e.ctrlKey && !e.shiftKey && !e.altKey && e.key === 'ArrowLeft') {
+          e.preventDefault();
+          if (rail && rail.classList.contains('rail-open')) {
+            rail.classList.remove('rail-open');
+            clearRailKeyboardFocus();
+          }
+          if (sb && sb.classList.contains('-translate-x-full')) {
+            toggleSidebar();
+          }
+          highlightMoreMenuItem(0);
+          return;
+        }
+
+        // 6. TAB KEY: Jump Immediately to Top Patient Case Search Bar
+        if (e.key === 'Tab' && !e.ctrlKey && !e.altKey && !e.metaKey && !e.shiftKey) {
+          const openModal = document.querySelector('#summaryPopupModal:not(.hidden), #profileModal:not(.hidden), #storageModal:not(.hidden), #aboutModal:not(.hidden), #loginModal:not(.hidden), #settingsModal:not(.hidden), #geminiModal:not(.hidden)');
+          if (!openModal) {
+            const searchInput = document.getElementById('headerCaseSearch');
+            if (searchInput && document.activeElement !== searchInput) {
+              e.preventDefault();
+              searchInput.focus();
+              searchInput.select();
+              return;
+            }
+          }
+        }
+
+        if (e.altKey || e.ctrlKey || e.metaKey) return;
+
         const isHorizontal = e.key === 'ArrowLeft' || e.key === 'ArrowRight';
         const isVertical = e.key === 'ArrowUp' || e.key === 'ArrowDown';
         const isEnter = e.key === 'Enter';
         if (!isHorizontal && !isVertical && !isEnter) return;
-        if (e.altKey || e.ctrlKey || e.metaKey) return;
 
-        // Ignore if a popup modal is open
+        // Ignore section/panel navigation if a center modal is open
         const openModal = document.querySelector('#summaryPopupModal:not(.hidden), #profileModal:not(.hidden), #storageModal:not(.hidden), #aboutModal:not(.hidden), #loginModal:not(.hidden), #settingsModal:not(.hidden), #geminiModal:not(.hidden)');
         if (openModal) return;
 
         const isRailOpen = rail && rail.classList.contains('rail-open');
+        const isMoreOpen = sb && !sb.classList.contains('-translate-x-full');
         const active = document.activeElement;
 
-        // 1. ENTER KEY: Open the currently highlighted rail label
+        // 7. ENTER KEY: Activate Highlighted Item in More Menu or Right Rail
         if (isEnter) {
+          if (isMoreOpen && moreFocusedItemIndex !== null) {
+            e.preventDefault();
+            const items = getMoreMenuNavigableItems();
+            const targetItem = items[moreFocusedItemIndex];
+            clearMoreKeyboardFocus();
+            if (targetItem) targetItem.click();
+            return;
+          }
           if (isRailOpen && railFocusedSecIndex !== null) {
             e.preventDefault();
             const chosenIdx = railFocusedSecIndex;
             clearRailKeyboardFocus();
+            rail.classList.remove('rail-open');
             switchToOrbitSection(chosenIdx);
+            return;
           }
           return;
         }
 
-        // 2. UP / DOWN ARROWS: Only move highlight through rail labels without switching sections
+        // 8. UP / DOWN ARROWS:
+        // • If More Menu is open -> step through More items
+        // • If Right Rail is open -> step through Rail labels
+        // • If neither is open -> scroll the active clinical section on screen
         if (isVertical) {
-          if (!isRailOpen && active && (active.tagName === 'SELECT' || active.tagName === 'TEXTAREA' || (active.tagName === 'INPUT' && active.type === 'number'))) {
+          const step = e.key === 'ArrowUp' ? -1 : 1;
+
+          if (isMoreOpen) {
+            e.preventDefault();
+            const nextIdx = moreFocusedItemIndex !== null ? moreFocusedItemIndex + step : 0;
+            highlightMoreMenuItem(nextIdx);
+            return;
+          }
+
+          if (isRailOpen) {
+            e.preventDefault();
+            const visibleBtns = Array.from(document.querySelectorAll('#rightSectionRail .rail-item-btn'));
+            if (visibleBtns.length === 0) return;
+            const visibleIndices = visibleBtns.map(b => parseInt(b.dataset.secIdx, 10));
+            const baseSecIdx = railFocusedSecIndex !== null ? railFocusedSecIndex : currentOrbitSectionIndex;
+            let pos = visibleIndices.indexOf(baseSecIdx);
+            if (pos === -1) pos = 0;
+            const nextPos = Math.max(0, Math.min(visibleIndices.length - 1, pos + step));
+            highlightRailLabelOnly(visibleIndices[nextPos]);
+            return;
+          }
+
+          // Neither More nor Rail is open: let select/textarea/number inputs work normally, otherwise scroll current section
+          if (active && (active.tagName === 'SELECT' || active.tagName === 'TEXTAREA' || (active.tagName === 'INPUT' && active.type === 'number'))) {
             return;
           }
           e.preventDefault();
-          if (rail && !isRailOpen) {
-            rail.classList.add('rail-open');
-          }
-
-          const visibleBtns = Array.from(document.querySelectorAll('#rightSectionRail .rail-item-btn'));
-          if (visibleBtns.length === 0) return;
-          const visibleIndices = visibleBtns.map(b => parseInt(b.dataset.secIdx, 10));
-
-          const baseSecIdx = railFocusedSecIndex !== null ? railFocusedSecIndex : currentOrbitSectionIndex;
-          let pos = visibleIndices.indexOf(baseSecIdx);
-          if (pos === -1) pos = 0;
-
-          const step = e.key === 'ArrowUp' ? -1 : 1;
-          const nextPos = Math.max(0, Math.min(visibleIndices.length - 1, pos + step));
-          highlightRailLabelOnly(visibleIndices[nextPos]);
+          window.scrollBy({ top: step * 140, behavior: 'smooth' });
           return;
         }
 
-        // 3. LEFT / RIGHT ARROWS: Switch to Previous / Next Section
+        // 9. LEFT / RIGHT ARROWS: Switch to Previous / Next Section
         if (isHorizontal) {
           if (active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA') && !active.readOnly) {
             const nonTextTypes = ['checkbox', 'radio', 'button', 'submit', 'range', 'file'];
@@ -3472,6 +3619,7 @@ let railFocusedSecIndex = null;
           }
           e.preventDefault();
           clearRailKeyboardFocus();
+          clearMoreKeyboardFocus();
           navigateMainSection(currentOrbitSectionIndex, e.key === 'ArrowLeft' ? -1 : 1);
         }
       });
