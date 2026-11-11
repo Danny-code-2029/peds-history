@@ -2699,7 +2699,7 @@
       }
     }
 
-    function injectPrivacySettingsUI() {
+function injectPrivacySettingsUI() {
       const settingsContainer = document.querySelector('#settingsModal .p-5');
       if (!settingsContainer) return;
       const existing = document.getElementById('privacyControlSection');
@@ -2708,14 +2708,36 @@
 
       const div = document.createElement('div');
       div.id = 'privacyControlSection';
-      div.className = 'border-t pt-3 space-y-2.5';
+      div.className = 'border-t pt-3 space-y-3';
       div.innerHTML = `
         <div class="flex items-center justify-between">
           <div>
             <div class="font-bold text-slate-800 dark:text-slate-100">🔒 Admin: Private Website Mode</div>
-            <div class="text-[11px] text-emerald-600 font-semibold">Verified Admin</div>
+            <div class="text-[11px] text-emerald-600 font-semibold">Verified Admin (${window.ADMIN_OWNER_EMAIL})</div>
           </div>
           <input type="checkbox" id="privateModeToggle" onchange="savePrivacySettings(true)" class="w-5 h-5 accent-blue-600 rounded cursor-pointer" />
+        </div>
+
+        <div class="bg-slate-50 dark:bg-slate-800/80 p-3 rounded-2xl border border-slate-200 dark:border-slate-700 space-y-2.5">
+          <div class="flex items-center justify-between">
+            <label class="font-bold text-[11px] uppercase tracking-wider text-slate-500 dark:text-slate-400">Allowed Gmail IDs</label>
+            <span id="allowedEmailCountBadge" class="text-[10px] bg-blue-600/20 text-blue-400 border border-blue-500/30 px-2 py-0.5 rounded-full font-clinical-mono font-bold">0 Allowed</span>
+          </div>
+
+          <div class="flex gap-1.5">
+            <input
+              id="newAllowedEmailInput"
+              type="email"
+              placeholder="e.g., colleague@gmail.com"
+              onkeydown="if(event.key==='Enter'){ event.preventDefault(); addAllowedGmail(); }"
+              class="flex-1 border rounded-xl px-2.5 py-1.5 text-xs bg-white dark:bg-slate-900"
+            />
+            <button type="button" onclick="addAllowedGmail()" class="chrome-pill-btn bg-blue-600 hover:bg-blue-500 text-white px-3 py-1.5 text-xs shadow shrink-0">
+              + Add
+            </button>
+          </div>
+
+          <div id="allowedEmailsListContainer" class="max-h-36 overflow-y-auto space-y-1.5 pr-0.5"></div>
         </div>
       `;
       settingsContainer.appendChild(div);
@@ -2730,17 +2752,81 @@
       } catch { return { enabled: false, emails: [] }; }
     }
 
-    function loadPrivacySettingsIntoUI() {
+    function renderAllowedEmailsList(emails) {
+      const listEl = document.getElementById('allowedEmailsListContainer');
+      const countEl = document.getElementById('allowedEmailCountBadge');
+      const cleanList = cleanEmailList(emails);
+      if (countEl) countEl.textContent = `${cleanList.length + 1} Allowed`;
+      if (!listEl) return;
+
+      let html = `
+        <div class="flex items-center justify-between px-2.5 py-1.5 rounded-xl bg-emerald-950/40 border border-emerald-700/50 text-[11px]">
+          <span class="font-semibold text-emerald-300 truncate">${window.ADMIN_OWNER_EMAIL}</span>
+          <span class="text-[10px] text-emerald-400 font-clinical-mono shrink-0 ml-2">Owner ★</span>
+        </div>
+      `;
+
+      if (cleanList.length === 0) {
+        html += `<div class="text-[11px] text-slate-400 text-center py-1.5">No additional Gmails added yet.</div>`;
+      } else {
+        html += cleanList.map(email => `
+          <div class="flex items-center justify-between px-2.5 py-1.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-[11px]">
+            <span class="font-medium text-slate-700 dark:text-slate-200 truncate">${email}</span>
+            <button type="button" onclick="removeAllowedGmail('${email}')" class="text-rose-500 hover:text-rose-400 font-bold px-1.5 ml-2 shrink-0" title="Remove Gmail">✕</button>
+          </div>
+        `).join('');
+      }
+      listEl.innerHTML = html;
+    }
+
+    async function loadPrivacySettingsIntoUI() {
       if (!isCurrentUserAdmin()) return;
-      const cfg = getPrivacyConfig();
+      let cfg = getPrivacyConfig();
+      try {
+        const snap = await db.collection('site_settings').doc('access_control').get();
+        if (snap.exists) {
+          cfg = { enabled: Boolean(snap.data().enabled), emails: cleanEmailList(snap.data().emails) };
+          localStorage.setItem('peds_privacy_config_v3', JSON.stringify(cfg));
+        }
+      } catch (e) {}
+
       const toggle = document.getElementById('privateModeToggle');
       if (toggle) toggle.checked = Boolean(cfg.enabled);
+      renderAllowedEmailsList(cfg.emails);
+    }
+
+    async function addAllowedGmail() {
+      if (!isCurrentUserAdmin()) return;
+      const input = document.getElementById('newAllowedEmailInput');
+      const email = normalizeEmail(input?.value || '');
+      if (!email || !email.includes('@')) {
+        alert('Please enter a valid Gmail address.');
+        return;
+      }
+      const cfg = getPrivacyConfig();
+      if (!cfg.emails.includes(email) && email !== normalizeEmail(window.ADMIN_OWNER_EMAIL)) {
+        cfg.emails.push(email);
+      }
+      if (input) input.value = '';
+      localStorage.setItem('peds_privacy_config_v3', JSON.stringify(cfg));
+      renderAllowedEmailsList(cfg.emails);
+      await savePrivacySettings(false);
+    }
+
+    async function removeAllowedGmail(emailToRemove) {
+      if (!isCurrentUserAdmin()) return;
+      const cfg = getPrivacyConfig();
+      cfg.emails = cfg.emails.filter(e => e !== normalizeEmail(emailToRemove));
+      localStorage.setItem('peds_privacy_config_v3', JSON.stringify(cfg));
+      renderAllowedEmailsList(cfg.emails);
+      await savePrivacySettings(false);
     }
 
     async function savePrivacySettings(showToast = true) {
       if (!isCurrentUserAdmin()) return;
-      const enabled = document.getElementById('privateModeToggle')?.checked || false;
-      const cfg = { enabled, emails: [] };
+      const currentCfg = getPrivacyConfig();
+      const enabled = document.getElementById('privateModeToggle')?.checked ?? currentCfg.enabled;
+      const cfg = { enabled, emails: cleanEmailList(currentCfg.emails) };
       localStorage.setItem('peds_privacy_config_v3', JSON.stringify(cfg));
       try { await db.collection('site_settings').doc('access_control').set(cfg, { merge: false }); } catch (e) {}
       enforcePrivateAccessGate(currentGoogleUser);
@@ -2748,7 +2834,8 @@
 
     async function emergencyAdminUnlock() {
       if (!isCurrentUserAdmin()) { alert('Admin only'); return; }
-      const cfg = { enabled: false, emails: [] };
+      const currentCfg = getPrivacyConfig();
+      const cfg = { enabled: false, emails: cleanEmailList(currentCfg.emails) };
       localStorage.setItem('peds_privacy_config_v3', JSON.stringify(cfg));
       try { await db.collection('site_settings').doc('access_control').set(cfg, { merge: false }); } catch (e) {}
       document.getElementById('privateAccessOverlay')?.classList.add('hidden');
@@ -2760,12 +2847,31 @@
         const snap = await db.collection('site_settings').doc('access_control').get();
         if (snap.exists) {
           cfg = { enabled: Boolean(snap.data().enabled), emails: cleanEmailList(snap.data().emails) };
+          localStorage.setItem('peds_privacy_config_v3', JSON.stringify(cfg));
         }
       } catch (e) {}
 
       const overlay = document.getElementById('privateAccessOverlay');
+      const errBox = document.getElementById('privateGateError');
       if (!overlay) return;
-      if (!cfg.enabled || isCurrentUserAdmin()) { overlay.classList.add('hidden'); return; }
+
+      const userEmail = getUserEmailFromFirebase(user);
+      const isAllowedUser = isCurrentUserAdmin(user) || (userEmail && cfg.emails.includes(userEmail));
+
+      if (!cfg.enabled || isAllowedUser) {
+        overlay.classList.add('hidden');
+        if (errBox) errBox.classList.add('hidden');
+        return;
+      }
+
+      if (errBox) {
+        if (userEmail) {
+          errBox.textContent = `Access Denied: ${userEmail} is not in the Allowed Gmails list.`;
+          errBox.classList.remove('hidden');
+        } else {
+          errBox.classList.add('hidden');
+        }
+      }
       overlay.classList.remove('hidden');
     }
 
