@@ -334,6 +334,26 @@
     .logout-crisp-btn:active {
       transform: scale(0.97);
     }
+
+    /* 3D Blue Save Button with Black Outline & Tactile Depth */
+    .save-3d-blue-btn {
+      background: linear-gradient(180deg, #3b82f6 0%, #2563eb 55%, #1d4ed8 100%) !important;
+      border: 2px solid #000000 !important;
+      box-shadow: 0 4px 0 #000000, 0 6px 14px rgba(0, 0, 0, 0.6), inset 0 1.5px 0 rgba(255, 255, 255, 0.4) !important;
+      color: #ffffff !important;
+      font-weight: 800 !important;
+      letter-spacing: 0.03em;
+      transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease;
+    }
+    .save-3d-blue-btn:hover {
+      filter: brightness(1.08);
+      transform: translateY(-1px);
+      box-shadow: 0 5px 0 #000000, 0 8px 18px rgba(37, 99, 235, 0.55), inset 0 1.5px 0 rgba(255, 255, 255, 0.5) !important;
+    }
+    .save-3d-blue-btn:active {
+      transform: translateY(3px);
+      box-shadow: 0 1px 0 #000000, 0 2px 6px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
+    }
     #forensicWatermark {
       position: fixed;
       inset: 0;
@@ -1962,55 +1982,62 @@
     </div>
   </div>
 
-  <!-- 11.5 Modal 1: Medico Profile Page -->
-  <div id="profileModal" class="hidden fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-xs flex items-center justify-center p-4">
-    <div class="modal-card bg-white rounded-3xl shadow-2xl max-w-md w-full overflow-hidden border border-slate-200">
-      <div class="bg-slate-900 text-white px-5 py-4 flex items-center justify-between">
+<!-- 11.5 Modal 1: Medico Profile Page -->
+  <div id="profileModal" class="hidden fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="modal-card bg-white dark:bg-slate-900 rounded-3xl shadow-2xl max-w-md w-full overflow-hidden border border-slate-200 dark:border-slate-700">
+      <div class="bg-slate-950 text-white px-5 py-3.5 flex items-center justify-between border-b border-slate-800">
         <div>
-          <h3 class="font-bold text-sm">👤 Medico Profile</h3>
+          <h3 class="font-extrabold text-sm tracking-tight">👤 Medico Profile</h3>
           <p class="text-[11px] text-slate-400">Personalize your clinician details &amp; avatar</p>
         </div>
-        <button onclick="closeProfileModal()" class="text-slate-400 hover:text-white text-xl font-bold px-2">&times;</button>
+        <button onclick="closeProfileModal()" class="w-7 h-7 rounded-full flex items-center justify-center text-slate-400 hover:text-white hover:bg-slate-800 text-lg font-bold transition-colors">&times;</button>
       </div>
 
       <div class="p-5 space-y-4 text-xs">
-        <div class="flex flex-col items-center gap-2">
-          <div class="google-avatar-ring">
-            <img id="profileModalAvatarPreview" src="" alt="Profile Preview" class="w-20 h-20 google-avatar-inner" />
+        <!-- Clean Circular Avatar Preview (No Bead Ring) + Balanced Action Pills -->
+        <div class="flex flex-col items-center gap-2.5 pb-3 border-b border-slate-200 dark:border-slate-700/80">
+          <div class="p-1 rounded-full bg-slate-800/90 border border-slate-600 shadow-lg">
+            <img id="profileModalAvatarPreview" src="" alt="Profile Preview" class="w-20 h-20 rounded-full object-cover block bg-slate-900" />
           </div>
-          <div class="flex flex-wrap items-center justify-center gap-2 mt-1">
-            <label class="chrome-pill-btn cursor-pointer bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 text-[11px]">
-              <span>📷 Upload New Photo</span>
+          <div class="flex flex-wrap items-center justify-center gap-2 mt-0.5">
+            <label class="chrome-pill-btn cursor-pointer bg-blue-600 hover:bg-blue-500 text-white px-3.5 py-1.5 text-[11px] shadow-sm border border-blue-400/30">
+              <span>📷 Upload Photo</span>
               <input type="file" accept="image/*" onchange="handleProfilePicUpload(this)" class="hidden" />
             </label>
-            <button type="button" onclick="resetProfilePicToGoogle()" class="chrome-pill-btn bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1.5 text-[11px] border">
-              Use Google Photo
+            <button type="button" onclick="resetProfilePicToGoogle()" class="chrome-pill-btn bg-slate-800 hover:bg-slate-700 text-slate-200 px-3.5 py-1.5 text-[11px] border border-slate-600 shadow-sm">
+              <span>🔄 Use Google Photo</span>
             </button>
           </div>
         </div>
 
+        <!-- Refined Clinician Details Inputs -->
         <div class="space-y-3">
           <div>
-            <label class="block font-semibold mb-1">Full Name</label>
-            <input id="profName" type="text" placeholder="e.g., Dr. Satyapriya Srinivash" class="w-full border rounded-xl p-2.5 text-sm" />
+            <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1">Full Name</label>
+            <input id="profName" type="text" placeholder="e.g., Dr. Satyapriya Srinivash" class="w-full border rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all" />
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1">Phone Number</label>
+              <input id="profPhone" type="tel" placeholder="e.g., +91 98765 43210" class="w-full border rounded-xl px-3 py-2 text-sm font-clinical-mono focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all" />
+            </div>
+            <div>
+              <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1">Course / Batch</label>
+              <input id="profCourse" type="text" placeholder="e.g., MBBS (Prof 2nd)" class="w-full border rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all" />
+            </div>
           </div>
           <div>
-            <label class="block font-semibold mb-1">Phone Number</label>
-            <input id="profPhone" type="tel" placeholder="e.g., +91 98765 43210" class="w-full border rounded-xl p-2.5 text-sm" />
-          </div>
-          <div>
-            <label class="block font-semibold mb-1">Educational Institution / Medical College</label>
-            <input id="profInstitution" type="text" placeholder="e.g., Shri Shankaracharya Institute of Medical Sciences" class="w-full border rounded-xl p-2.5 text-sm" />
-          </div>
-          <div>
-            <label class="block font-semibold mb-1">Course / Batch / Designation</label>
-            <input id="profCourse" type="text" placeholder="e.g., MBBS" class="w-full border rounded-xl p-2.5 text-sm" />
+            <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1">Educational Institution / Medical College</label>
+            <input id="profInstitution" type="text" placeholder="e.g., Shri Shankaracharya Institute of Medical Sciences" class="w-full border rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all" />
           </div>
         </div>
 
-        <button onclick="saveMedicoProfile()" class="w-full chrome-pill-btn justify-center bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 text-sm shadow">
-          <span>✓ Save Profile Details</span>
-        </button>
+        <!-- Centered 3D Blue Save Button with Black Outline at Base -->
+        <div class="pt-3 border-t border-slate-200 dark:border-slate-700/80 flex justify-center">
+          <button onclick="saveMedicoProfile()" class="chrome-pill-btn save-3d-blue-btn justify-center px-8 py-2 rounded-full text-xs">
+            <span>Save</span>
+          </button>
+        </div>
       </div>
     </div>
   </div>
