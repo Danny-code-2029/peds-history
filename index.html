@@ -537,61 +537,66 @@
   <!-- 4.1 Backdrop Overlay (Closes Sidebar When Tapped Outside) -->
   <div id="sidebarOverlay" onclick="toggleSidebar()" class="hidden fixed inset-0 bg-slate-950/60 backdrop-blur-xs z-40 transition-opacity"></div>
 
-  <aside id="leftSidebar" class="fixed top-0 left-0 bottom-0 w-72 bg-white dark:bg-slate-900 shadow-2xl border-r border-slate-200 dark:border-slate-800 z-50 transform -translate-x-full transition-transform duration-200 flex flex-col justify-between">
+    <aside id="leftSidebar" class="fixed top-0 left-0 bottom-0 w-72 bg-white dark:bg-slate-900 shadow-2xl border-r border-slate-200 dark:border-slate-800 z-50 transform -translate-x-full transition-transform duration-200 flex flex-col justify-between">
     <div>
       <!-- 4.2 Sidebar Top Header -->
-      <div class="px-4 py-3.5 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
-        <span class="text-xs font-bold uppercase tracking-wider text-slate-400">More Menu</span>
-        <button onclick="toggleSidebar()" class="p-1.5 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 text-lg leading-none" aria-label="Close Sidebar">&times;</button>
+      <div class="px-5 py-3.5 bg-slate-950/40 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+        <span class="text-[11px] font-extrabold uppercase tracking-widest text-slate-400">More Menu</span>
+        <button onclick="toggleSidebar()" class="w-7 h-7 rounded-full flex items-center justify-center hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-400 hover:text-white text-lg leading-none transition-colors" aria-label="Close Sidebar">&times;</button>
       </div>
 
-      <!-- 4.3 Clinician Profile Card (Clicking Opens Medico Profile Modal) -->
+      <!-- 4.3 Clinician Profile Card (Clean Circular Avatar Without Bead Ring) -->
       <div class="p-4 border-b border-slate-200 dark:border-slate-800">
-        <div onclick="toggleSidebar(); openProfileModal();" class="group cursor-pointer bg-slate-50 dark:bg-slate-800/70 hover:bg-blue-50/70 dark:hover:bg-slate-800 p-3 rounded-2xl border border-slate-200 dark:border-slate-700 transition-all flex items-center gap-3">
-          <div class="google-avatar-ring shrink-0">
-            <img id="sidebarAvatarImg" src="" alt="Profile" class="w-12 h-12 google-avatar-inner" />
+        <div onclick="toggleSidebar(); openProfileModal();" class="group cursor-pointer bg-slate-50 dark:bg-slate-800/60 hover:bg-blue-50/70 dark:hover:bg-slate-800 p-3.5 rounded-2xl border border-slate-200 dark:border-slate-700/80 hover:border-blue-500/50 shadow-sm transition-all flex items-center gap-3.5">
+          <div class="p-0.5 rounded-full bg-slate-800 border-2 border-slate-600 group-hover:border-blue-400 shadow-md shrink-0 transition-colors">
+            <img id="sidebarAvatarImg" src="" alt="Profile" class="w-12 h-12 rounded-full object-cover block bg-slate-900" />
           </div>
           <div class="overflow-hidden flex-1">
-            <div id="sidebarProfileName" class="font-bold text-sm text-slate-900 dark:text-white truncate group-hover:text-blue-600">Medico Profile</div>
-            <div id="sidebarProfileCourse" class="text-[11px] text-slate-500 dark:text-slate-400 truncate">Tap to add Name, College &amp; Course</div>
-            <span class="inline-block mt-1 text-[10px] font-semibold text-blue-600 dark:text-blue-400">✎ View / Edit Profile</span>
+            <div id="sidebarProfileName" class="font-extrabold text-sm text-slate-900 dark:text-white truncate group-hover:text-blue-400 transition-colors">Medico Profile</div>
+            <div id="sidebarProfileCourse" class="text-[11px] text-slate-500 dark:text-slate-400 truncate mt-0.5">Tap to add Name, College &amp; Course</div>
+            <span class="inline-flex items-center gap-1 mt-1.5 text-[10px] font-bold text-blue-500 dark:text-blue-400 bg-blue-500/10 border border-blue-500/20 px-2 py-0.5 rounded-full">
+              ✎ View / Edit Profile
+            </span>
           </div>
         </div>
       </div>
 
       <!-- 4.4 Navigation Items Under Profile: Storage -> Settings -> About -->
-      <nav class="p-3 space-y-1 text-sm font-medium">
-        <button onclick="toggleSidebar(); openStorageModal();" class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 transition-colors">
+      <nav class="p-3.5 space-y-1.5 text-sm font-semibold">
+        <button onclick="toggleSidebar(); openStorageModal();" class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl border border-transparent hover:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800/90 text-slate-700 dark:text-slate-200 transition-all">
           <div class="flex items-center gap-3">
-            <span class="text-base">🗄️</span>
+            <span class="w-5 h-5 inline-flex items-center justify-center text-base shrink-0">🗄️</span>
             <span>Storage &amp; Google Sheet</span>
           </div>
-          <span id="sidebarCaseCount" class="text-[11px] bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full font-bold font-clinical-mono">0</span>
+          <span id="sidebarCaseCount" class="text-[11px] bg-blue-600/20 text-blue-400 border border-blue-500/40 px-2.5 py-0.5 rounded-full font-bold font-clinical-mono">0</span>
         </button>
 
-        <button onclick="toggleSidebar(); toggleSettingsModal();" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 transition-colors">
-          <span class="text-base">⚙️</span>
+        <button onclick="toggleSidebar(); toggleSettingsModal();" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl border border-transparent hover:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800/90 text-slate-700 dark:text-slate-200 transition-all">
+          <span class="w-5 h-5 inline-flex items-center justify-center text-base shrink-0">⚙️</span>
           <span>Settings</span>
         </button>
 
-        <button onclick="toggleSidebar(); openAboutModal();" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 transition-colors">
-          <span class="text-base">ℹ️</span>
+        <!-- About Item with Blue Hollow Circle & Blue "i" Icon (Fill = None) -->
+        <button onclick="toggleSidebar(); openAboutModal();" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl border border-transparent hover:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800/90 text-slate-700 dark:text-slate-200 transition-all">
+          <span class="w-5 h-5 inline-flex items-center justify-center text-blue-500 shrink-0">
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="9" fill="none" />
+              <line x1="12" y1="16" x2="12" y2="11" />
+              <circle cx="12" cy="8" r="0.6" fill="currentColor" />
+            </svg>
+          </span>
           <span>About</span>
         </button>
       </nav>
     </div>
 
-    <!-- 4.5 Bottom Quick-Action Buttons Inside Sidebar -->
-    <div class="p-4 border-t border-slate-200 dark:border-slate-800 space-y-2">
-      <button onclick="toggleSidebar(); saveCurrentCaseToStorage(true);" class="w-full chrome-pill-btn justify-center bg-blue-600 hover:bg-blue-700 text-white text-xs py-2.5 shadow">
-        <span>💾 Save Current Patient to Storage</span>
-      </button>
-      <button onclick="toggleSidebar(); startBlankPatientCase();" class="w-full chrome-pill-btn justify-center bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs py-2">
-        <span>➕ Start New Blank Case</span>
+    <!-- 4.5 Bottom Centered Log Out Button (Matches Profile Popup) -->
+    <div class="p-4 border-t border-slate-200 dark:border-slate-800 flex justify-center">
+      <button onclick="toggleSidebar(); handleMedicoLogout();" class="chrome-pill-btn logout-crisp-btn justify-center px-8 py-2 rounded-full text-xs">
+        <span>Log out</span>
       </button>
     </div>
-  </aside>
-     
+  </aside>     
 <!-- ==========================================================================
        [SECTION 05] MAIN CLINICAL WORKSPACE — AUTO-DETECTED SYMPTOM MODULES
        ========================================================================== -->
