@@ -405,6 +405,92 @@
       box-shadow: none !important;
     }
 
+    /* Fix All Inner White/Light Boxes, Tables, Pastels & Text Visibility in Dark Mode */
+    html.dark .bg-white,
+    html.dark .bg-slate-50,
+    html.dark .bg-slate-100 {
+      background-color: #0f172a !important;
+      color: #f1f5f9 !important;
+      border-color: #334155 !important;
+    }
+    html.dark thead.bg-slate-50,
+    html.dark thead tr {
+      background-color: #1e293b !important;
+      color: #93c5fd !important;
+      border-bottom: 1px solid #334155 !important;
+    }
+    html.dark table,
+    html.dark tbody,
+    html.dark tr,
+    html.dark td,
+    html.dark th {
+      color: #e2e8f0 !important;
+      border-color: #334155 !important;
+    }
+    html.dark tbody tr:hover {
+      background-color: rgba(59, 130, 246, 0.15) !important;
+    }
+
+    /* Convert Light Pastel Table Headers, Footers & Callout Strips in Dark Mode */
+    html.dark [class*="bg-blue-50"],
+    html.dark [class*="bg-blue-100"],
+    html.dark [class*="bg-indigo-50"],
+    html.dark [class*="bg-cyan-50"],
+    html.dark [class*="bg-cyan-100"],
+    html.dark .ask-prompt {
+      background-color: rgba(30, 58, 138, 0.35) !important;
+      border-color: rgba(59, 130, 246, 0.4) !important;
+      color: #dbeafe !important;
+    }
+    html.dark [class*="bg-emerald-50"],
+    html.dark [class*="bg-emerald-100"],
+    html.dark .clinical-pearl {
+      background-color: rgba(6, 78, 59, 0.35) !important;
+      border-color: rgba(16, 185, 129, 0.4) !important;
+      color: #d1fae5 !important;
+    }
+    html.dark [class*="bg-purple-50"],
+    html.dark [class*="bg-purple-100"] {
+      background-color: rgba(88, 28, 135, 0.35) !important;
+      border-color: rgba(168, 85, 247, 0.4) !important;
+      color: #f3e8ff !important;
+    }
+    html.dark [class*="bg-amber-50"],
+    html.dark [class*="bg-amber-100"] {
+      background-color: rgba(120, 53, 15, 0.35) !important;
+      border-color: rgba(245, 158, 11, 0.4) !important;
+      color: #fef3c7 !important;
+    }
+    html.dark [class*="bg-rose-50"],
+    html.dark [class*="bg-rose-100"],
+    html.dark [class*="bg-red-50"] {
+      background-color: rgba(136, 19, 55, 0.35) !important;
+      border-color: rgba(244, 63, 94, 0.4) !important;
+      color: #ffe4e6 !important;
+    }
+
+    /* Fix Dark Text Classes Inside Dark Mode Cards & Tables */
+    html.dark [class*="text-slate-6"],
+    html.dark [class*="text-slate-7"],
+    html.dark [class*="text-slate-8"],
+    html.dark [class*="text-slate-9"],
+    html.dark [class*="text-blue-8"],
+    html.dark [class*="text-blue-9"],
+    html.dark [class*="text-emerald-8"],
+    html.dark [class*="text-emerald-9"],
+    html.dark [class*="text-purple-8"],
+    html.dark [class*="text-purple-9"],
+    html.dark [class*="text-amber-8"],
+    html.dark [class*="text-amber-9"],
+    html.dark [class*="text-rose-8"],
+    html.dark [class*="text-rose-9"],
+    html.dark [class*="text-red-9"],
+    html.dark [class*="text-indigo-9"],
+    html.dark [class*="text-cyan-8"],
+    html.dark [class*="text-cyan-9"] {
+      color: #f1f5f9 !important;
+    }
+
     @media print {
       body:not(.authorized-print) * { display: none !important; }
       header, .no-print, #geminiFloatBtn, #geminiModal, #settingsModal, #loginModal, #leftSidebar, #sidebarOverlay, #profileModal, #storageModal, #aboutModal, #accountPopup, #privateAccessOverlay, #antiCaptureCurtain, #rightSectionRail, #mobileBottomRail { display: none !important; }
