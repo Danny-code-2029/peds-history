@@ -335,7 +335,7 @@
       transform: scale(0.97);
     }
 
-    /* 3D Blue Save Button with Black Outline & Tactile Depth */
+ /* 3D Blue Save Button with Black Outline & Tactile Depth */
     .save-3d-blue-btn {
       background: linear-gradient(180deg, #3b82f6 0%, #2563eb 55%, #1d4ed8 100%) !important;
       border: 2px solid #000000 !important;
@@ -353,6 +353,36 @@
     .save-3d-blue-btn:active {
       transform: translateY(3px);
       box-shadow: 0 1px 0 #000000, 0 2px 6px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
+    }
+
+    /* Auto-Blur Everything Else When Any Modal, Sidebar, or Account Popup is Open */
+    body.popup-blur-active > header,
+    body.popup-blur-active > main,
+    body.popup-blur-active > #geminiFloatBtn,
+    body.popup-blur-active > #rightRailSliderTrack,
+    body.popup-blur-active > #rightSectionRail,
+    body.popup-blur-active > #mobileBottomRail {
+      filter: blur(9px) brightness(0.55);
+      pointer-events: none;
+      user-select: none;
+      transition: filter 0.2s ease;
+    }
+    body.account-popup-blur-active > main,
+    body.account-popup-blur-active > #geminiFloatBtn,
+    body.account-popup-blur-active > #rightRailSliderTrack,
+    body.account-popup-blur-active > #rightSectionRail,
+    body.account-popup-blur-active > #mobileBottomRail,
+    body.account-popup-blur-active > header > div > div:nth-child(1),
+    body.account-popup-blur-active > header > div > div:nth-child(2),
+    body.account-popup-blur-active > header button[onclick*="saveCurrentCaseToStorage"],
+    body.account-popup-blur-active > header #headerLoginBtn,
+    body.account-popup-blur-active > header #headerAvatarBtn {
+      filter: blur(9px) brightness(0.55);
+      transition: filter 0.2s ease;
+    }
+    body.popup-blur-active .google-avatar-ring::before,
+    body.account-popup-blur-active .google-avatar-ring::before {
+      animation-play-state: paused !important;
     }
     #forensicWatermark {
       position: fixed;
@@ -3181,16 +3211,120 @@ function injectPrivacySettingsUI() {
       link.download = 'cases.csv'; link.click(); link.remove();
     }
 
+      function ensureShortcutsModalExists() {
+      let modal = document.getElementById('shortcutsModal');
+      if (modal) return modal;
+      modal = document.createElement('div');
+      modal.id = 'shortcutsModal';
+      modal.className = 'hidden fixed inset-0 z-50 bg-slate-950/65 flex items-center justify-center p-4';
+      modal.onclick = (e) => { if (e.target === modal) closeShortcutsModal(); };
+      modal.innerHTML = `
+        <div class="modal-card bg-white dark:bg-slate-900 rounded-3xl shadow-2xl max-w-lg w-full overflow-hidden border border-slate-200 dark:border-slate-700">
+          <div class="bg-slate-950 text-white px-5 py-3.5 flex items-center justify-between border-b border-slate-800">
+            <div>
+              <h3 class="font-extrabold text-sm tracking-tight">⌨️ Keyboard Shortcuts &amp; Command Codes</h3>
+              <p class="text-[11px] text-slate-400">Type <span class="font-clinical-mono text-blue-400 font-bold">codes</span> in the search bar anytime to view</p>
+            </div>
+            <button onclick="closeShortcutsModal()" class="w-7 h-7 rounded-full flex items-center justify-center text-slate-400 hover:text-white hover:bg-slate-800 text-lg font-bold transition-colors">&times;</button>
+          </div>
+          <div class="p-5 space-y-2.5 text-xs max-h-[75vh] overflow-y-auto">
+            <div class="flex items-center justify-between py-2 px-3 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700">
+              <span class="font-semibold">Previous / Next Clinical Section</span>
+              <kbd class="px-2.5 py-1 rounded-lg bg-slate-900 text-blue-300 border border-slate-700 font-clinical-mono font-bold">← / →</kbd>
+            </div>
+            <div class="flex items-center justify-between py-2 px-3 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700">
+              <span class="font-semibold">Scroll Active Section (or Open Menu/Rail)</span>
+              <kbd class="px-2.5 py-1 rounded-lg bg-slate-900 text-blue-300 border border-slate-700 font-clinical-mono font-bold">↑ / ↓</kbd>
+            </div>
+            <div class="flex items-center justify-between py-2 px-3 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700">
+              <span class="font-semibold">Open Highlighted Item in More / Rail</span>
+              <kbd class="px-2.5 py-1 rounded-lg bg-slate-900 text-blue-300 border border-slate-700 font-clinical-mono font-bold">Enter</kbd>
+            </div>
+            <div class="flex items-center justify-between py-2 px-3 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700">
+              <span class="font-semibold">Open Right Sections Rail</span>
+              <kbd class="px-2.5 py-1 rounded-lg bg-slate-900 text-blue-300 border border-slate-700 font-clinical-mono font-bold">Ctrl + →</kbd>
+            </div>
+            <div class="flex items-center justify-between py-2 px-3 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700">
+              <span class="font-semibold">Open Left More Menu</span>
+              <kbd class="px-2.5 py-1 rounded-lg bg-slate-900 text-blue-300 border border-slate-700 font-clinical-mono font-bold">Ctrl + ←</kbd>
+            </div>
+            <div class="flex items-center justify-between py-2 px-3 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700">
+              <span class="font-semibold">Close Any Open Menu, Rail or Popup</span>
+              <kbd class="px-2.5 py-1 rounded-lg bg-slate-900 text-blue-300 border border-slate-700 font-clinical-mono font-bold">Ctrl + Shift</kbd>
+            </div>
+            <div class="flex items-center justify-between py-2 px-3 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700">
+              <span class="font-semibold">Focus Top Patient Search Bar</span>
+              <kbd class="px-2.5 py-1 rounded-lg bg-slate-900 text-blue-300 border border-slate-700 font-clinical-mono font-bold">Tab</kbd>
+            </div>
+            <div class="flex items-center justify-between py-2 px-3 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700">
+              <span class="font-semibold">Save Current Patient Case</span>
+              <kbd class="px-2.5 py-1 rounded-lg bg-slate-900 text-emerald-300 border border-slate-700 font-clinical-mono font-bold">Ctrl + S</kbd>
+            </div>
+            <div class="flex items-center justify-between py-2 px-3 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700">
+              <span class="font-semibold">Reset Clinical Form</span>
+              <kbd class="px-2.5 py-1 rounded-lg bg-slate-900 text-rose-300 border border-slate-700 font-clinical-mono font-bold">Ctrl + Backspace</kbd>
+            </div>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(modal);
+      return modal;
+    }
+
+    function openShortcutsModal() {
+      const modal = ensureShortcutsModalExists();
+      modal.classList.remove('hidden');
+      syncPopupBackgroundBlurState();
+    }
+
+    function closeShortcutsModal() {
+      const modal = document.getElementById('shortcutsModal');
+      if (modal) modal.classList.add('hidden');
+      syncPopupBackgroundBlurState();
+    }
+
+    function syncPopupBackgroundBlurState() {
+      const sb = document.getElementById('leftSidebar');
+      const isMoreOpen = sb && !sb.classList.contains('-translate-x-full');
+      const modalIds = ['profileModal', 'storageModal', 'settingsModal', 'aboutModal', 'loginModal', 'geminiModal', 'summaryPopupModal', 'shortcutsModal'];
+      const isAnyModalOpen = modalIds.some(id => {
+        const el = document.getElementById(id);
+        return el && !el.classList.contains('hidden');
+      });
+      const accPopup = document.getElementById('accountPopup');
+      const isAccountPopupOpen = accPopup && !accPopup.classList.contains('hidden');
+
+      document.body.classList.toggle('popup-blur-active', Boolean(isMoreOpen || isAnyModalOpen));
+      document.body.classList.toggle('account-popup-blur-active', Boolean(!isMoreOpen && !isAnyModalOpen && isAccountPopupOpen));
+    }
+
+    function initPopupBlurObserver() {
+      ensureShortcutsModalExists();
+      const targetIds = ['leftSidebar', 'accountPopup', 'profileModal', 'storageModal', 'settingsModal', 'aboutModal', 'loginModal', 'geminiModal', 'summaryPopupModal', 'shortcutsModal'];
+      const observer = new MutationObserver(() => syncPopupBackgroundBlurState());
+      targetIds.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) observer.observe(el, { attributes: true, attributeFilter: ['class'] });
+      });
+    }
+    window.addEventListener('DOMContentLoaded', initPopupBlurObserver);
+
     function handleCaseSearch(query) {
       const q = query.trim().toLowerCase();
       const dropdown = document.getElementById('searchResultsDropdown');
+      if (q === 'codes') {
+        clearCaseSearch();
+        document.getElementById('headerCaseSearch')?.blur();
+        openShortcutsModal();
+        return;
+      }
       document.getElementById('clearSearchBtn').classList.toggle('hidden', !q);
       const matches = getStoredCases().filter(c => c.name.toLowerCase().includes(q) || c.chiefComplaints.toLowerCase().includes(q));
-      dropdown.innerHTML = matches.map(c => `<div onclick="loadCaseById('${c.id}')" class="px-4 py-2 hover:bg-blue-50 cursor-pointer font-bold text-xs">${c.name} — ${c.chiefComplaints}</div>`).join('');
+      dropdown.innerHTML = matches.map(c => `<div onclick="loadCaseById('${c.id}')" class="px-4 py-2 hover:bg-blue-50 dark:hover:bg-slate-700 cursor-pointer font-bold text-xs">${c.name} — ${c.chiefComplaints}</div>`).join('');
       dropdown.classList.toggle('hidden', !q);
     }
-    function clearCaseSearch() { document.getElementById('headerCaseSearch').value = ''; document.getElementById('searchResultsDropdown').classList.add('hidden'); }
-
+    function clearCaseSearch() { document.getElementById('headerCaseSearch').value = ''; document.getElementById('searchResultsDropdown').classList.add('hidden'); document.getElementById('clearSearchBtn')?.classList.add('hidden'); }
+       
     function renderSymptomTimeline() {
       const raw = document.getElementById('chiefComplaints').value.trim();
       const container = document.getElementById('timelineContainer');
@@ -3818,7 +3952,7 @@ function renderRightSectionRail() {
       updateRailActiveStateFast();
       rebuildSectionBottomNavBars();
     }
-    function rebuildSectionBottomNavBars() {
+      function rebuildSectionBottomNavBars() {
       const sections = getAllMainSections();
       let lastVisibleIdx = sections.length - 1;
       while (lastVisibleIdx > 0 && sections[lastVisibleIdx].classList.contains('hidden')) lastVisibleIdx--;
@@ -3832,13 +3966,13 @@ function renderRightSectionRail() {
           navBar.className = 'section-step-nav flex flex-wrap items-center justify-between gap-2 pt-3 mt-4 border-t no-print';
           contentDiv.appendChild(navBar);
         }
-        // Identical consistent blue pill buttons for both Prev and Next
+        // Identical consistent blue pill buttons for both Prev and Next, and clean "Generate" on final section
         const prevBtn = idx > 0
           ? `<button type="button" onclick="navigateMainSection(${idx}, -1)" class="chrome-pill-btn text-xs bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 shadow">⬅ Prev</button>`
           : `<span></span>`;
         const nextBtn = idx < lastVisibleIdx
           ? `<button type="button" onclick="navigateMainSection(${idx}, 1)" class="chrome-pill-btn text-xs bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 shadow">Next ➔</button>`
-          : `<button type="button" onclick="triggerFinalGenerateAndPopup()" class="chrome-pill-btn text-xs gemini-chrome-fab text-white px-5 py-2.5 shadow-lg font-bold">✨ Generate &amp; Auto-Save ➔</button>`;
+          : `<button type="button" onclick="triggerFinalGenerateAndPopup()" class="chrome-pill-btn text-xs gemini-chrome-fab text-white px-6 py-2.5 shadow-lg font-bold">Generate</button>`;
         navBar.innerHTML = prevBtn + nextBtn;
       });
     }
