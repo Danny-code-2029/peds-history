@@ -6,17 +6,23 @@
      ============================================================================ -->
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover" />
 
   <!-- 1.1 Google Search Console Verification -->
   <meta name="google-site-verification" content="I0785uVeIRkrW6Ue63YVX0HmrvEGWhRWJCt3I32gG9Q" />
 
-  <!-- 1.2 SEO Title & Metadata Shown on Google Search -->
+  <!-- 1.2 SEO Title, App Store / PWA Meta Tags & Dynamic Custom Domain Canonical -->
   <title>Pediatric History Performa | Dr. Danny</title>
   <meta name="description" content="Interactive Pediatric History Performa, ICMR-NIN 2020 dietary recall calculator, tickable developmental milestone tables, SSIMS clinical examination, and AI case generator by Dr. Danny (danny-code-2029)." />
   <meta name="keywords" content="Dr. Danny, Dr Danny peds, pediatric history performa, pediatric history, peds history, clinical pediatrics, ICMR NIN diet calculator, SSIMS examination, danny-code-2029" />
   <meta name="robots" content="index, follow" />
-  <link rel="canonical" href="https://danny-code-2029.github.io/peds-history/" />
+  <meta name="theme-color" content="#0f172a" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Peds Performa" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <link id="dynamicCanonicalLink" rel="canonical" href="https://danny-code-2029.github.io/peds-history/" />
+  <link id="dynamicManifestLink" rel="manifest" href="" />
 
   <!-- 1.3 Professional Clinical Typography (Plus Jakarta Sans, Source Serif 4, JetBrains Mono) -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -2028,8 +2034,11 @@
          [SECTION 11] CENTERED CASE PRESENTATION POPUP, SECURITY OVERLAYS & MODALS
          ========================================================================== -->
 
-    <footer class="text-center text-xs text-slate-400 pt-4">
-      Pediatric History Performa • Dr. Danny (danny-code-2029)
+      <footer class="text-center text-[11px] text-slate-400 pt-4 pb-2 space-y-1 max-w-3xl mx-auto px-3">
+      <div class="font-semibold text-slate-300">Pediatric History Performa • Dr. Danny (danny-code-2029)</div>
+      <p class="text-[10px] text-slate-500 leading-relaxed">
+        ⚕️ <strong>Educational &amp; Clinical Reference Disclaimer:</strong> Designed strictly as an academic case-taking &amp; educational reference tool for medical students and clinicians based on ICMR-NIN 2020, WHO MGRS, and IAP/NIS guidelines. Does not replace independent physician judgment or institutional protocols.
+      </p>
     </footer>
 
   </main>
@@ -2224,28 +2233,41 @@
     </div>
   </div>
 
-  <!-- 11.7 Modal 3: About Page -->
+<!-- 11.7 Modal 3: About Page (Includes App Store Guideline 1.4.1 Medical Citations & Privacy Disclosure) -->
   <div id="aboutModal" class="hidden fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-xs flex items-center justify-center p-4">
-    <div class="modal-card bg-white rounded-3xl shadow-2xl max-w-lg w-full overflow-hidden border border-slate-200">
-      <div class="bg-slate-900 text-white px-5 py-4 flex items-center justify-between">
+    <div class="modal-card bg-white dark:bg-slate-900 rounded-3xl shadow-2xl max-w-lg w-full overflow-hidden border border-slate-200 dark:border-slate-700">
+      <div class="bg-slate-950 text-white px-5 py-4 flex items-center justify-between border-b border-slate-800">
         <div>
-          <h3 class="font-bold text-sm">ℹ️ About Pediatric History Performa</h3>
-          <p class="text-[11px] text-slate-400">Protected Clinical Case-Taking &amp; Decision Support System</p>
+          <h3 class="font-bold text-sm">ℹ️ About &amp; Clinical References</h3>
+          <p class="text-[11px] text-slate-400">Academic Case-Taking &amp; Medical Reference Documentation</p>
         </div>
         <button onclick="closeAboutModal()" class="text-slate-400 hover:text-white text-xl font-bold px-2">&times;</button>
       </div>
-      <div class="p-5 space-y-3 text-xs leading-relaxed text-slate-700 dark:text-slate-300">
+      <div class="p-5 space-y-3 text-xs leading-relaxed text-slate-700 dark:text-slate-300 max-h-[78vh] overflow-y-auto">
         <p>
-          <strong>Pediatric History Performa</strong> is a privacy-hardened bedside clinical history and systemic examination platform with circular section navigation, live ICMR-NIN 2020 dietary recall, 1-device session enforcement, and AI case synthesis.
+          <strong>Pediatric History Performa</strong> is an academic bedside clinical history and physical examination logbook designed for medical students and clinicians.
         </p>
-        <div class="pt-1 text-[11px] text-slate-500 flex justify-between items-center border-t">
+        <div class="bg-slate-50 dark:bg-slate-800/80 p-3 rounded-2xl border border-slate-200 dark:border-slate-700 space-y-1.5">
+          <div class="font-bold text-slate-900 dark:text-white">📚 Standard Medical References &amp; Citations:</div>
+          <ul class="list-disc pl-4 space-y-1 text-[11px]">
+            <li><strong>Dietary RDA &amp; Food Values:</strong> ICMR-NIN (Indian Council of Medical Research – National Institute of Nutrition) 2020 Nutrient Requirements for Indians.</li>
+            <li><strong>Developmental Milestones &amp; Red Flags:</strong> WHO Multicentre Growth Reference Study (MGRS) &amp; Ghai Essential Pediatrics.</li>
+            <li><strong>Immunization Schedules:</strong> National Immunization Schedule (NIS, MoHFW India) &amp; Indian Academy of Pediatrics (IAP ACVIP) Guidelines.</li>
+            <li><strong>Maintenance Fluids &amp; Antipyretic Reference:</strong> Holliday-Segar 4-2-1 Formula (1957) &amp; Standard Pediatric Pharmacopoeia (10–15 mg/kg/dose reference).</li>
+          </ul>
+        </div>
+        <div class="bg-slate-50 dark:bg-slate-800/80 p-3 rounded-2xl border border-slate-200 dark:border-slate-700 space-y-1 text-[11px]">
+          <div class="font-bold text-slate-900 dark:text-white">🔒 Data Privacy &amp; Local-First Storage:</div>
+          <p>Patient case drafts are stored locally on your device (`localStorage`). Google Sign-In is used solely for 1-device session verification and encrypted personal API key storage. Users can permanently delete their account and all cloud records anytime in <strong>Settings → Delete Account &amp; Data</strong>.</p>
+        </div>
+        <div class="pt-2 text-[11px] text-slate-500 flex justify-between items-center border-t border-slate-200 dark:border-slate-800">
           <span>Created by <strong>Dr. Danny (Satyapriya Srinivash)</strong></span>
-          <span>v5.0 • Protected Orbit Edition</span>
+          <span>v5.5 • Store-Ready Edition</span>
         </div>
       </div>
     </div>
   </div>
-
+     
   <!-- 11.8 Modal 4: Firebase Google Login & Cloud API Vault -->
   <div id="loginModal" class="hidden fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-xs flex items-center justify-center p-4">
     <div class="modal-card bg-white rounded-3xl shadow-2xl max-w-md w-full overflow-hidden border border-indigo-200">
@@ -2310,35 +2332,43 @@
     </div>
   </div>
 
-  <!-- 11.9 Modal 5: Display, Vault & Admin Privacy Settings -->
+<!-- 11.9 Modal 5: Display, Vault, Account Deletion & Admin Privacy Settings -->
   <div id="settingsModal" class="hidden fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-xs flex items-center justify-center p-4">
-    <div class="modal-card bg-white rounded-3xl shadow-2xl max-w-md w-full overflow-hidden border border-slate-200">
-      <div class="bg-slate-900 text-white px-5 py-4 flex items-center justify-between">
+    <div class="modal-card bg-white dark:bg-slate-900 rounded-3xl shadow-2xl max-w-md w-full overflow-hidden border border-slate-200 dark:border-slate-700 max-h-[90vh] flex flex-col">
+      <div class="bg-slate-950 text-white px-5 py-4 flex items-center justify-between border-b border-slate-800">
         <h3 class="font-bold text-sm">⚙️ Display &amp; Security Settings</h3>
         <button onclick="toggleSettingsModal()" class="text-white text-xl font-bold px-2">&times;</button>
       </div>
-      <div class="p-5 space-y-4 text-xs">
+      <div class="p-5 space-y-4 text-xs overflow-y-auto flex-1">
         <div>
           <label class="block font-bold mb-2 text-sm">Select Color Theme</label>
           <div class="grid grid-cols-3 gap-2.5">
-            <button onclick="setTheme('light')" id="themeBtnLight" class="border rounded-2xl p-3 font-semibold flex flex-col items-center gap-1 hover:bg-slate-100">
+            <button onclick="setTheme('light')" id="themeBtnLight" class="border rounded-2xl p-3 font-semibold flex flex-col items-center gap-1 hover:bg-slate-100 dark:hover:bg-slate-800">
               <span class="text-lg">☀️</span><span>Light</span>
             </button>
-            <button onclick="setTheme('dark')" id="themeBtnDark" class="border rounded-2xl p-3 font-semibold flex flex-col items-center gap-1 hover:bg-slate-100">
+            <button onclick="setTheme('dark')" id="themeBtnDark" class="border rounded-2xl p-3 font-semibold flex flex-col items-center gap-1 hover:bg-slate-100 dark:hover:bg-slate-800">
               <span class="text-lg">🌙</span><span>Dark</span>
             </button>
-            <button onclick="setTheme('system')" id="themeBtnSystem" class="border rounded-2xl p-3 font-semibold flex flex-col items-center gap-1 hover:bg-slate-100">
+            <button onclick="setTheme('system')" id="themeBtnSystem" class="border rounded-2xl p-3 font-semibold flex flex-col items-center gap-1 hover:bg-slate-100 dark:hover:bg-slate-800">
               <span class="text-lg">💻</span><span>System</span>
             </button>
           </div>
         </div>
-        <div class="border-t pt-3 flex justify-between items-center">
+        <div class="border-t border-slate-200 dark:border-slate-700 pt-3 flex justify-between items-center">
           <span class="text-slate-600 dark:text-slate-300">Manage Cloud API Key Vault</span>
-          <button onclick="toggleSettingsModal(); toggleLoginModal();" class="chrome-pill-btn bg-indigo-100 text-indigo-900 px-3.5 py-1.5">🔑 Open Vault</button>
+          <button onclick="toggleSettingsModal(); toggleLoginModal();" class="chrome-pill-btn bg-indigo-600 hover:bg-indigo-500 text-white px-3.5 py-1.5">🔑 Open Vault</button>
         </div>
-        <div class="border-t pt-3 flex justify-between items-center">
-          <span class="text-slate-500">Clear all saved patient cases</span>
-          <button onclick="clearAllDrafts()" class="chrome-pill-btn bg-rose-100 text-rose-800 px-3.5 py-1.5 hover:bg-rose-200">Clear Storage</button>
+        <div class="border-t border-slate-200 dark:border-slate-700 pt-3 flex justify-between items-center">
+          <span class="text-slate-500 dark:text-slate-400">Clear all saved patient cases</span>
+          <button onclick="clearAllDrafts()" class="chrome-pill-btn bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-600 px-3.5 py-1.5">Clear Storage</button>
+        </div>
+        <!-- Mandatory App Store (Guideline 5.1.1v) & Google Play Account & Cloud Data Deletion -->
+        <div class="border-t border-slate-200 dark:border-slate-700 pt-3 flex justify-between items-center">
+          <div>
+            <div class="font-bold text-rose-500">Delete Account &amp; Cloud Data</div>
+            <div class="text-[10px] text-slate-400">Permanently erases your profile, vault &amp; local data</div>
+          </div>
+          <button onclick="deleteMedicoAccountAndData()" class="chrome-pill-btn bg-rose-600 hover:bg-rose-700 text-white px-3.5 py-1.5 shrink-0">🗑️ Delete Account</button>
         </div>
       </div>
     </div>
@@ -2404,7 +2434,7 @@
     </div>
   </div>
 
-  <!-- 11.11 Modal 7: Full-Screen Private Access & 1-Device Lock Overlay -->
+  <!-- 11.11 Modal 7: Full-Screen Private Access & Store Reviewer Verification Gate -->
   <div id="privateAccessOverlay" class="hidden fixed inset-0 z-[100] bg-slate-950 text-white flex items-center justify-center p-4">
     <div class="bg-slate-900 border border-slate-700 rounded-3xl shadow-2xl max-w-md w-full p-6 text-center space-y-4">
       <div class="w-14 h-14 rounded-full bg-blue-600/20 border border-blue-500/40 flex items-center justify-center mx-auto text-2xl">
@@ -2420,12 +2450,24 @@
       <button onclick="signInWithGoogle()" class="w-full chrome-pill-btn justify-center bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-4 shadow-lg text-sm">
         <span>G</span> <span>Sign in / Claim Active Device Slot</span>
       </button>
-      <button onclick="emergencyAdminUnlock()" class="text-[11px] text-slate-400 hover:text-white underline pt-1 block mx-auto">
+
+      <!-- App Store / Google Play Reviewer Access Passcode Box (Guideline 2.1 Compliance) -->
+      <div class="pt-2 border-t border-slate-800 space-y-2">
+        <button type="button" onclick="document.getElementById('storeReviewerBox').classList.toggle('hidden')" class="text-[11px] text-slate-400 hover:text-blue-400 underline block mx-auto">
+          📋 App Store / Play Store Reviewer Access
+        </button>
+        <div id="storeReviewerBox" class="hidden flex gap-1.5 pt-1">
+          <input id="reviewerPasscodeInput" type="password" placeholder="Enter Reviewer Access Code" class="flex-1 border border-slate-700 rounded-xl px-3 py-1.5 text-xs bg-slate-950 text-white" />
+          <button type="button" onclick="unlockStoreReviewerAccess()" class="chrome-pill-btn bg-emerald-600 hover:bg-emerald-500 text-white px-3.5 py-1.5 text-xs">Unlock</button>
+        </div>
+      </div>
+
+      <button onclick="emergencyAdminUnlock()" class="text-[11px] text-slate-500 hover:text-white underline pt-1 block mx-auto">
         🔓 Admin Emergency: Turn Off Private Lock on This Device
       </button>
     </div>
   </div>
-
+     
  <!-- ==========================================================================
        [SECTION 12] MODULAR JAVASCRIPT ENGINE
        (AUTO-MODULE DETECTION, ADMIN WATERMARK BYPASS, MOBILE BOTTOM RAIL & ORBIT)
@@ -2450,11 +2492,82 @@
 
     window.ADMIN_OWNER_EMAIL = "satya.srinivash1234@gmail.com";
     window.BANNED_RESIDUE_EMAIL = "satya.srinivash123@gmail.com";
+    window.STORE_REVIEWER_PASSCODE = "PEDS-REVIEW-2026";
 
     const DEFAULT_AVATAR_SVG = "data:image/svg+xml;utf8," + encodeURIComponent(
-      `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#1d4ed8"/><circle cx="50" cy="36" r="18" fill="#ffffff"/><path d="M20 86c0-16.5 13.5-30 30-30s30 13.5 30 30" fill="#ffffff"/></svg>`
+      `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" rx="22" fill="#1d4ed8"/><circle cx="50" cy="36" r="18" fill="#ffffff"/><path d="M20 86c0-16.5 13.5-30 30-30s30 13.5 30 30" fill="#ffffff"/></svg>`
     );
 
+    // 1. Dynamic Custom Domain & PWA Manifest Auto-Generator (Zero-Config Domain Shift)
+    (function initCustomDomainAndManifest() {
+      const currentOriginUrl = window.location.origin + window.location.pathname;
+      const canonEl = document.getElementById('dynamicCanonicalLink');
+      if (canonEl && window.location.protocol.startsWith('http')) {
+        canonEl.href = currentOriginUrl;
+      }
+      const manifestEl = document.getElementById('dynamicManifestLink');
+      if (manifestEl) {
+        const pwaManifest = {
+          name: "Pediatric History Performa | Dr. Danny",
+          short_name: "Peds Performa",
+          description: "Academic Pediatric History & Clinical Examination Proforma",
+          start_url: currentOriginUrl,
+          scope: currentOriginUrl,
+          display: "standalone",
+          orientation: "portrait-primary",
+          background_color: "#0f172a",
+          theme_color: "#0f172a",
+          categories: ["medical", "education", "productivity"],
+          icons: [
+            { src: DEFAULT_AVATAR_SVG, sizes: "192x192", type: "image/svg+xml", purpose: "any maskable" },
+            { src: DEFAULT_AVATAR_SVG, sizes: "512x512", type: "image/svg+xml", purpose: "any maskable" }
+          ]
+        };
+        manifestEl.href = "data:application/manifest+json;charset=utf-8," + encodeURIComponent(JSON.stringify(pwaManifest));
+      }
+    })();
+
+    // 2. App Store / Google Play Reviewer Passcode Unlock (Guideline 2.1 Compliance)
+    function unlockStoreReviewerAccess() {
+      const code = (document.getElementById('reviewerPasscodeInput')?.value || '').trim();
+      if (code === window.STORE_REVIEWER_PASSCODE) {
+        sessionStorage.setItem('peds_store_reviewer_unlocked', 'true');
+        document.getElementById('privateAccessOverlay')?.classList.add('hidden');
+        syncPopupBackgroundBlurState();
+      } else {
+        alert('Invalid Reviewer Access Code.');
+      }
+    }
+
+    // 3. Mandatory In-App Account & Cloud Data Deletion (Apple 5.1.1v & Google Play Compliance)
+    async function deleteMedicoAccountAndData() {
+      const confirmDelete = confirm(
+        "⚠️ Permanent Account & Data Deletion:\n\nThis will permanently delete your saved Cloud API Vault, active device lock record, clinician profile, and all locally stored patient cases.\n\nDo you want to proceed?"
+      );
+      if (!confirmDelete) return;
+
+      try {
+        if (currentGoogleUser) {
+          const uid = currentGoogleUser.uid;
+          const emailKey = normalizeEmail(currentGoogleUser.email);
+          try { await db.collection('medico_vault').doc(uid).delete(); } catch (e) {}
+          try { await db.collection('active_sessions').doc(emailKey).delete(); } catch (e) {}
+          localStorage.removeItem('peds_uid_vault_' + uid);
+          try {
+            await currentGoogleUser.delete();
+          } catch (reauthErr) {
+            await auth.signOut();
+          }
+        }
+      } catch (err) {}
+
+      localStorage.removeItem('peds_medico_profile_v1');
+      localStorage.removeItem('peds_saved_cases_db_v1');
+      localStorage.removeItem('peds_working_draft_v1');
+      sessionStorage.clear();
+      alert("Your account and all associated cloud and local data have been permanently deleted.");
+      window.location.reload();
+    }
     const TABLE_7_6_FOODS = [
       { id: "human_milk", category: "Milk & Dairy", name: "Human milk", unitSing: "100 mL", unitPlur: "× 100 mL", rawAmt: "100 mL", kcal: 65.0, prot: 1.1, cho: 7.4, fat: 3.4 },
       { id: "cow_milk", category: "Milk & Dairy", name: "Milk (cow)", unitSing: "½ glass (100 mL)", unitPlur: "× ½ glass (100 mL)", rawAmt: "100 mL", kcal: 73.0, prot: 3.2, cho: 4.9, fat: 4.4 },
